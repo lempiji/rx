@@ -1,0 +1,8 @@
+{
+	"name": "rx",
+	"description": "Reactive Extensions for D Programming Language.",
+	"copyright": "Copyright © 2015, lempiji",
+	"authors": ["lempiji"],
+	"dependencies": {
+	}
+}
