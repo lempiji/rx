@@ -2,6 +2,24 @@ module rx.disposable;
 
 import rx.primitives;
 
+template isDisposable(T)
+{
+    enum bool isDisposable = is(typeof({
+            T disposable = void;
+            disposable.dispose();
+        }()));
+}
+unittest
+{
+    struct A { void dispose(){} }
+    class B {void dispose(){} }
+    interface C { void dispose(); }
+
+    static assert(isDisposable!A);
+    static assert(isDisposable!B);
+    static assert(isDisposable!C);
+}
+
 interface Disposable
 {
     void dispose();

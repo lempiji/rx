@@ -6,13 +6,85 @@ import std.typetuple;
 
 import rx.primitives;
 
-interface Observer(E...) : staticMap!(OutputRange, E)
+
+template hasCompleted(T)
+{
+    enum bool hasCompleted = is(typeof({
+            T observer = void;
+            observer.completed();
+        }()));
+}
+unittest
+{
+    struct A
+    {
+        void completed();
+    }
+    struct B
+    {
+        void _completed();
+    }
+
+    static assert( hasCompleted!A);
+    static assert(!hasCompleted!B);
+}
+
+template hasFailure(T)
+{
+    enum bool hasFailure = is(typeof({
+            T observer = void;
+            Exception e = void;
+            observer.failure(e);
+        }()));
+}
+unittest
+{
+    struct A
+    {
+        void failure(Exception e);
+    }
+    struct B
+    {
+        void _failure(Exception e);
+    }
+    struct C
+    {
+        void failure();
+    }
+
+    static assert(hasFailure!A);
+    static assert(!hasFailure!B);
+    static assert(!hasFailure!C);
+}
+
+template isObserver(T, E)
+{
+    enum bool isObserver = isOutputRange!(T, E) && hasCompleted!T && hasFailure!T;
+}
+unittest
+{
+    struct TestObserver
+    {
+        void put(int n) { }
+        void completed() { }
+        void failure(Exception e) { }
+    }
+
+    static assert(isObserver!(TestObserver, int));
+}
+
+interface Observer(E) : OutputRange!E
 {
     void completed();
     void failure(Exception e);
 }
+unittest
+{
+    alias TObserver = Observer!byte;
+    static assert(isObserver!(TObserver, byte));
+}
 
-class ObserverObject(R, E...) : OutputRangeObject!(R, E), Observer!E
+class ObserverObject(R, E...) : OutputRangeObject!(R, E), staticMap!(Observer, E)
 {
 public:
     this(R range)
@@ -41,21 +113,24 @@ private:
     R _range;
 }
 
-template observerObject(E...)
+template observerObject(E)
 {
-    Observer!E observerObject(R)(R range)
+    ObserverObject!(R, E) observerObject(R)(R range)
     {
-        static assert(isOutputRange!(R, E));
-
-        static if (is(R : Observer!E))
-        {
-            return range;
-        }
-        else
-        {
-            return new ObserverObject!(R, E)(range);
-        }
+        return new ObserverObject!(R, E)(range);
     }
+}
+unittest
+{
+    struct TestObserver
+    {
+        void put(int n) { }
+        void put(Object obj) { }
+    }
+
+    Observer!int observer = observerObject!int(TestObserver());
+    observer.put(0);
+    static assert(isObserver!(typeof(observer), int));
 }
 
 unittest
@@ -75,7 +150,6 @@ unittest
 
     auto test = new TestObserver;
     Observer!int observer = observerObject!int(test);
-    assert(observer is test);
     assert(putCount == 0);
     observer.put(0);
     assert(putCount == 1);

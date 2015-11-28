@@ -6,6 +6,7 @@ import rx.observer;
 import rx.observable;
 
 import core.atomic : atomicLoad, cas;
+import std.range : put;
 
 interface Subject(E) : Observer!E, Observable!E { }
 
@@ -21,7 +22,8 @@ public:
 public:
     void put(E obj)
     {
-        atomicLoad(_observer).put(obj);
+        auto temp = atomicLoad(_observer);
+        temp.put(obj);
     }
     void completed()
     {
@@ -118,6 +120,8 @@ unittest
 {
     static assert(isObserver!(SubjectObject!int, int));
     static assert(isObservable!(SubjectObject!int, int));
+    static assert(!isObservable!(SubjectObject!int, string));
+    static assert(!isObservable!(SubjectObject!int, string));
 }
 
 unittest

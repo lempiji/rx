@@ -4,8 +4,70 @@ import rx.primitives;
 import rx.disposable;
 import rx.observer;
 
+template isObservable(T, E)
+{
+    enum bool isObservable = is(T.ElementType : E) && is(typeof({
+            T observable = void;
+            Observer!E observer = void;
+            auto d = observable.subscribe(observer);
+            static assert(isDisposable!(typeof(d)));
+        }()));
+}
+unittest
+{
+    struct TestDisposable
+    {
+        void dispose() { }
+    }
+    struct TestObservable
+    {
+        alias ElementType = int;
+        TestDisposable subscribe(T)(T observer)
+        {
+            static assert(isObserver!(T, int));
+            return TestDisposable();
+        }
+    }
+
+    static assert( isObservable!(TestObservable, int));
+    static assert(!isObservable!(TestObservable, Object));
+}
+
+template isSubscribable(TObservable, TObserver)
+{
+    enum bool isSubscribable = is(typeof({
+            TObservable observable = void;
+            TObserver observer = void;
+            auto d = observable.subscribe(observer);
+            static assert(isDisposable!(typeof(d)));
+        }()));
+}
+unittest
+{
+    struct TestDisposable
+    {
+        void dispose() { }
+    }
+    struct TestObserver
+    {
+        void put(int n) { }
+        void completed() { }
+        void failure(Exception e) { }
+    }
+    struct TestObservable
+    {
+        TestDisposable subscribe(TestObserver observer)
+        {
+            return TestDisposable();
+        }
+    }
+
+    static assert(isSubscribable!(TestObservable, TestObserver));
+}
+
 interface Observable(E)
 {
+    alias ElementType = E;
     Disposable subscribe(Observer!E observer);
 }
 
@@ -41,6 +103,12 @@ template observableObject(E)
         }
     }
 }
+
+unittest
+{
+    static assert(isObservable!(Observable!int, int));
+}
+
 unittest
 {
     int subscribeCount = 0;
