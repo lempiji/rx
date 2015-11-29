@@ -91,18 +91,7 @@ public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = FilterObserver!(f, TObserver, ElementType);
-        static if (isSubscribable!(TObservable, ObserverType))
-        {
-            return _observable.subscribe(ObserverType(observer));
-        }
-        else static if (isSubscribable!(TObservable, Observer!ElementType))
-        {
-            return _observable.subscribe(observerObject!ElementType(ObserverType(observer)));
-        }
-        else
-        {
-            static assert(false);
-        }
+        return doSubscribe(_observable, ObserverType(observer));
     }
 
 private:
@@ -235,18 +224,7 @@ public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = MapObserver!(f, TObserver, TObservable.ElementType);
-        static if (isSubscribable!(TObservable, ObserverType))
-        {
-            return _observable.subscribe(ObserverType(observer));
-        }
-        else static if (isSubscribable!(TObservable, Observer!(TObservable.ElementType)))
-        {
-            return _observable.subscribe(observerObject!(TObservable.ElementType)(ObserverType(observer)));
-        }
-        else
-        {
-            static assert(false);
-        }
+        return doSubscribe(_observable, ObserverType(observer));
     }
 
 private:

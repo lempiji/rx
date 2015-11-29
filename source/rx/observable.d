@@ -65,6 +65,51 @@ unittest
     static assert(isSubscribable!(TestObservable, TestObserver));
 }
 
+auto doSubscribe(TObservable, TObserver)(ref TObservable observable, TObserver observer)
+{
+    alias ElementType = TObservable.ElementType;
+    static if (isSubscribable!(TObservable, TObserver))
+    {
+        return observable.subscribe(observer);
+    }
+    else static if (isSubscribable!(TObservable, Observer!ElementType))
+    {
+        return observable.subscribe(observerObject!ElementType(observer));
+    }
+    else
+    {
+        static assert(false);
+    }
+}
+unittest
+{
+    struct TestObserver
+    {
+        void put(int n) { }
+    }
+    struct TestObservable1
+    {
+        alias ElementType = int;
+        Disposable subscribe(Observer!int observer)
+        {
+            return null;
+        }
+    }
+    struct TestObservable2
+    {
+        alias ElementType = int;
+        Disposable subscribe(TestObserver observer)
+        {
+            return null;
+        }
+    }
+
+    TestObservable1 observable1;
+    auto disposable1 = observable1.doSubscribe(TestObserver());
+    TestObservable2 observable2;
+    auto disposable2 = observable2.doSubscribe(TestObserver());
+}
+
 interface Observable(E)
 {
     alias ElementType = E;
