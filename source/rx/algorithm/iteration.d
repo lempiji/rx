@@ -3,8 +3,11 @@ module rx.algorithm.iteration;
 import rx.observer;
 import rx.observable;
 
+import core.atomic : cas, atomicLoad;
+
 import std.functional : unaryFun;
 import std.range : put;
+import std.typecons : RefCounted, refCounted;
 
 //####################
 // Overview
@@ -305,4 +308,92 @@ unittest
     sub.put(2);
     import std.algorithm : equal;
     assert(equal(buffer.data, [0, 2, 4][]));
+}
+
+//####################
+// Drop
+//####################
+struct DropObserver(TObserver, E)
+{
+public:
+    this(TObserver observer, shared(size_t)* count)
+    {
+        _observer = observer;
+        _count = count;
+    }
+public:
+    void put(E obj)
+    {
+        shared(size_t) oldValue = void;
+        size_t newValue = void;
+        do
+        {
+            oldValue = *_count;
+            if (atomicLoad(oldValue) == 0)
+            {
+                _observer.put(obj);
+                return;
+            }
+
+            newValue = oldValue - 1;
+        } while (!cas(_count, oldValue, newValue));
+    }
+
+    static if (hasCompleted!TObserver)
+    {
+        void completed()
+        {
+            _observer.completed();
+        }
+    }
+
+    static if (hasFailure!TObserver)
+    {
+        void failure(Exception e)
+        {
+            _observer.failure(e);
+        }
+    }
+private:
+    TObserver _observer;
+    shared(size_t)* _count;
+}
+struct DropObservable(TObservable)
+{
+    alias ElementType = TObservable.ElementType;
+public:
+    this(TObservable observable, size_t n)
+    {
+        _observable = observable;
+        _count = new shared(size_t)(n);
+    }
+public:
+    auto subscribe(TObserver)(TObserver observer)
+    {
+        alias ObserverType = DropObserver!(TObserver, ElementType);
+        return doSubscribe(_observable, ObserverType(observer, _count));
+    }
+private:
+    TObservable _observable;
+    shared(size_t)* _count;
+}
+auto drop(TObservable)(ref TObservable observable, size_t n)
+{
+    return DropObservable!TObservable(observable, n);
+}
+unittest
+{
+    import rx.subject;
+    auto subject = new SubjectObject!int;
+    auto dropped = subject.drop(1);
+    static assert(isObservable!(typeof(dropped), int));
+
+    import std.array : appender;
+    auto buf = appender!(int[]);
+    auto disposable = dropped.subscribe(buf);
+
+    subject.put(0);
+    assert(buf.data.length == 0);
+    subject.put(1);
+    assert(buf.data.length == 1);
 }

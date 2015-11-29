@@ -29,7 +29,6 @@ void main()
 
 ### Future work
 - more algorithms
- * skip
  * take
  * scan
  * reduce(aggregate)
