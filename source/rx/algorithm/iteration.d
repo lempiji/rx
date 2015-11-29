@@ -4,6 +4,7 @@ import rx.primitives;
 import rx.observer;
 import rx.observable;
 
+import std.functional : unaryFun;
 import std.range : put;
 
 //####################
@@ -47,7 +48,8 @@ public:
 public:
     void put(E obj)
     {
-        if (f(obj)) _observer.put(obj);
+        alias fun = unaryFun!f;
+        if (fun(obj)) _observer.put(obj);
     }
 
     static if (hasCompleted!TObserver)
@@ -158,6 +160,22 @@ unittest
     import std.algorithm : equal;
     assert(equal(buffer.data, [0, 2][]));
 }
+unittest
+{
+    import rx.subject;
+    import std.array : appender;
+
+    Subject!int sub = new SubjectObject!int;
+    auto filtered = sub.filter!"a % 2 == 0";
+    auto buffer = appender!(int[])();
+    auto disposable = filtered.subscribe(buffer);
+    sub.put(0);
+    sub.put(1);
+    sub.put(2);
+    sub.put(3);
+    import std.algorithm : equal;
+    assert(equal(buffer.data, [0, 2][]));
+}
 
 //####################
 // Map
@@ -173,7 +191,8 @@ public:
 public:
     void put(E obj)
     {
-        _observer.put(f(obj));
+        alias fun = unaryFun!f;
+        _observer.put(fun(obj));
     }
 
     static if (hasCompleted!TObserver)
@@ -205,7 +224,7 @@ unittest
 
 struct MapObservable(alias f, TObservable)
 {
-    alias ElementType = typeof({ return f(TObservable.ElementType.init); }());
+    alias ElementType = typeof({ return unaryFun!(f)(TObservable.ElementType.init); }());
 public:
     this(TObservable observable)
     {
@@ -290,4 +309,23 @@ unittest
     sub.put(2);
     import std.algorithm : equal;
     assert(equal(buffer.data, ["0", "1", "2"][]));
+}
+unittest
+{
+    import rx.subject;
+    import std.array : appender;
+    import std.conv : to;
+
+    Subject!int sub = new SubjectObject!int;
+    auto mapped = sub.map!"a * 2";
+    static assert(isObservable!(typeof(mapped), int));
+    static assert(isSubscribable!(typeof(mapped), Observer!int));
+
+    auto buffer = appender!(int[])();
+    auto disposable = mapped.subscribe(buffer);
+    sub.put(0);
+    sub.put(1);
+    sub.put(2);
+    import std.algorithm : equal;
+    assert(equal(buffer.data, [0, 2, 4][]));
 }

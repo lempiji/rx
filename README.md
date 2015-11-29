@@ -26,3 +26,21 @@ void main()
     assert(equal(result, ["0", "2", "4", "6", "8"]));
 }
 ```
+
+### Future work
+- more algorithms
+ * skip
+ * take
+ * scan
+ * reduce(aggregate)
+ * zip
+
+
+- support concurrency(std.concurrency.Scheduler)
+
+
+- more utilities
+ * help to make the observers
+
+
+- more test
