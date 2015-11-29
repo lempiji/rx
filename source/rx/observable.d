@@ -1,6 +1,5 @@
 module rx.observable;
 
-import rx.primitives;
 import rx.disposable;
 import rx.observer;
 

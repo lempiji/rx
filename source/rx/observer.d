@@ -4,8 +4,6 @@ import std.range.primitives;
 import std.range.interfaces;
 import std.typetuple;
 
-import rx.primitives;
-
 
 template hasCompleted(T)
 {

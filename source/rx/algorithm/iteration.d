@@ -1,6 +1,5 @@
 module rx.algorithm.iteration;
 
-import rx.primitives;
 import rx.observer;
 import rx.observable;
 

@@ -1,7 +1,5 @@
 module rx.disposable;
 
-import rx.primitives;
-
 template isDisposable(T)
 {
     enum bool isDisposable = is(typeof({
