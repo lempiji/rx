@@ -316,27 +316,18 @@ unittest
 struct DropObserver(TObserver, E)
 {
 public:
-    this(TObserver observer, shared(size_t)* count)
+    this(TObserver observer, DropObservablePayload payload)
     {
         _observer = observer;
-        _count = count;
+        _payload = payload;
     }
 public:
     void put(E obj)
     {
-        shared(size_t) oldValue = void;
-        size_t newValue = void;
-        do
+        if (_payload.tryUpdateCount())
         {
-            oldValue = *_count;
-            if (atomicLoad(oldValue) == 0)
-            {
-                _observer.put(obj);
-                return;
-            }
-
-            newValue = oldValue - 1;
-        } while (!cas(_count, oldValue, newValue));
+            _observer.put(obj);
+        }
     }
 
     static if (hasCompleted!TObserver)
@@ -356,26 +347,53 @@ public:
     }
 private:
     TObserver _observer;
-    shared(size_t)* _count;
+    DropObservablePayload _payload;
+}
+package class DropObservablePayload
+{
+public:
+    this(size_t n)
+    {
+        _count = n;
+    }
+public:
+    bool tryUpdateCount()
+    {
+        shared(size_t) oldValue = void;
+        size_t newValue = void;
+        do
+        {
+            oldValue = _count;
+            if (atomicLoad(oldValue) == 0)
+                return true;
+
+            newValue = oldValue - 1;
+        } while (!cas(&_count, oldValue, newValue));
+
+        return false;
+    }
+private:
+    shared(size_t) _count;
 }
 struct DropObservable(TObservable)
 {
+public:
     alias ElementType = TObservable.ElementType;
 public:
     this(TObservable observable, size_t n)
     {
         _observable = observable;
-        _count = new shared(size_t)(n);
+        _payload = new DropObservablePayload(n);
     }
 public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = DropObserver!(TObserver, ElementType);
-        return doSubscribe(_observable, ObserverType(observer, _count));
+        return doSubscribe(_observable, ObserverType(observer, _payload));
     }
 private:
     TObservable _observable;
-    shared(size_t)* _count;
+    DropObservablePayload _payload;
 }
 auto drop(TObservable)(ref TObservable observable, size_t n)
 {
@@ -396,4 +414,11 @@ unittest
     assert(buf.data.length == 0);
     subject.put(1);
     assert(buf.data.length == 1);
+
+    auto buf2 = appender!(int[]);
+    dropped.subscribe(buf2);
+    assert(buf2.data.length == 0);
+    subject.put(2);
+    assert(buf2.data.length == 1);
+    assert(buf.data.length == 2);
 }
