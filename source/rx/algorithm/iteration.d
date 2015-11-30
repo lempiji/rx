@@ -22,7 +22,9 @@ unittest
     auto subject = new SubjectObject!int;
     auto pub = subject
         .filter!(n => n % 2 == 0)
-        .map!(o => to!string(o));
+        .map!(o => to!string(o))
+        .drop(1)
+        .take(3);
 
     auto buf = appender!(string[]);
     auto disposable = pub.subscribe(buf);
@@ -33,7 +35,7 @@ unittest
     }
 
     auto result = buf.data;
-    assert(equal(result, ["0", "2", "4", "6", "8"]));
+    assert(equal(result, ["2", "4", "6"]));
 }
 
 //####################
@@ -316,7 +318,7 @@ unittest
 struct DropObserver(TObserver, E)
 {
 public:
-    this(TObserver observer, DropObservablePayload payload)
+    this(TObserver observer, shared(AtomicCounter) payload)
     {
         _observer = observer;
         _payload = payload;
@@ -347,33 +349,7 @@ public:
     }
 private:
     TObserver _observer;
-    DropObservablePayload _payload;
-}
-package class DropObservablePayload
-{
-public:
-    this(size_t n)
-    {
-        _count = n;
-    }
-public:
-    bool tryUpdateCount()
-    {
-        shared(size_t) oldValue = void;
-        size_t newValue = void;
-        do
-        {
-            oldValue = _count;
-            if (atomicLoad(oldValue) == 0)
-                return true;
-
-            newValue = oldValue - 1;
-        } while (!cas(&_count, oldValue, newValue));
-
-        return false;
-    }
-private:
-    shared(size_t) _count;
+    shared(AtomicCounter) _payload;
 }
 struct DropObservable(TObservable)
 {
@@ -383,7 +359,7 @@ public:
     this(TObservable observable, size_t n)
     {
         _observable = observable;
-        _payload = new DropObservablePayload(n);
+        _payload = new shared AtomicCounter(n);
     }
 public:
     auto subscribe(TObserver)(TObserver observer)
@@ -393,9 +369,9 @@ public:
     }
 private:
     TObservable _observable;
-    DropObservablePayload _payload;
+    shared(AtomicCounter) _payload;
 }
-auto drop(TObservable)(ref TObservable observable, size_t n)
+auto drop(TObservable)(auto ref TObservable observable, size_t n)
 {
     return DropObservable!TObservable(observable, n);
 }
@@ -421,4 +397,118 @@ unittest
     subject.put(2);
     assert(buf2.data.length == 1);
     assert(buf.data.length == 2);
+}
+
+//####################
+// Take
+//####################
+struct TakeObserver(TObserver, E)
+{
+public:
+    this(TObserver observer, shared(AtomicCounter) payload)
+    {
+        _observer = observer;
+        _payload = payload;
+    }
+public:
+    void put(E obj)
+    {
+        if (_payload.tryUpdateCount()) return;
+        _observer.put(obj);
+    }
+
+    static if (hasCompleted!TObserver)
+    {
+        void completed()
+        {
+            _observer.completed();
+        }
+    }
+
+    static if (hasFailure!TObserver)
+    {
+        void failure(Exception e)
+        {
+            _observer.failure(e);
+        }
+    }
+private:
+    TObserver _observer;
+    shared(AtomicCounter) _payload;
+}
+struct TakeObservable(TObservable)
+{
+public:
+    alias ElementType = TObservable.ElementType;
+public:
+    this(TObservable observable, size_t n)
+    {
+        _observable = observable;
+        _payload = new shared AtomicCounter(n);
+    }
+public:
+    auto subscribe(TObserver)(TObserver observer)
+    {
+        alias ObserverType = TakeObserver!(TObserver, ElementType);
+        return doSubscribe(_observable, ObserverType(observer, _payload));
+    }
+private:
+    TObservable _observable;
+    shared(AtomicCounter) _payload;
+}
+auto take(TObservable)(auto ref TObservable observable, size_t n)
+{
+    return TakeObservable!TObservable(observable, n);
+}
+unittest
+{
+    import rx.subject;
+    auto subject = new SubjectObject!int;
+    auto taken = subject.take(1);
+    static assert(isObservable!(typeof(taken), int));
+
+    import std.array : appender;
+    auto buf = appender!(int[]);
+    auto disposable = taken.subscribe(buf);
+
+    subject.put(0);
+    assert(buf.data.length == 1);
+    subject.put(1);
+    assert(buf.data.length == 1);
+
+    auto buf2 = appender!(int[]);
+    taken.subscribe(buf2);
+    assert(buf2.data.length == 0);
+    subject.put(2);
+    assert(buf2.data.length == 0);
+    assert(buf.data.length == 1);
+}
+//####################
+// Util
+//####################
+package shared class AtomicCounter
+{
+public:
+    this(size_t n)
+    {
+        _count = n;
+    }
+public:
+    bool tryUpdateCount() @trusted
+    {
+        shared(size_t) oldValue = void;
+        size_t newValue = void;
+        do
+        {
+            oldValue = _count;
+            if (oldValue == 0)
+                return true;
+
+            newValue = oldValue - 1;
+        } while (!cas(&_count, oldValue, newValue));
+
+        return false;
+    }
+private:
+    size_t _count;
 }

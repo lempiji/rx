@@ -29,7 +29,6 @@ void main()
 
 ### Future work
 - more algorithms
- * take
  * scan
  * reduce(aggregate)
  * zip
