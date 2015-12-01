@@ -4,10 +4,8 @@ import rx.observer;
 import rx.observable;
 
 import core.atomic : cas, atomicLoad;
-
 import std.functional : unaryFun;
 import std.range : put;
-import std.typecons : RefCounted, refCounted;
 
 //####################
 // Overview
@@ -318,15 +316,15 @@ unittest
 struct DropObserver(TObserver, E)
 {
 public:
-    this(TObserver observer, shared(AtomicCounter) payload)
+    this(TObserver observer, size_t count)
     {
         _observer = observer;
-        _payload = payload;
+        _counter = new shared AtomicCounter(count);
     }
 public:
     void put(E obj)
     {
-        if (_payload.tryUpdateCount())
+        if (_counter.tryUpdateCount())
         {
             _observer.put(obj);
         }
@@ -349,7 +347,7 @@ public:
     }
 private:
     TObserver _observer;
-    shared(AtomicCounter) _payload;
+    shared(AtomicCounter) _counter;
 }
 struct DropObservable(TObservable)
 {
@@ -359,17 +357,17 @@ public:
     this(TObservable observable, size_t n)
     {
         _observable = observable;
-        _payload = new shared AtomicCounter(n);
+        _count = n;
     }
 public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = DropObserver!(TObserver, ElementType);
-        return doSubscribe(_observable, ObserverType(observer, _payload));
+        return doSubscribe(_observable, ObserverType(observer, _count));
     }
 private:
     TObservable _observable;
-    shared(AtomicCounter) _payload;
+    size_t _count;
 }
 auto drop(TObservable)(auto ref TObservable observable, size_t n)
 {
@@ -395,8 +393,11 @@ unittest
     dropped.subscribe(buf2);
     assert(buf2.data.length == 0);
     subject.put(2);
-    assert(buf2.data.length == 1);
+    assert(buf2.data.length == 0);
     assert(buf.data.length == 2);
+    subject.put(3);
+    assert(buf2.data.length == 1);
+    assert(buf.data.length == 3);
 }
 
 //####################
@@ -405,15 +406,15 @@ unittest
 struct TakeObserver(TObserver, E)
 {
 public:
-    this(TObserver observer, shared(AtomicCounter) payload)
+    this(TObserver observer, size_t count)
     {
         _observer = observer;
-        _payload = payload;
+        _counter = new shared AtomicCounter(count);
     }
 public:
     void put(E obj)
     {
-        if (_payload.tryUpdateCount()) return;
+        if (_counter.tryUpdateCount()) return;
         _observer.put(obj);
     }
 
@@ -434,7 +435,7 @@ public:
     }
 private:
     TObserver _observer;
-    shared(AtomicCounter) _payload;
+    shared(AtomicCounter) _counter;
 }
 struct TakeObservable(TObservable)
 {
@@ -444,17 +445,17 @@ public:
     this(TObservable observable, size_t n)
     {
         _observable = observable;
-        _payload = new shared AtomicCounter(n);
+        _count = n;
     }
 public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = TakeObserver!(TObserver, ElementType);
-        return doSubscribe(_observable, ObserverType(observer, _payload));
+        return doSubscribe(_observable, ObserverType(observer, _count));
     }
 private:
     TObservable _observable;
-    shared(AtomicCounter) _payload;
+    size_t _count;
 }
 auto take(TObservable)(auto ref TObservable observable, size_t n)
 {
@@ -480,7 +481,10 @@ unittest
     taken.subscribe(buf2);
     assert(buf2.data.length == 0);
     subject.put(2);
-    assert(buf2.data.length == 0);
+    assert(buf2.data.length == 1);
+    assert(buf.data.length == 1);
+    subject.put(3);
+    assert(buf2.data.length == 1);
     assert(buf.data.length == 1);
 }
 //####################
