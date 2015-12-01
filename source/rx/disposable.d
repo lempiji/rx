@@ -114,3 +114,71 @@ unittest
     assert(d1 !is null);
     assert(d1 is d2);
 }
+
+package final class DisposedMarker : Disposable
+{
+private:
+    this() { }
+
+public:
+    void dispose() { }
+
+public:
+    static Disposable instance()
+    {
+        import std.concurrency : initOnce;
+        static __gshared DisposedMarker inst;
+        return initOnce!inst(new DisposedMarker);
+    }
+}
+
+final class SingleAssignmentDisposable : Disposable
+{
+public:
+    void setDisposable(Disposable disposable)
+    {
+        import core.atomic;
+        if (!cas(&_disposable, shared(Disposable).init, cast(shared)disposable)) assert(false);
+    }
+public:
+    void dispose()
+    {
+        import rx.util;
+        auto temp = exchange(_disposable, cast(shared)DisposedMarker.instance);
+        if (temp !is null) temp.dispose();
+    }
+private:
+    shared(Disposable) _disposable;
+}
+unittest
+{
+    int count = 0;
+    class TestDisposable : Disposable
+    {
+        void dispose() { count++; }
+    }
+    auto temp = new SingleAssignmentDisposable;
+    temp.setDisposable(new TestDisposable);
+    assert(count == 0);
+    temp.dispose();
+    assert(count == 1);
+}
+unittest
+{
+    import core.exception;
+    class TestDisposable : Disposable
+    {
+        void dispose() { }
+    }
+    auto temp = new SingleAssignmentDisposable;
+    temp.setDisposable(new TestDisposable);
+    try
+    {
+        temp.setDisposable(new TestDisposable);
+    }
+    catch(AssertError)
+    {
+        return;
+    }
+    assert(false);
+}

@@ -1,5 +1,6 @@
 module rx.algorithm.iteration;
 
+import rx.disposable;
 import rx.observer;
 import rx.observable;
 
@@ -25,7 +26,7 @@ unittest
         .take(3);
 
     auto buf = appender!(string[]);
-    auto disposable = pub.subscribe(buf);
+    auto disposable = pub.subscribe(observerObject!string(buf));
 
     foreach (i; 0 .. 10)
     {
@@ -41,37 +42,27 @@ unittest
 //####################
 struct FilterObserver(alias f, TObserver, E)
 {
+    mixin SimpleObserverImpl!(TObserver, E);
+
 public:
     this(TObserver observer)
     {
         _observer = observer;
     }
-
-public:
-    void put(E obj)
+    static if (hasCompleted!TObserver || hasFailure!TObserver)
+    {
+        this(TObserver observer, Disposable disposable)
+        {
+            _observer = observer;
+            _disposable = disposable;
+        }
+    }
+private:
+    void putImpl(E obj)
     {
         alias fun = unaryFun!f;
         if (fun(obj)) _observer.put(obj);
     }
-
-    static if (hasCompleted!TObserver)
-    {
-        void completed()
-        {
-            _observer.completed();
-        }
-    }
-
-    static if (hasFailure!TObserver)
-    {
-        void failure(Exception e)
-        {
-            _observer.failure(e);
-        }
-    }
-
-private:
-    TObserver _observer;
 }
 unittest
 {
@@ -93,7 +84,16 @@ public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = FilterObserver!(f, TObserver, ElementType);
-        return doSubscribe(_observable, ObserverType(observer));
+        static if (hasCompleted!TObserver || hasFailure!TObserver)
+        {
+            auto disposable = new SingleAssignmentDisposable;
+            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, disposable))));
+            return disposable;
+        }
+        else
+        {
+            return doSubscribe(_observable, ObserverType(observer));
+        }
     }
 
 private:
@@ -173,37 +173,27 @@ unittest
 //####################
 struct MapObserver(alias f, TObserver, E)
 {
+    mixin SimpleObserverImpl!(TObserver, E);
+
 public:
     this(TObserver observer)
     {
         _observer = observer;
     }
-
-public:
-    void put(E obj)
+    static if (hasCompleted!TObserver || hasFailure!TObserver)
+    {
+        this(TObserver observer, Disposable disposable)
+        {
+            _observer = observer;
+            _disposable = disposable;
+        }
+    }
+private:
+    void putImpl(E obj)
     {
         alias fun = unaryFun!f;
         _observer.put(fun(obj));
     }
-
-    static if (hasCompleted!TObserver)
-    {
-        void completed()
-        {
-            _observer.completed();
-        }
-    }
-
-    static if (hasFailure!TObserver)
-    {
-        void failure(Exception e)
-        {
-            _observer.failure(e);
-        }
-    }
-
-private:
-    TObserver _observer;
 }
 unittest
 {
@@ -226,7 +216,16 @@ public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = MapObserver!(f, TObserver, TObservable.ElementType);
-        return doSubscribe(_observable, ObserverType(observer));
+        static if (hasCompleted!TObserver || hasFailure!TObserver)
+        {
+            auto disposable = new SingleAssignmentDisposable;
+            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, disposable))));
+            return disposable;
+        }
+        else
+        {
+            return doSubscribe(_observable, ObserverType(observer));
+        }
     }
 
 private:
@@ -315,38 +314,31 @@ unittest
 //####################
 struct DropObserver(TObserver, E)
 {
+    mixin SimpleObserverImpl!(TObserver, E);
 public:
     this(TObserver observer, size_t count)
     {
         _observer = observer;
-        _counter = new shared AtomicCounter(count);
+        _counter = new shared(AtomicCounter)(count);
     }
-public:
-    void put(E obj)
+    static if (hasCompleted!TObserver || hasFailure!TObserver)
+    {
+        this(TObserver observer, size_t count, Disposable disposable)
+        {
+            _observer = observer;
+            _counter = new shared(AtomicCounter)(count);
+            _disposable = disposable;
+        }
+    }
+private:
+    void putImpl(E obj)
     {
         if (_counter.tryUpdateCount())
         {
             _observer.put(obj);
         }
     }
-
-    static if (hasCompleted!TObserver)
-    {
-        void completed()
-        {
-            _observer.completed();
-        }
-    }
-
-    static if (hasFailure!TObserver)
-    {
-        void failure(Exception e)
-        {
-            _observer.failure(e);
-        }
-    }
 private:
-    TObserver _observer;
     shared(AtomicCounter) _counter;
 }
 struct DropObservable(TObservable)
@@ -363,7 +355,16 @@ public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = DropObserver!(TObserver, ElementType);
-        return doSubscribe(_observable, ObserverType(observer, _count));
+        static if (hasCompleted!TObserver || hasFailure!TObserver)
+        {
+            auto disposable = new SingleAssignmentDisposable;
+            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, _count, disposable))));
+            return disposable;
+        }
+        else
+        {
+            return doSubscribe(_observable, ObserverType(observer, _count));
+        }
     }
 private:
     TObservable _observable;
@@ -405,36 +406,29 @@ unittest
 //####################
 struct TakeObserver(TObserver, E)
 {
+    mixin SimpleObserverImpl!(TObserver, E);
 public:
     this(TObserver observer, size_t count)
     {
         _observer = observer;
-        _counter = new shared AtomicCounter(count);
+        _counter = new shared(AtomicCounter)(count);
     }
-public:
-    void put(E obj)
+    static if (hasCompleted!TObserver || hasFailure!TObserver)
+    {
+        this(TObserver observer, size_t count, Disposable disposable)
+        {
+            _observer = observer;
+            _counter = new shared(AtomicCounter)(count);
+            _disposable = disposable;
+        }
+    }
+private:
+    void putImpl(E obj)
     {
         if (_counter.tryUpdateCount()) return;
         _observer.put(obj);
     }
-
-    static if (hasCompleted!TObserver)
-    {
-        void completed()
-        {
-            _observer.completed();
-        }
-    }
-
-    static if (hasFailure!TObserver)
-    {
-        void failure(Exception e)
-        {
-            _observer.failure(e);
-        }
-    }
 private:
-    TObserver _observer;
     shared(AtomicCounter) _counter;
 }
 struct TakeObservable(TObservable)
@@ -451,7 +445,16 @@ public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = TakeObserver!(TObserver, ElementType);
-        return doSubscribe(_observable, ObserverType(observer, _count));
+        static if (hasCompleted!TObserver || hasFailure!TObserver)
+        {
+            auto disposable = new SingleAssignmentDisposable;
+            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, _count, disposable))));
+            return disposable;
+        }
+        else
+        {
+            return doSubscribe(_observable, ObserverType(observer, _count));
+        }
     }
 private:
     TObservable _observable;
@@ -515,4 +518,50 @@ public:
     }
 private:
     size_t _count;
+}
+
+private mixin template SimpleObserverImpl(TObserver, E)
+{
+public:
+    void put(E obj)
+    {
+        static if (hasFailure!TObserver)
+        {
+            try
+            {
+                putImpl(obj);
+            }
+            catch(Exception e)
+            {
+                _observer.failure(e);
+                _disposable.dispose();
+            }
+        }
+        else
+        {
+            putImpl(obj);
+        }
+    }
+    static if (hasCompleted!TObserver)
+    {
+        void completed()
+        {
+            _observer.completed();
+            _disposable.dispose();
+        }
+    }
+    static if (hasFailure!TObserver)
+    {
+        void failure(Exception e)
+        {
+            _observer.failure(e);
+            _disposable.dispose();
+        }
+    }
+private:
+    TObserver _observer;
+    static if (hasCompleted!TObserver || hasFailure!TObserver)
+    {
+        Disposable _disposable;
+    }
 }
