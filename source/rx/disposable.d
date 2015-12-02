@@ -152,6 +152,10 @@ private:
 }
 unittest
 {
+    static assert(isDisposable!SingleAssignmentDisposable);
+}
+unittest
+{
     int count = 0;
     class TestDisposable : Disposable
     {
