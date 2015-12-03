@@ -31,13 +31,10 @@ void main()
 - more algorithms
  * reduce(aggregate)
  * zip
-
-
-- support concurrency(std.concurrency.Scheduler)
-
-
+ * takeUntil
+ * skipUntil
 - more utilities
+ * generators
  * help to make the observers
-
-
 - more test
+- more documents
