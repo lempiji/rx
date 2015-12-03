@@ -4,6 +4,7 @@ import rx.disposable;
 import rx.observer;
 import rx.observable;
 
+import std.range : put;
 import std.concurrency : Scheduler;
 
 
@@ -78,6 +79,7 @@ private:
 
 struct ObserveOnObservable(TObservable)
 {
+    alias ElementType = TObservable.ElementType;
 public:
     this(TObservable observable, Scheduler scheduler)
     {

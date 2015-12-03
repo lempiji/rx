@@ -64,7 +64,7 @@ unittest
     static assert(isSubscribable!(TestObservable, TestObserver));
 }
 
-auto doSubscribe(TObservable, TObserver)(ref TObservable observable, TObserver observer)
+auto doSubscribe(TObservable, TObserver)(auto ref TObservable observable, TObserver observer)
 {
     alias ElementType = TObservable.ElementType;
     static if (isSubscribable!(TObservable, TObserver))

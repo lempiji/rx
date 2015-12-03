@@ -81,6 +81,10 @@ public:
             {
                 newObserver = cast(shared)composite.add(observer);
             }
+            else if (auto nop = cast(NopObserver!E)temp)
+            {
+                newObserver = cast(shared)observer;
+            }
             else
             {
                 newObserver = cast(shared)(new CompositeObserver!E([temp, observer]));
@@ -189,6 +193,23 @@ unittest
     assert(putCount == 2);
     assert(failureCount == 1);
 }
+unittest
+{
+    import std.array : appender;
+    auto buf1 = appender!(int[]);
+    auto buf2 = appender!(int[]);
+    auto subject = new SubjectObject!int;
+    subject.subscribe(observerObject!(int)(buf1));
+    subject.doSubscribe((int n) => buf2.put(n));
+
+    assert(buf1.data.length == 0);
+    assert(buf2.data.length == 0);
+    subject.put(0);
+    assert(buf1.data.length == 1);
+    assert(buf2.data.length == 1);
+    assert(buf1.data[0] == buf2.data[0]);
+}
+
 
 private class Subscription(TSubject, TObserver) : Disposable
 {
