@@ -374,3 +374,121 @@ unittest
     c4.put(0);
     assert(count == 4);
 }
+
+auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)
+{
+    static struct AnonymouseObserver
+    {
+    public:
+        this(void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)
+        {
+            _doPut = doPut;
+            _doCompleted = doCompleted;
+            _doFailure = doFailure;
+        }
+    public:
+        void put(E obj)
+        {
+            if (_doPut !is null) _doPut(obj);
+        }
+        void completed()
+        {
+            if (_doCompleted !is null) _doCompleted();
+        }
+        void failure(Exception e)
+        {
+            if (_doFailure !is null) _doFailure(e);
+        }
+    private:
+        void delegate(E) _doPut;
+        void delegate() _doCompleted;
+        void delegate(Exception) _doFailure;
+    }
+
+    return AnonymouseObserver(doPut, doCompleted, doFailure);
+}
+unittest
+{
+    int countPut = 0;
+    int countCompleted = 0;
+    int countFailure = 0;
+    auto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; }, (Exception){ countFailure++; });
+    .put(observer, 0);
+    assert(countPut == 1);
+    observer.completed();
+    assert(countCompleted == 1);
+    observer.failure(null);
+    assert(countFailure == 1);
+}
+auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted)
+{
+    static struct AnonymouseObserver
+    {
+    public:
+        this(void delegate(E) doPut, void delegate() doCompleted)
+        {
+            _doPut = doPut;
+            _doCompleted = doCompleted;
+        }
+    public:
+        void put(E obj)
+        {
+            if (_doPut !is null) _doPut(obj);
+        }
+        void completed()
+        {
+            if (_doCompleted !is null) _doCompleted();
+        }
+    private:
+        void delegate(E) _doPut;
+        void delegate() _doCompleted;
+    }
+
+    return AnonymouseObserver(doPut, doCompleted);
+}
+unittest
+{
+    int countPut = 0;
+    int countCompleted = 0;
+    auto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; });
+    .put(observer, 0);
+    assert(countPut == 1);
+    observer.completed();
+    assert(countCompleted == 1);
+}
+auto makeObserver(E)(void delegate(E) doPut, void delegate(Exception) doFailure)
+{
+    static struct AnonymouseObserver
+    {
+    public:
+        this(void delegate(E) doPut, void delegate(Exception) doFailure)
+        {
+            _doPut = doPut;
+            _doFailure = doFailure;
+        }
+    public:
+        void put(E obj)
+        {
+            if (_doPut !is null) _doPut(obj);
+        }
+        void failure(Exception e)
+        {
+            if (_doFailure !is null) _doFailure(e);
+        }
+    private:
+        void delegate(E) _doPut;
+        void delegate(Exception) _doFailure;
+    }
+
+    return AnonymouseObserver(doPut, doFailure);
+}
+unittest
+{
+    int countPut = 0;
+    int countFailure = 0;
+    auto observer = makeObserver((int){ countPut++; }, (Exception){ countFailure++; });
+    .put(observer, 0);
+    assert(countPut == 1);
+    observer.failure(null);
+    assert(countFailure == 1);
+}
