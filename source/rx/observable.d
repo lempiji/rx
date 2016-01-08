@@ -64,21 +64,27 @@ unittest
     static assert(isSubscribable!(TestObservable, TestObserver));
 }
 
+auto doSubscribe(TObservable, E)(auto ref TObservable observable, void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)
+{
+    return doSubscribe(observable, makeObserver(doPut, doCompleted, doFailure));
+}
+auto doSubscribe(TObservable, E)(auto ref TObservable observable, void delegate(E) doPut, void delegate() doCompleted)
+{
+    return doSubscribe(observable, makeObserver(doPut, doCompleted));
+}
+auto doSubscribe(TObservable, E)(auto ref TObservable observable, void delegate(E) doPut, void delegate(Exception) doFailure)
+{
+    return doSubscribe(observable, makeObserver(doPut, doFailure));
+}
 auto doSubscribe(TObservable, TObserver)(auto ref TObservable observable, TObserver observer)
 {
     alias ElementType = TObservable.ElementType;
     static if (isSubscribable!(TObservable, TObserver))
-    {
         return observable.subscribe(observer);
-    }
     else static if (isSubscribable!(TObservable, Observer!ElementType))
-    {
         return observable.subscribe(observerObject!ElementType(observer));
-    }
     else
-    {
         static assert(false);
-    }
 }
 unittest
 {
@@ -97,16 +103,24 @@ unittest
     struct TestObservable2
     {
         alias ElementType = int;
-        Disposable subscribe(TestObserver observer)
+        Disposable subscribe(T)(T observer)
         {
             return null;
         }
     }
 
-    TestObservable1 observable1;
-    auto disposable1 = observable1.doSubscribe(TestObserver());
-    TestObservable2 observable2;
-    auto disposable2 = observable2.doSubscribe(TestObserver());
+    TestObservable1 o1;
+    auto d0 = o1.doSubscribe((int n){}, (){}, (Exception e){});
+    auto d1 = o1.doSubscribe((int n){}, (){});
+    auto d2 = o1.doSubscribe((int n){}, (Exception e){});
+    auto d3 = o1.doSubscribe((int n){});
+    auto d4 = o1.doSubscribe(TestObserver());
+    TestObservable2 o2;
+    auto d5 = o2.doSubscribe((int n){}, (){}, (Exception e){});
+    auto d6 = o2.doSubscribe((int n){}, (){});
+    auto d7 = o2.doSubscribe((int n){}, (Exception e){});
+    auto d8 = o2.doSubscribe((int n){});
+    auto d9 = o2.doSubscribe(TestObserver());
 }
 
 interface Observable(E)
