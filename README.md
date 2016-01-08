@@ -1,4 +1,5 @@
 ## Reactive Extensions for D Programming Language
+[![Build Status](https://travis-ci.org/lempiji/rx.svg?branch=master)](https://travis-ci.org/lempiji/rx)
 
 ### Example
 ```d
