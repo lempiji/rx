@@ -41,6 +41,12 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# =========================
+# Dlang / Dub
+# =========================
 .dub
 *.obj
+*.lib
 *.exe
+*.lst
