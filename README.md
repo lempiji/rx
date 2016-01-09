@@ -36,6 +36,5 @@ void main()
  * skipUntil
 - more utilities
  * generators
- * help to make the observers
 - more test
 - more documents

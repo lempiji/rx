@@ -615,6 +615,85 @@ unittest
     assert(result[4] == 5);
 }
 
+
+//####################
+// Tee
+//####################
+struct TeeObserver(alias f, TObserver, E)
+{
+public:
+    this(TObserver observer)
+    {
+        _observer = observer;
+    }
+public:
+    void put(E obj)
+    {
+        unaryFun!f(obj);
+        _observer.put(obj);
+    }
+    static if (hasCompleted!TObserver)
+    {
+        void completed()
+        {
+            _observer.completed();
+        }
+    }
+    static if (hasFailure!TObserver)
+    {
+        void failure(Exception e)
+        {
+            _observer.failure(e);
+        }
+    }
+private:
+    TObserver _observer;
+}
+struct TeeObservable(alias f, TObservable, E)
+{
+    alias ElementType = E;
+public:
+    this(TObservable observable)
+    {
+        _observable = observable;
+    }
+public:
+    auto subscribe(T)(auto ref T observer)
+    {
+        return _observable.doSubscribe(TeeObserver!(f, T, E)(observer));
+    }
+private:
+    TObservable _observable;
+}
+template tee(alias f)
+{
+    TeeObservable!(f, TObservable, TObservable.ElementType) tee(TObservable)(auto ref TObservable observable)
+    {
+        return typeof(return)(observable);
+    }
+}
+unittest
+{
+    import rx.subject;
+    auto sub = new SubjectObject!int;
+    import std.array;
+    auto buf1 = appender!(int[]);
+    auto buf2 = appender!(int[]);
+    auto disposable = sub
+        .tee!(i => buf1.put(i))()
+        .map!(i => i * 2)()
+        .subscribe(buf2);
+
+    sub.put(1);
+    sub.put(2);
+    disposable.dispose();
+    sub.put(3);
+
+    import std.algorithm : equal;
+    assert(equal(buf1.data, [1, 2]));
+    assert(equal(buf2.data, [2, 4]));
+}
+
 //####################
 // Util
 //####################
