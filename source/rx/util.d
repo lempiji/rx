@@ -31,6 +31,15 @@ public:
     }
 
 public:
+    bool signal() @property
+    {
+        synchronized (_mutex)
+        {
+            return _signal;
+        }
+    }
+
+public:
     void setSignal()
     {
         synchronized (_mutex)

@@ -1,6 +1,7 @@
 module rx.disposable;
 
 import core.sync.mutex;
+import rx.util;
 
 template isDisposable(T)
 {
@@ -259,4 +260,25 @@ unittest
     assert(count == 2);
     d.disposable(disposableObject(A()));
     assert(count == 3);
+}
+
+class SignalDisposable : Disposable
+{
+public:
+    this()
+    {
+        _signal = new EventSignal;
+    }
+public:
+    EventSignal signal()
+    {
+        return _signal;
+    }
+public:
+    void dispose()
+    {
+        _signal.setSignal();
+    }
+private:
+    EventSignal _signal;
 }

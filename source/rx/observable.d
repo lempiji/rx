@@ -1,7 +1,11 @@
 module rx.observable;
 
+import std.functional : unaryFun;
+import std.range : put;
+
 import rx.disposable;
 import rx.observer;
+import rx.util;
 
 template isObservable(T, E)
 {
@@ -211,4 +215,100 @@ unittest
     assert(disposeCount == 0);
     disposable.dispose();
     assert(disposeCount == 1);
+}
+
+//#########################
+// Defer
+//#########################
+struct DeferObserver(TObserver, E)
+{
+public:
+    this(TObserver observer, EventSignal signal)
+    {
+        _observer = observer;
+        _signal = signal;
+    }
+
+public:
+    void put(E obj)
+    {
+        if (_signal.signal) return;
+
+        static if (hasFailure!TObserver)
+        {
+            try
+            {
+                .put(_observer, obj);
+            }
+            catch (Exception e)
+            {
+                _observer.failure(e);
+            }
+        }
+        else
+        {
+            .put(_observer, obj);
+        }
+    }
+    void completed()
+    {
+        if (_signal.signal) return;
+        _signal.setSignal();
+
+        static if (hasCompleted!TObserver)
+        {
+            _observer.completed();
+        }
+    }
+    void failure(Exception e)
+    {
+        if (_signal.signal) return;
+        _signal.setSignal();
+
+        static if (hasFailure!TObserver)
+        {
+            _observer.failure(e);
+        }
+    }
+private:
+    TObserver _observer;
+    EventSignal _signal;
+}
+struct DeferObservable(alias f, E)
+{
+    alias ElementType = E;
+public:
+    auto subscribe(T)(T observer)
+    {
+        alias fun = unaryFun!f;
+        auto d = new SignalDisposable;
+        fun(DeferObserver!(T, E)(observer, d.signal));
+        return d;
+    }
+}
+DeferObservable!(f, E) defer(E, alias f)()
+{
+    return typeof(return)();
+}
+unittest
+{
+    auto sub = defer!(int, (observer){
+        observer.put(1);
+        observer.put(2);
+        observer.put(3);
+        observer.completed();
+    });
+    int countPut = 0;
+    int countCompleted = 0;
+    struct A
+    {
+        void put(int n) { countPut++; }
+        void completed() { countCompleted++; }
+    }
+
+    assert(countPut == 0);
+    assert(countCompleted == 0);
+    auto d = sub.doSubscribe(A());
+    assert(countPut == 3);
+    assert(countCompleted == 1);
 }
