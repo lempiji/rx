@@ -212,11 +212,11 @@ unittest
 {
     import core.atomic;
     import core.sync.condition;
-    import std.meta;
+    import std.typecons : TypeTuple;
     import rx.util : EventSignal;
     enum N = 4;
 
-    foreach (T; AliasSeq!(LocalScheduler, ThreadScheduler, TaskPoolScheduler))
+    foreach (T; TypeTuple!(LocalScheduler, ThreadScheduler, TaskPoolScheduler))
     {
         auto scheduler = new T;
         auto signal = new EventSignal;
