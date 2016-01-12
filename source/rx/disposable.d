@@ -1,5 +1,7 @@
 module rx.disposable;
 
+import core.sync.mutex;
+
 template isDisposable(T)
 {
     enum bool isDisposable = is(typeof({
@@ -185,4 +187,76 @@ unittest
         return;
     }
     assert(false);
+}
+
+class SerialDisposable : Disposable
+{
+public:
+    this()
+    {
+        _gate = new Mutex;
+    }
+
+public:
+    void disposable(Disposable value) @property
+    {
+        auto shouldDispose = false;
+        Disposable old = null;
+        synchronized (_gate)
+        {
+            shouldDispose = _disposed;
+            if (!shouldDispose)
+            {
+                old = _disposable;
+                _disposable = value;
+            }
+        }
+        if (old !is null)
+            old.dispose();
+        if (shouldDispose && value !is null)
+            value.dispose();
+    }
+    Disposable disposable() @property
+    {
+        return _disposable;
+    }
+
+public:
+    void dispose()
+    {
+        Disposable old = null;
+        synchronized (_gate)
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+                old = _disposable;
+                _disposable = null;
+            }
+        }
+        if (old !is null) old.dispose();
+    }
+
+private:
+    Mutex _gate;
+    bool _disposed;
+    Disposable _disposable;
+}
+unittest
+{
+    int count = 0;
+    struct A
+    {
+        void dispose() { count++; }
+    }
+
+    auto d = new SerialDisposable;
+    d.disposable(disposableObject(A()));
+    assert(count == 0);
+    d.disposable(disposableObject(A()));
+    assert(count == 1);
+    d.dispose();
+    assert(count == 2);
+    d.disposable(disposableObject(A()));
+    assert(count == 3);
 }
