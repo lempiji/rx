@@ -233,3 +233,29 @@ unittest
         assert(count == N);
     }
 }
+
+private __gshared Scheduler s_scheduler;
+shared static this()
+{
+    s_scheduler = new TaskPoolScheduler;
+}
+
+Scheduler currentScheduler() @property
+{
+    return s_scheduler;
+}
+TScheduler currentScheduler(TScheduler : Scheduler)(TScheduler scheduler) @property
+{
+    s_scheduler = scheduler;
+    return scheduler;
+}
+
+unittest
+{
+    Scheduler s = currentScheduler;
+    scope(exit) currentScheduler = s;
+
+    TaskPoolScheduler s1 = new TaskPoolScheduler;
+    TaskPoolScheduler s2 = currentScheduler = s1;
+    assert(s2 is s1);
+}
