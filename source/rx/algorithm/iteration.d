@@ -621,33 +621,26 @@ unittest
 //####################
 struct TeeObserver(alias f, TObserver, E)
 {
+    mixin SimpleObserverImpl!(TObserver, E);
 public:
     this(TObserver observer)
     {
         _observer = observer;
     }
-public:
-    void put(E obj)
+    static if (hasCompleted!TObserver || hasFailure!TObserver)
+    {
+        this(TObserver observer, Disposable disposable)
+        {
+            _observer = observer;
+            _disposable = disposable;
+        }
+    }
+private:
+    void putImpl(E obj)
     {
         unaryFun!f(obj);
         _observer.put(obj);
     }
-    static if (hasCompleted!TObserver)
-    {
-        void completed()
-        {
-            _observer.completed();
-        }
-    }
-    static if (hasFailure!TObserver)
-    {
-        void failure(Exception e)
-        {
-            _observer.failure(e);
-        }
-    }
-private:
-    TObserver _observer;
 }
 struct TeeObservable(alias f, TObservable, E)
 {
@@ -660,7 +653,17 @@ public:
 public:
     auto subscribe(T)(auto ref T observer)
     {
-        return _observable.doSubscribe(TeeObserver!(f, T, E)(observer));
+        alias ObserverType = TeeObserver!(f, T, E);
+        static if (hasCompleted!T || hasFailure!T)
+        {
+            auto disposable = new SingleAssignmentDisposable;
+            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, disposable))));
+            return disposable;
+        }
+        else
+        {
+            return doSubscribe(_observable, ObserverType(observer));
+        }
     }
 private:
     TObservable _observable;
@@ -692,6 +695,35 @@ unittest
     import std.algorithm : equal;
     assert(equal(buf1.data, [1, 2]));
     assert(equal(buf2.data, [2, 4]));
+}
+unittest
+{
+    import rx.subject;
+    auto sub = new SubjectObject!int;
+
+    int countPut = 0;
+    int countFailure = 0;
+    struct Test
+    {
+        void put(int) { countPut++; }
+        void failure(Exception) { countFailure++; }
+    }
+
+    int foo(int n)
+    {
+        if (n == 0) throw new Exception("");
+        return n * 2;
+    }
+
+    auto d = sub.tee!foo().doSubscribe(Test());
+
+    assert(countPut == 0);
+    sub.put(1);
+    assert(countPut == 1);
+    assert(countFailure == 0);
+    sub.put(0);
+    assert(countPut == 1);
+    assert(countFailure == 1);
 }
 
 //####################
