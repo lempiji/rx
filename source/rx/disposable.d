@@ -1,5 +1,6 @@
 module rx.disposable;
 
+import core.atomic;
 import core.sync.mutex;
 import rx.util;
 
@@ -57,6 +58,44 @@ interface Disposable
 interface Cancelable : Disposable
 {
     bool isDisposed() @property;
+}
+
+class CancelToken : Cancelable
+{
+public:
+    bool isDisposed() @property
+    {
+        return atomicLoad(_disposed);
+    }
+    alias isDisposed isCanceled;
+
+public:
+    void dispose()
+    {
+        atomicStore(_disposed, true);
+    }
+    alias dispose cancel;
+
+private:
+    shared(bool) _disposed;
+}
+unittest
+{
+    auto c = new CancelToken;
+    assert(!c.isDisposed);
+    assert(!c.isCanceled);
+    c.dispose();
+    assert(c.isDisposed);
+    assert(c.isCanceled);
+}
+unittest
+{
+    auto c = new CancelToken;
+    assert(!c.isDisposed);
+    assert(!c.isCanceled);
+    c.cancel();
+    assert(c.isDisposed);
+    assert(c.isCanceled);
 }
 
 class DisposableObject(T) : Disposable

@@ -4,6 +4,7 @@ import rx.disposable;
 import rx.observer;
 import rx.observable;
 
+import core.time;
 import core.thread : Thread;
 import std.range : put;
 import std.parallelism : TaskPool, taskPool, task;
@@ -11,6 +12,10 @@ import std.parallelism : TaskPool, taskPool, task;
 interface Scheduler
 {
     void start(void delegate() op);
+}
+interface AsyncScheduler : Scheduler
+{
+    CancelToken schedule(void delegate() op, Duration val);
 }
 
 class LocalScheduler : Scheduler
@@ -21,15 +26,27 @@ public:
         op();
     }
 }
-class ThreadScheduler : Scheduler
+class ThreadScheduler : AsyncScheduler
 {
     void start(void delegate() op)
     {
         auto t = new Thread(op);
         t.start();
     }
+    CancelToken schedule(void delegate() op, Duration val)
+    {
+        auto target = MonoTime.currTime + val;
+        auto c = new CancelToken;
+        start({
+            if (c.isCanceled) return;
+            auto dt = target - MonoTime.currTime;
+            if (dt > Duration.zero) Thread.sleep(dt);
+            if (!c.isCanceled) op();
+        });
+        return c;
+    }
 }
-class TaskPoolScheduler : Scheduler
+class TaskPoolScheduler : AsyncScheduler
 {
 public:
     this(TaskPool pool = taskPool)
@@ -42,9 +59,46 @@ public:
     {
         _pool.put(task(op));
     }
+    CancelToken schedule(void delegate() op, Duration val)
+    {
+        auto target = MonoTime.currTime + val;
+        auto c = new CancelToken;
+        start({
+            if (c.isCanceled) return;
+            auto dt = target - MonoTime.currTime;
+            if (dt > Duration.zero) Thread.sleep(dt);
+            if (!c.isCanceled) op();
+        });
+        return c;
+    }
 
 private:
     TaskPool _pool;
+}
+unittest
+{
+    import std.typetuple;
+    foreach (T; TypeTuple!(ThreadScheduler, TaskPoolScheduler))
+    {
+        auto s = new T;
+        bool done = false;
+        auto c = s.schedule((){ done = true; }, dur!"msecs"(50));
+        Thread.sleep(dur!"msecs"(100));
+        assert(done);
+    }
+}
+unittest
+{
+    import std.typetuple;
+    foreach (T; TypeTuple!(ThreadScheduler, TaskPoolScheduler))
+    {
+        auto s = new T;
+        bool done = false;
+        auto c = s.schedule((){ done = true; }, dur!"msecs"(50));
+        c.cancel();
+        Thread.sleep(dur!"msecs"(100));
+        assert(!done);
+    }
 }
 
 struct ObserveOnObserver(TObserver, TScheduler, E)
