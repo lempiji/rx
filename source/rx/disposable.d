@@ -20,10 +20,43 @@ unittest
     static assert(isDisposable!B);
     static assert(isDisposable!C);
 }
+template isCancelable(T)
+{
+    enum isCancelable = isDisposable!T && is(typeof((inout int n = 0){
+            T disposable = void;
+            bool b = disposable.isDisposed;
+        }));
+}
+unittest
+{
+    struct A
+    {
+        bool isDisposed() @property { return true; }
+        void dispose() { }
+    }
+    class B
+    {
+        bool isDisposed() @property { return true; }
+        void dispose() { }
+    }
+    interface C
+    {
+        bool isDisposed() @property;
+        void dispose();
+    }
+
+    static assert(isCancelable!A);
+    static assert(isCancelable!B);
+    static assert(isCancelable!C);
+}
 
 interface Disposable
 {
     void dispose();
+}
+interface Cancelable : Disposable
+{
+    bool isDisposed() @property;
 }
 
 class DisposableObject(T) : Disposable
@@ -43,14 +76,31 @@ public:
 private:
     T _disposable;
 }
+class CancelableObject(T) : DisposableObject!T, Cancelable
+{
+public:
+    this(T disposable)
+    {
+        super(disposable);
+    }
+public:
+    bool isDisposed() @property
+    {
+        return _disposable.isDisposed;
+    }
+}
 
-Disposable disposableObject(T)(T disposable)
+auto disposableObject(T)(T disposable)
 {
     static assert(isDisposable!T);
 
-    static if (is(T : Disposable))
+    static if (is(T : Cancelable) || is(T : Disposable))
     {
         return disposable;
+    }
+    else static if (isCancelable!T)
+    {
+        return new CancelableObject!T(disposable);
     }
     else
     {
@@ -92,6 +142,29 @@ unittest
     disposable.dispose();
     assert(count == 1);
 }
+unittest
+{
+    int count = 0;
+    struct TestCancelable
+    {
+        bool isDisposed() @property { return _disposed; }
+        void dispose()
+        {
+            count++;
+            _disposed = true;
+        }
+        bool _disposed;
+    }
+
+    TestCancelable test;
+    Cancelable cancelable = disposableObject(test);
+
+    assert(!cancelable.isDisposed);
+    assert(count == 0);
+    cancelable.dispose();
+    assert(cancelable.isDisposed);
+    assert(count == 1);
+}
 
 final class NopDisposable : Disposable
 {
@@ -118,16 +191,18 @@ unittest
     assert(d1 is d2);
 }
 
-package final class DisposedMarker : Disposable
+package final class DisposedMarker : Cancelable
 {
 private:
     this() { }
 
 public:
+    bool isDisposed() @property { return true; }
+public:
     void dispose() { }
 
 public:
-    static Disposable instance()
+    static Cancelable instance()
     {
         import std.concurrency : initOnce;
         static __gshared DisposedMarker inst;
@@ -135,7 +210,7 @@ public:
     }
 }
 
-final class SingleAssignmentDisposable : Disposable
+final class SingleAssignmentDisposable : Cancelable
 {
 public:
     void setDisposable(Disposable disposable)
@@ -144,6 +219,11 @@ public:
         if (!cas(&_disposable, shared(Disposable).init, cast(shared)disposable)) assert(false);
     }
 public:
+    bool isDisposed()
+    {
+        return _disposable is cast(shared)DisposedMarker.instance;
+    }
+
     void dispose()
     {
         import rx.util;
@@ -166,8 +246,10 @@ unittest
     }
     auto temp = new SingleAssignmentDisposable;
     temp.setDisposable(new TestDisposable);
+    assert(!temp.isDisposed);
     assert(count == 0);
     temp.dispose();
+    assert(temp.isDisposed);
     assert(count == 1);
 }
 unittest
@@ -190,7 +272,7 @@ unittest
     assert(false);
 }
 
-class SerialDisposable : Disposable
+class SerialDisposable : Cancelable
 {
 public:
     this()
@@ -199,6 +281,11 @@ public:
     }
 
 public:
+    bool isDisposed() @property
+    {
+        return _disposed;
+    }
+
     void disposable(Disposable value) @property
     {
         auto shouldDispose = false;
