@@ -339,14 +339,28 @@ unittest
     }
 
     auto d = new SerialDisposable;
-    d.disposable(disposableObject(A()));
+    d.disposable = disposableObject(A());
     assert(count == 0);
-    d.disposable(disposableObject(A()));
+    d.disposable = disposableObject(A());
     assert(count == 1);
     d.dispose();
     assert(count == 2);
-    d.disposable(disposableObject(A()));
+    d.disposable = disposableObject(A());
     assert(count == 3);
+}
+unittest
+{
+    int count = 0;
+    struct A
+    {
+        void dispose() { count++; }
+    }
+
+    auto d = new SerialDisposable;
+    d.dispose();
+    assert(count == 0);
+    d.disposable = disposableObject(A());
+    assert(count == 1);
 }
 
 class SignalDisposable : Disposable
@@ -357,7 +371,7 @@ public:
         _signal = new EventSignal;
     }
 public:
-    EventSignal signal()
+    EventSignal signal() @property
     {
         return _signal;
     }
@@ -368,4 +382,12 @@ public:
     }
 private:
     EventSignal _signal;
+}
+unittest
+{
+    auto d = new SignalDisposable;
+    auto signal = d.signal;
+    assert(!signal.signal);
+    d.dispose();
+    assert(signal.signal);
 }
