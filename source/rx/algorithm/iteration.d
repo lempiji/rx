@@ -3,6 +3,7 @@ module rx.algorithm.iteration;
 import rx.disposable;
 import rx.observer;
 import rx.observable;
+import rx.util;
 
 import core.atomic : cas, atomicLoad;
 import std.functional : unaryFun, binaryFun;
@@ -724,80 +725,4 @@ unittest
     sub.put(0);
     assert(countPut == 1);
     assert(countFailure == 1);
-}
-
-//####################
-// Util
-//####################
-package shared class AtomicCounter
-{
-public:
-    this(size_t n)
-    {
-        _count = n;
-    }
-public:
-    bool tryUpdateCount() @trusted
-    {
-        shared(size_t) oldValue = void;
-        size_t newValue = void;
-        do
-        {
-            oldValue = _count;
-            if (oldValue == 0)
-                return true;
-
-            newValue = oldValue - 1;
-        } while (!cas(&_count, oldValue, newValue));
-
-        return false;
-    }
-private:
-    size_t _count;
-}
-
-private mixin template SimpleObserverImpl(TObserver, E)
-{
-public:
-    void put(E obj)
-    {
-        static if (hasFailure!TObserver)
-        {
-            try
-            {
-                putImpl(obj);
-            }
-            catch(Exception e)
-            {
-                _observer.failure(e);
-                _disposable.dispose();
-            }
-        }
-        else
-        {
-            putImpl(obj);
-        }
-    }
-    static if (hasCompleted!TObserver)
-    {
-        void completed()
-        {
-            _observer.completed();
-            _disposable.dispose();
-        }
-    }
-    static if (hasFailure!TObserver)
-    {
-        void failure(Exception e)
-        {
-            _observer.failure(e);
-            _disposable.dispose();
-        }
-    }
-private:
-    TObserver _observer;
-    static if (hasCompleted!TObserver || hasFailure!TObserver)
-    {
-        Disposable _disposable;
-    }
 }

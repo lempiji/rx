@@ -63,3 +63,30 @@ private:
     Condition _condition;
     bool _signal;
 }
+
+package shared class AtomicCounter
+{
+public:
+    this(size_t n)
+    {
+        _count = n;
+    }
+public:
+    bool tryUpdateCount() @trusted
+    {
+        shared(size_t) oldValue = void;
+        size_t newValue = void;
+        do
+        {
+            oldValue = _count;
+            if (oldValue == 0)
+                return true;
+
+            newValue = oldValue - 1;
+        } while (!cas(&_count, oldValue, newValue));
+
+        return false;
+    }
+private:
+    size_t _count;
+}

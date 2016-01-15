@@ -492,3 +492,49 @@ unittest
     observer.failure(null);
     assert(countFailure == 1);
 }
+
+package mixin template SimpleObserverImpl(TObserver, E)
+{
+public:
+    void put(E obj)
+    {
+        static if (hasFailure!TObserver)
+        {
+            try
+            {
+                putImpl(obj);
+            }
+            catch(Exception e)
+            {
+                _observer.failure(e);
+                _disposable.dispose();
+            }
+        }
+        else
+        {
+            putImpl(obj);
+        }
+    }
+    static if (hasCompleted!TObserver)
+    {
+        void completed()
+        {
+            _observer.completed();
+            _disposable.dispose();
+        }
+    }
+    static if (hasFailure!TObserver)
+    {
+        void failure(Exception e)
+        {
+            _observer.failure(e);
+            _disposable.dispose();
+        }
+    }
+private:
+    TObserver _observer;
+    static if (hasCompleted!TObserver || hasFailure!TObserver)
+    {
+        Disposable _disposable;
+    }
+}
