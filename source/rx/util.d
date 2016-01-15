@@ -63,6 +63,13 @@ private:
     Condition _condition;
     bool _signal;
 }
+unittest
+{
+    auto event = new EventSignal;
+    assert(!event.signal);
+    event.setSignal();
+    assert(event.signal);
+}
 
 package shared class AtomicCounter
 {

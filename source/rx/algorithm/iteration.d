@@ -407,30 +407,56 @@ unittest
 //####################
 struct TakeObserver(TObserver, E)
 {
-    mixin SimpleObserverImpl!(TObserver, E);
 public:
-    this(TObserver observer, size_t count)
+    this(TObserver observer, size_t count, Disposable disposable)
     {
         _observer = observer;
-        _counter = new shared(AtomicCounter)(count);
+        _count = count;
+        _disposable = disposable;
     }
-    static if (hasCompleted!TObserver || hasFailure!TObserver)
+public:
+    void put(E obj)
     {
-        this(TObserver observer, size_t count, Disposable disposable)
+        shared(size_t) oldValue = void;
+        size_t newValue = void;
+        do
         {
-            _observer = observer;
-            _counter = new shared(AtomicCounter)(count);
-            _disposable = disposable;
+            oldValue = _count;
+            if (oldValue == 0) return;
+
+            newValue = atomicLoad(oldValue) - 1;
+        } while(!cas(&_count, oldValue, newValue));
+        
+        _observer.put(obj);
+        if (newValue == 0)
+        {
+            static if (hasCompleted!TObserver)
+            {
+                _observer.completed();
+            }
+            _disposable.dispose();
         }
     }
-private:
-    void putImpl(E obj)
+    void completed()
     {
-        if (_counter.tryUpdateCount()) return;
-        _observer.put(obj);
+        static if (hasCompleted!TObserver)
+        {
+            _observer.completed();
+        }
+        _disposable.dispose();
+    }
+    void failure(Exception e)
+    {
+        static if (hasFailure!TObserver)
+        {
+            _observer.failure(e);
+        }
+        _disposable.dispose();
     }
 private:
-    shared(AtomicCounter) _counter;
+    TObserver _observer;
+    shared(size_t) _count;
+    Disposable _disposable;
 }
 struct TakeObservable(TObservable)
 {
@@ -446,16 +472,9 @@ public:
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = TakeObserver!(TObserver, ElementType);
-        static if (hasCompleted!TObserver || hasFailure!TObserver)
-        {
-            auto disposable = new SingleAssignmentDisposable;
-            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, _count, disposable))));
-            return disposable;
-        }
-        else
-        {
-            return doSubscribe(_observable, ObserverType(observer, _count));
-        }
+        auto disposable = new SingleAssignmentDisposable;
+        disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, _count, disposable))));
+        return disposable;
     }
 private:
     TObservable _observable;
@@ -490,6 +509,29 @@ unittest
     subject.put(3);
     assert(buf2.data.length == 1);
     assert(buf.data.length == 1);
+}
+unittest
+{
+    import rx.subject;
+    auto sub = new SubjectObject!int;
+    auto taken = sub.take(2);
+
+    int countPut = 0;
+    int countCompleted = 0;
+    struct TestObserver
+    {
+        void put(int n) { countPut++; }
+        void completed() { countCompleted++; }
+    }
+
+    auto d = taken.doSubscribe(TestObserver());
+    assert(countPut == 0);
+    sub.put(1);
+    assert(countPut == 1);
+    assert(countCompleted == 0);
+    sub.put(2);
+    assert(countPut == 2);
+    assert(countCompleted == 1);
 }
 
 //####################
