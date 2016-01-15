@@ -430,3 +430,26 @@ unittest
     d.dispose();
     assert(signal.signal);
 }
+
+class CompositeDisposable : Disposable
+{
+public:
+    this(Disposable[] disposables...)
+    {
+        _disposables = disposables.dup;
+    }
+public:
+    void dispose()
+    {
+        foreach (ref d; _disposables) d.dispose();
+    }
+private:
+    Disposable[] _disposables;
+}
+unittest
+{
+    auto d1 = new SingleAssignmentDisposable;
+    auto d2 = new SerialDisposable;
+    auto d = new CompositeDisposable(d1, d2);
+    d.dispose();
+}
