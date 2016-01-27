@@ -453,3 +453,36 @@ unittest
     auto d = new CompositeDisposable(d1, d2);
     d.dispose();
 }
+
+class AnonymouseDisposable : Disposable
+{
+public:
+    this(void delegate() dispose)
+    {
+        assert(dispose !is null);
+        _dispose = dispose;
+    }
+
+public:
+    void dispose()
+    {
+        if (_dispose !is null)
+        {
+            _dispose();
+            _dispose = null;
+        }
+    }
+
+private:
+    void delegate() _dispose;
+}
+unittest
+{
+    int count = 0;
+    auto d = new AnonymouseDisposable({ count++; });
+    assert(count == 0);
+    d.dispose();
+    assert(count == 1);
+    d.dispose();
+    assert(count == 1);
+}
