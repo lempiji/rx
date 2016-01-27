@@ -38,3 +38,8 @@ void main()
  * generators
 - more test
 - more documents
+
+### License
+This library is under the MIT License.
+
+Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET).

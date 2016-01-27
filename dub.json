@@ -2,11 +2,10 @@
 	"name": "rx",
 	"description": "Reactive Extensions for D Programming Language.",
 	"copyright": "Copyright © 2015, lempiji",
-	"license": "BSL-1.0",
+	"license": "MIT",
 	"homepage": "https://github.com/lempiji/rx",
 	"authors": ["lempiji"],
 
-	"version": "0.1.0",
 	"targetType": "library",
 	"sourcePaths": ["source"]
 }

@@ -35,7 +35,17 @@ public:
         {
             try
             {
-                _disposable.disposable = _scheduler.schedule({ _observer.put(obj); }, _dueTime);
+                _disposable.disposable = _scheduler.schedule({
+                    try
+                    {
+                        _observer.put(obj);
+                    }
+                    catch (Exception e)
+                    {
+                        _observer.failure(e);
+                        _disposable.dispose();
+                    }
+                }, _dueTime);
             }
             catch (Exception e)
             {
