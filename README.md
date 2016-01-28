@@ -1,7 +1,35 @@
 ## Reactive Extensions for D Programming Language
 [![Build Status](https://travis-ci.org/lempiji/rx.svg?branch=master)](https://travis-ci.org/lempiji/rx)
 
-### Example
+### Overview
+The is a library like the [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET), for the asynchronous or event-based programs on OutputRange concept.
+
+#### Basic concept interfaces
+```d
+//module rx.disposable
+interface Disposable
+{
+    void dispose();
+}
+
+//module rx.observer
+interface Observer(E) : OutputRange!E
+{
+    //void put(E obj); //inherits from OutputRange!E
+    void completed();
+    void failure(Exception e);
+}
+
+//module rx.observable
+interface Observable(E)
+{
+    alias ElementType = E;
+    Disposable subscribe(Observer!E observer);
+}
+
+```
+
+#### Example
 ```d
 import rx;
 import std.algorithm : equal;
@@ -20,13 +48,18 @@ void main()
 
     foreach (i; 0 .. 10)
     {
-        subject.put(i);
+        subject.put(i); //fire some event
     }
 
     auto result = buf.data;
-    assert(equal(result, ["0", "2", "4", "6", "8"]));
+    assert(equal(result, ["0", "2", "4", "6", "8"])); //receive some event
 }
 ```
+
+### License
+This library is under the MIT License.
+
+Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET).
 
 ### Future work
 - more algorithms
@@ -38,8 +71,3 @@ void main()
  * generators
 - more test
 - more documents
-
-### License
-This library is under the MIT License.
-
-Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET).
