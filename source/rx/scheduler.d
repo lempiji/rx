@@ -266,7 +266,7 @@ unittest
 {
     import core.atomic;
     import core.sync.condition;
-    import std.typecons : TypeTuple;
+    import std.typetuple;
     import rx.util : EventSignal;
     enum N = 4;
 

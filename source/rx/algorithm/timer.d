@@ -1,6 +1,7 @@
 module rx.algorithm.timer;
 
 import core.time;
+import std.range : put;
 import rx.disposable;
 import rx.observer;
 import rx.observable;
