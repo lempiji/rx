@@ -80,7 +80,7 @@ auto doSubscribe(TObservable, E)(auto ref TObservable observable, void delegate(
 {
     return doSubscribe(observable, makeObserver(doPut, doFailure));
 }
-auto doSubscribe(TObservable, TObserver)(auto ref TObservable observable, TObserver observer)
+auto doSubscribe(TObservable, TObserver)(auto ref TObservable observable, auto ref TObserver observer)
 {
     alias ElementType = TObservable.ElementType;
     static if (isSubscribable!(TObservable, TObserver))
@@ -153,7 +153,7 @@ private:
 
 template observableObject(E)
 {
-    Observable!E observableObject(R)(R observable)
+    Observable!E observableObject(R)(auto ref R observable)
     {
         static if (is(R : Observable!E))
         {

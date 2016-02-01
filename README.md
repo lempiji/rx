@@ -63,7 +63,6 @@ Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NE
 
 ### Future work
 - more algorithms
- * reduce(aggregate)
  * zip
  * takeUntil
  * skipUntil

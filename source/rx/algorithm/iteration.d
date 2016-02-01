@@ -825,3 +825,132 @@ unittest
     s2.put(100);
     assert(count == 2);
 }
+
+
+//####################
+// TakeLast
+//####################
+auto takeLast(TObservable)(auto ref TObservable observable)
+{
+    static struct TakeLastObservable
+    {
+    public:
+        alias ElementType = TObservable.ElementType;
+
+    public:
+        this(ref TObservable observable)
+        {
+            _observable = observable;
+        }
+
+    public:
+        auto subscribe(TObserver)(auto ref TObserver observer)
+        {
+            static class TakeLastObserver
+            {
+            public:
+                this(ref TObserver observer, SingleAssignmentDisposable disposable)
+                {
+                    _observer = observer;
+                    _disposable = disposable;
+                }
+
+            public:
+                void put(ElementType obj)
+                {
+                    _current = obj;
+                    _hasValue = true;
+                }
+
+                void completed()
+                {
+                    if (_hasValue) _observer.put(_current);
+
+                    static if (hasCompleted!TObserver)
+                    {
+                        _observer.completed();
+                    }
+                    _disposable.dispose();
+                }
+
+                static if (hasFailure!TObserver)
+                {
+                    void failure(Exception e)
+                    {
+                        _observer.failure(e);
+                    }
+                }
+
+            private:
+                bool _hasValue = false;
+                ElementType _current;
+                TObserver _observer;
+                SingleAssignmentDisposable _disposable;
+            }
+
+            auto d = new SingleAssignmentDisposable;
+            d.setDisposable(disposableObject(doSubscribe(_observable, new TakeLastObserver(observer, d))));
+            return d;
+        }
+
+    private:
+        TObservable _observable;
+    }
+
+    return TakeLastObservable(observable);
+}
+
+unittest
+{
+    import rx.subject;
+    auto sub = new SubjectObject!int;
+
+    int putCount = 0;
+    int completedCount = 0;
+    int failureCount = 0;
+    struct TestObserver
+    {
+        void put(int n) { putCount++; }
+        void completed() { completedCount++; }
+        void failure(Exception e) { failureCount++; }
+    }
+
+    auto d = sub.takeLast.subscribe(TestObserver());
+
+    assert(putCount == 0);
+    sub.put(1);
+    assert(putCount == 0);
+    sub.put(10);
+    assert(putCount == 0);
+    sub.completed();
+    assert(putCount == 1);
+    assert(completedCount == 1);
+    sub.put(100);
+    assert(putCount == 1);
+    assert(completedCount == 1);
+}
+
+//####################
+// Fold
+//####################
+auto fold(alias fun, TObservable, Seed)(auto ref TObservable observable, Seed seed)
+{
+    return observable.scan!fun(seed).takeLast;
+}
+unittest
+{
+    import rx.subject;
+    auto sub = new SubjectObject!int;
+    auto sum = sub.fold!"a+b"(0);
+
+    int result = 0;
+    sum.doSubscribe((int n){ result = n; });
+
+    foreach (i; 1 .. 11)
+    {
+        sub.put(i);
+    }
+    assert(result == 0);
+    sub.completed();
+    assert(result == 55);
+}
