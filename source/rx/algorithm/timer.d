@@ -89,11 +89,6 @@ unittest
     assert(buf.data.length == 4);
     assert(equal(buf.data, [0, 1, 2, 3]));
 }
-unittest
-{
-    auto t = timer(dur!"msecs"(30), dur!"msecs"(50));
-    auto d = t.subscribe((size_t n) { });
-}
 
 //#########################
 // Throttle
