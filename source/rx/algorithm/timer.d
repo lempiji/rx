@@ -7,6 +7,94 @@ import rx.observer;
 import rx.observable;
 import rx.scheduler;
 
+
+//#########################
+// Timer
+//#########################
+auto timer(TScheduler : AsyncScheduler)(Duration wait, Duration interval, TScheduler scheduler)
+{
+	static struct TimerObservable
+	{
+	public:
+		alias ElementType = size_t;
+
+	public:
+		this(Duration wait, Duration interval, TScheduler scheduler)
+		{
+			_wait = wait;
+			_interval = interval;
+			_scheduler = scheduler;
+		}
+
+	public:
+		auto subscribe(TObserver)(auto ref TObserver observer)
+		{
+			auto disposable = new SignalDisposable;
+			auto signal = disposable.signal;
+
+			auto makePut = (ElementType val) {
+				return {
+					import std.range : put;
+					observer.put(val);
+				};
+		 	};
+
+			auto th = new Thread({
+					Thread.sleep(_wait);
+
+					if (!signal.signal) _scheduler.start(makePut(0));
+
+                    import core.time;
+                    auto nextTime = MonoTime.currTime;
+                    size_t n = 1;
+					while (!signal.signal)
+					{
+                        nextTime += _interval;
+
+                        auto dt = nextTime - MonoTime.currTime;
+                        if (dt > Duration.zero) Thread.sleep(dt);
+
+						if (!signal.signal) _scheduler.start(makePut(n++));
+					}
+				});
+            th.isDaemon = true;
+            th.start();
+
+			return disposable;
+		}
+
+	private:
+		Duration _wait;
+		Duration _interval;
+		TScheduler _scheduler;
+	}
+
+	return TimerObservable(wait, interval, scheduler);
+}
+
+auto timer(Duration wait, Duration interval)
+{
+	return timer(wait, interval, new TaskPoolScheduler);
+}
+
+unittest
+{
+    import std.algorithm;
+    import std.array;
+    auto t = timer(dur!"msecs"(30), dur!"msecs"(50));
+    auto buf = appender!(size_t[]);
+    auto d = t.subscribe(buf);
+    Thread.sleep(dur!"msecs"(200));
+    d.dispose();
+    assert(buf.data.length == 4);
+    assert(equal(buf.data, [0, 1, 2, 3]));
+}
+unittest
+{
+    auto t = timer(dur!"msecs"(30), dur!"msecs"(50));
+    auto d = t.subscribe((size_t n) { });
+}
+
 //#########################
 // Throttle
 //#########################
