@@ -1,4 +1,6 @@
 ## Reactive Extensions for D Programming Language
+
+[![Dub version](https://img.shields.io/dub/v/rx.svg)](https://code.dlang.org/packages/rx)
 [![Build Status](https://travis-ci.org/lempiji/rx.svg?branch=master)](https://travis-ci.org/lempiji/rx)
 
 ### Overview
