@@ -5,9 +5,11 @@
 [![Build Status](https://travis-ci.org/lempiji/rx.svg?branch=master)](https://travis-ci.org/lempiji/rx)
 
 ### Overview
+
 The is a library like the [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET), for the asynchronous or event-based programs on OutputRange concept.
 
 #### Basic concept interfaces
+
 ```d
 //module rx.disposable
 interface Disposable
@@ -33,6 +35,7 @@ interface Observable(E)
 ```
 
 #### Example
+
 ```d
 import rx;
 import std.algorithm : equal;
@@ -60,11 +63,13 @@ void main()
 ```
 
 ### License
+
 This library is under the MIT License.
 
 Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET).
 
 ### Future work
+
 - more algorithms
  * zip
  * takeUntil
