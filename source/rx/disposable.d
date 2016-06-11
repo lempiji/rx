@@ -73,7 +73,7 @@ interface Cancelable : Disposable
 }
 
 ///Simply implements for Cancelable interface. Its propagates notification that operations should be canceled.
-class CancelToken : Cancelable
+class CancellationToken : Cancelable
 {
 public:
     ///
@@ -98,7 +98,7 @@ private:
 }
 unittest
 {
-    auto c = new CancelToken;
+    auto c = new CancellationToken;
     assert(!c.isDisposed);
     assert(!c.isCanceled);
     c.dispose();
@@ -107,7 +107,7 @@ unittest
 }
 unittest
 {
-    auto c = new CancelToken;
+    auto c = new CancellationToken;
     assert(!c.isDisposed);
     assert(!c.isCanceled);
     c.cancel();

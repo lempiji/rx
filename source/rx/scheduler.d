@@ -15,7 +15,7 @@ interface Scheduler
 }
 interface AsyncScheduler : Scheduler
 {
-    CancelToken schedule(void delegate() op, Duration val);
+    CancellationToken schedule(void delegate() op, Duration val);
 }
 
 class LocalScheduler : Scheduler
@@ -33,10 +33,10 @@ class ThreadScheduler : AsyncScheduler
         auto t = new Thread(op);
         t.start();
     }
-    CancelToken schedule(void delegate() op, Duration val)
+    CancellationToken schedule(void delegate() op, Duration val)
     {
         auto target = MonoTime.currTime + val;
-        auto c = new CancelToken;
+        auto c = new CancellationToken;
         start({
             if (c.isCanceled) return;
             auto dt = target - MonoTime.currTime;
@@ -59,10 +59,10 @@ public:
     {
         _pool.put(task(op));
     }
-    CancelToken schedule(void delegate() op, Duration val)
+    CancellationToken schedule(void delegate() op, Duration val)
     {
         auto target = MonoTime.currTime + val;
-        auto c = new CancelToken;
+        auto c = new CancellationToken;
         start({
             if (c.isCanceled) return;
             auto dt = target - MonoTime.currTime;
