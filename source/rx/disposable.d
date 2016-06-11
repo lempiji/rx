@@ -1,9 +1,13 @@
+/+++++++++++++++++++++++++++++
+ + This module defines the concept of Disposable.
+ +/
 module rx.disposable;
 
 import core.atomic;
 import core.sync.mutex;
 import rx.util;
 
+///Tests if something is a Disposable.
 template isDisposable(T)
 {
     enum bool isDisposable = is(typeof({
@@ -11,16 +15,19 @@ template isDisposable(T)
             disposable.dispose();
         }()));
 }
+///
 unittest
 {
     struct A { void dispose(){} }
-    class B {void dispose(){} }
+    class B { void dispose(){} }
     interface C { void dispose(); }
 
     static assert(isDisposable!A);
     static assert(isDisposable!B);
     static assert(isDisposable!C);
 }
+
+///Tests if something is a Cancelable
 template isCancelable(T)
 {
     enum isCancelable = isDisposable!T && is(typeof((inout int n = 0){
@@ -28,6 +35,7 @@ template isCancelable(T)
             bool b = disposable.isDisposed;
         }));
 }
+///
 unittest
 {
     struct A
@@ -51,29 +59,38 @@ unittest
     static assert(isCancelable!C);
 }
 
+///Wrapper for disposable objects.
 interface Disposable
 {
+    ///
     void dispose();
 }
+///Wrapper for cancelable objects.
 interface Cancelable : Disposable
 {
+    ///
     bool isDisposed() @property;
 }
 
+///Simply implements for Cancelable interface. Its propagates notification that operations should be canceled.
 class CancelToken : Cancelable
 {
 public:
+    ///
     bool isDisposed() @property
     {
         return atomicLoad(_disposed);
     }
+    ///
     alias isDisposed isCanceled;
 
 public:
+    ///
     void dispose()
     {
         atomicStore(_disposed, true);
     }
+    ///
     alias dispose cancel;
 
 private:
@@ -98,15 +115,18 @@ unittest
     assert(c.isCanceled);
 }
 
+///Class that implements the Disposable interface and wraps the dispose methods in virtual functions.
 class DisposableObject(T) : Disposable
 {
 public:
+    ///
     this(T disposable)
     {
         _disposable = disposable;
     }
 
 public:
+    ///
     void dispose()
     {
         _disposable.dispose();
@@ -115,20 +135,25 @@ public:
 private:
     T _disposable;
 }
+///Class that implements the Cancelable interface and wraps the  isDisposed property in virtual functions.
 class CancelableObject(T) : DisposableObject!T, Cancelable
 {
 public:
+    ///
     this(T disposable)
     {
         super(disposable);
     }
+
 public:
+    ///
     bool isDisposed() @property
     {
         return _disposable.isDisposed;
     }
 }
 
+///Wraps dispose method in virtual functions.
 auto disposableObject(T)(T disposable)
 {
     static assert(isDisposable!T);
@@ -147,23 +172,7 @@ auto disposableObject(T)(T disposable)
     }
 }
 
-unittest
-{
-    int count = 0;
-    class TestDisposable : Disposable
-    {
-        void dispose()
-        {
-            count++;
-        }
-    }
-    auto test = new TestDisposable;
-    Disposable disposable = disposableObject(test);
-    assert(disposable is test);
-    assert(count == 0);
-    disposable.dispose();
-    assert(count == 1);
-}
+///
 unittest
 {
     int count = 0;
@@ -177,6 +186,23 @@ unittest
 
     TestDisposable test;
     Disposable disposable = disposableObject(test);
+    assert(count == 0);
+    disposable.dispose();
+    assert(count == 1);
+}
+unittest
+{
+    int count = 0;
+    class TestDisposable : Disposable
+    {
+        void dispose()
+        {
+            count++;
+        }
+    }
+    auto test = new TestDisposable;
+    Disposable disposable = disposableObject(test);
+    assert(disposable is test);
     assert(count == 0);
     disposable.dispose();
     assert(count == 1);
@@ -205,6 +231,7 @@ unittest
     assert(count == 1);
 }
 
+///Defines a instance property that return NOP Disposable.
 final class NopDisposable : Disposable
 {
 private:
@@ -214,14 +241,15 @@ public:
     void dispose() { }
 
 public:
-    static Disposable instance()
+    ///
+    static Disposable instance() @property
     {
         import std.concurrency : initOnce;
         static __gshared NopDisposable inst;
         return initOnce!inst(new NopDisposable);
     }
 }
-
+///
 unittest
 {
     Disposable d1 = NopDisposable.instance;
@@ -237,6 +265,7 @@ private:
 
 public:
     bool isDisposed() @property { return true; }
+
 public:
     void dispose() { }
 
@@ -249,33 +278,37 @@ public:
     }
 }
 
+///
 final class SingleAssignmentDisposable : Cancelable
 {
 public:
+    ///
     void setDisposable(Disposable disposable)
     {
         import core.atomic;
         if (!cas(&_disposable, shared(Disposable).init, cast(shared)disposable)) assert(false);
     }
+
 public:
-    bool isDisposed()
+    ///
+    bool isDisposed() @property
     {
         return _disposable is cast(shared)DisposedMarker.instance;
     }
 
+public:
+    ///
     void dispose()
     {
         import rx.util;
         auto temp = exchange(_disposable, cast(shared)DisposedMarker.instance);
         if (temp !is null) temp.dispose();
     }
+
 private:
     shared(Disposable) _disposable;
 }
-unittest
-{
-    static assert(isDisposable!SingleAssignmentDisposable);
-}
+///
 unittest
 {
     int count = 0;
@@ -290,6 +323,10 @@ unittest
     temp.dispose();
     assert(temp.isDisposed);
     assert(count == 1);
+}
+unittest
+{
+    static assert(isDisposable!SingleAssignmentDisposable);
 }
 unittest
 {
@@ -311,6 +348,7 @@ unittest
     assert(false);
 }
 
+///
 class SerialDisposable : Cancelable
 {
 public:
@@ -320,11 +358,13 @@ public:
     }
 
 public:
+    ///
     bool isDisposed() @property
     {
         return _disposed;
     }
 
+    ///
     void disposable(Disposable value) @property
     {
         auto shouldDispose = false;
@@ -343,12 +383,15 @@ public:
         if (shouldDispose && value !is null)
             value.dispose();
     }
+
+    ///
     Disposable disposable() @property
     {
         return _disposable;
     }
 
 public:
+    ///
     void dispose()
     {
         Disposable old = null;
@@ -402,6 +445,7 @@ unittest
     assert(count == 1);
 }
 
+///
 class SignalDisposable : Disposable
 {
 public:
@@ -409,16 +453,21 @@ public:
     {
         _signal = new EventSignal;
     }
+
 public:
+    ///
     EventSignal signal() @property
     {
         return _signal;
     }
+
 public:
+    ///
     void dispose()
     {
         _signal.setSignal();
     }
+
 private:
     EventSignal _signal;
 }
@@ -431,21 +480,27 @@ unittest
     assert(signal.signal);
 }
 
+///
 class CompositeDisposable : Disposable
 {
 public:
+    ///
     this(Disposable[] disposables...)
     {
         _disposables = disposables.dup;
     }
+
 public:
+    ///
     void dispose()
     {
         foreach (ref d; _disposables) d.dispose();
     }
+
 private:
     Disposable[] _disposables;
 }
+///
 unittest
 {
     auto d1 = new SingleAssignmentDisposable;
@@ -454,9 +509,11 @@ unittest
     d.dispose();
 }
 
+///
 class AnonymouseDisposable : Disposable
 {
 public:
+    ///
     this(void delegate() dispose)
     {
         assert(dispose !is null);
@@ -464,6 +521,7 @@ public:
     }
 
 public:
+    ///
     void dispose()
     {
         if (_dispose !is null)
@@ -476,6 +534,7 @@ public:
 private:
     void delegate() _dispose;
 }
+///
 unittest
 {
     int count = 0;
