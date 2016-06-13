@@ -1,4 +1,7 @@
-module rx.subject;
+/+++++++++++++++++++++++++++++
+ + This module defines the Subject and some implements.
+ +/
+ module rx.subject;
 
 import rx.disposable;
 import rx.observer;
@@ -7,8 +10,10 @@ import rx.observable;
 import core.atomic : atomicLoad, cas;
 import std.range : put;
 
+///Represents an object that is both an observable sequence as well as an observer.
 interface Subject(E) : Observer!E, Observable!E { }
 
+///Represents an object that is both an observable sequence as well as an observer. Each notification is broadcasted to all subscribed observers.
 class SubjectObject(E) : Subject!E
 {
     alias ElementType = E;
@@ -19,11 +24,13 @@ public:
     }
 
 public:
+    ///
     void put(E obj)
     {
         auto temp = atomicLoad(_observer);
         temp.put(obj);
     }
+    ///
     void completed()
     {
         shared(Observer!E) oldObserver = void;
@@ -37,7 +44,7 @@ public:
         } while (!cas(&_observer, oldObserver, newObserver));
         temp.completed();
     }
-
+    ///
     void failure(Exception error)
     {
         shared(Observer!E) oldObserver = void;
@@ -52,10 +59,12 @@ public:
         temp.failure(error);
     }
 
+    ///
     Disposable subscribe(T)(T observer)
     {
         return subscribe(observerObject!E(observer));
     }
+    ///
     Disposable subscribe(Observer!E observer)
     {
         shared(Observer!E) oldObserver = void;
@@ -94,6 +103,7 @@ public:
         return subscription(this, observer);
     }
 
+    ///
     void unsubscribe(Observer!E observer)
     {
         shared(Observer!E) oldObserver = void;
@@ -119,14 +129,8 @@ public:
 private:
     shared(Observer!E) _observer;
 }
-unittest
-{
-    static assert(isObserver!(SubjectObject!int, int));
-    static assert(isObservable!(SubjectObject!int, int));
-    static assert(!isObservable!(SubjectObject!int, string));
-    static assert(!isObservable!(SubjectObject!int, string));
-}
 
+///
 unittest
 {
     import std.array : appender;
@@ -143,6 +147,14 @@ unittest
     disposable.dispose();
     subject.put(2);
     assert(equal(data.data, [0, 1]));
+}
+
+unittest
+{
+    static assert(isObserver!(SubjectObject!int, int));
+    static assert(isObservable!(SubjectObject!int, int));
+    static assert(!isObservable!(SubjectObject!int, string));
+    static assert(!isObservable!(SubjectObject!int, string));
 }
 unittest
 {
