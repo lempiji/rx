@@ -169,7 +169,7 @@ private:
     R _observable;
 }
 
-///Wraps subscribe method in virtual functions.
+///Wraps subscribe method in virtual function.
 template observableObject(E)
 {
     Observable!E observableObject(R)(auto ref R observable)

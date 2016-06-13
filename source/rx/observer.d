@@ -1,10 +1,13 @@
-module rx.observer;
+/+++++++++++++++++++++++++++++
+ + This module defines the concept of Observer.
+ +/
+ module rx.observer;
 
 import std.range.primitives;
 import std.range.interfaces;
 import std.typetuple;
 
-
+///Tests if something has completed method.
 template hasCompleted(T)
 {
     enum bool hasCompleted = is(typeof({
@@ -12,6 +15,7 @@ template hasCompleted(T)
             observer.completed();
         }()));
 }
+///
 unittest
 {
     struct A
@@ -27,6 +31,7 @@ unittest
     static assert(!hasCompleted!B);
 }
 
+///Tests if something has failure method.
 template hasFailure(T)
 {
     enum bool hasFailure = is(typeof({
@@ -35,6 +40,7 @@ template hasFailure(T)
             observer.failure(e);
         }()));
 }
+///
 unittest
 {
     struct A
@@ -55,10 +61,12 @@ unittest
     static assert(!hasFailure!C);
 }
 
+///Tests if something is Observer.
 template isObserver(T, E)
 {
     enum bool isObserver = isOutputRange!(T, E) && hasCompleted!T && hasFailure!T;
 }
+///
 unittest
 {
     struct TestObserver
@@ -71,17 +79,22 @@ unittest
     static assert(isObserver!(TestObserver, int));
 }
 
+///Wraps completed and failure method in virtual function.
 interface Observer(E) : OutputRange!E
 {
+    ///
     void completed();
+    ///
     void failure(Exception e);
 }
+///
 unittest
 {
     alias TObserver = Observer!byte;
     static assert(isObserver!(TObserver, byte));
 }
 
+///Class that implements Observer interface and wraps the completed and failure method in virtual functions. This class extends the OutputRangeObject.
 class ObserverObject(R, E...) : OutputRangeObject!(R, E), staticMap!(Observer, E)
 {
 public:
@@ -92,6 +105,7 @@ public:
     }
 
 public:
+    ///
     void completed()
     {
         static if (hasCompleted!R)
@@ -99,6 +113,7 @@ public:
             _range.completed();
         }
     }
+    ///
     void failure(Exception e)
     {
         static if (hasFailure!R)
@@ -111,6 +126,7 @@ private:
     R _range;
 }
 
+///Wraps subscribe method in virtual function.
 template observerObject(E)
 {
     ObserverObject!(R, E) observerObject(R)(R range)
@@ -118,6 +134,7 @@ template observerObject(E)
         return new ObserverObject!(R, E)(range);
     }
 }
+///
 unittest
 {
     struct TestObserver
@@ -128,6 +145,8 @@ unittest
 
     Observer!int observer = observerObject!int(TestObserver());
     observer.put(0);
+    observer.completed();
+    observer.failure(null);
     static assert(isObserver!(typeof(observer), int));
 }
 
@@ -221,6 +240,7 @@ unittest
     o4.put(0); o4.completed(); o4.failure(null);
 }
 
+///
 final class NopObserver(E) : Observer!E
 {
 private:
@@ -232,6 +252,7 @@ public:
     void failure(Exception) { }
 
 public:
+    ///
     static Observer!E instance()
     {
         import std.concurrency : initOnce;
@@ -239,7 +260,7 @@ public:
         return initOnce!inst(new NopObserver!E);
     }
 }
-
+///
 unittest
 {
     Observer!int o1 = NopObserver!int.instance;
@@ -248,6 +269,7 @@ unittest
     assert(o1 is o2);
 }
 
+///
 final class DoneObserver(E) : Observer!E
 {
 private:
@@ -278,7 +300,7 @@ public:
         return initOnce!inst(new DoneObserver!E);
     }
 }
-
+///
 unittest
 {
     Observer!int o1 = DoneObserver!int.instance;
@@ -293,6 +315,7 @@ unittest
     assert(observer.exception is e);
 }
 
+///
 public class CompositeObserver(E) : Observer!E
 {
 private:
@@ -305,29 +328,30 @@ public:
     }
 
 public:
+    ///
     void put(E obj)
     {
         foreach (observer; _observers)
             observer.put(obj);
     }
-
+    ///
     void completed()
     {
         foreach (observer; _observers)
             observer.completed();
     }
-
+    ///
     void failure(Exception e)
     {
         foreach (observer; _observers)
             observer.failure(e);
     }
-
+    ///
     CompositeObserver!E add(Observer!E observer)
     {
         return new CompositeObserver!E(_observers ~ observer);
     }
-
+    ///
     Observer!E remove(Observer!E observer)
     {
         import std.algorithm : countUntil;
@@ -341,6 +365,7 @@ public:
     }
 
 public:
+    ///
     static CompositeObserver!E empty()
     {
         import std.concurrency : initOnce;
@@ -351,6 +376,7 @@ public:
 private:
     Observer!E[] _observers;
 }
+///
 unittest
 {
     int count = 0;
@@ -375,6 +401,7 @@ unittest
     assert(count == 4);
 }
 
+///The helper for the own observer.
 auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)
 {
     static struct AnonymouseObserver
@@ -407,19 +434,7 @@ auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted, void d
 
     return AnonymouseObserver(doPut, doCompleted, doFailure);
 }
-unittest
-{
-    int countPut = 0;
-    int countCompleted = 0;
-    int countFailure = 0;
-    auto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; }, (Exception){ countFailure++; });
-    .put(observer, 0);
-    assert(countPut == 1);
-    observer.completed();
-    assert(countCompleted == 1);
-    observer.failure(null);
-    assert(countFailure == 1);
-}
+///ditto
 auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted)
 {
     static struct AnonymouseObserver
@@ -446,16 +461,7 @@ auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted)
 
     return AnonymouseObserver(doPut, doCompleted);
 }
-unittest
-{
-    int countPut = 0;
-    int countCompleted = 0;
-    auto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; });
-    .put(observer, 0);
-    assert(countPut == 1);
-    observer.completed();
-    assert(countCompleted == 1);
-}
+///ditto
 auto makeObserver(E)(void delegate(E) doPut, void delegate(Exception) doFailure)
 {
     static struct AnonymouseObserver
@@ -482,13 +488,51 @@ auto makeObserver(E)(void delegate(E) doPut, void delegate(Exception) doFailure)
 
     return AnonymouseObserver(doPut, doFailure);
 }
+///
+unittest
+{
+    int countPut = 0;
+    int countCompleted = 0;
+    int countFailure = 0;
+
+    auto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; }, (Exception){ countFailure++; });
+
+    .put(observer, 0);
+    assert(countPut == 1);
+
+    observer.completed();
+    assert(countCompleted == 1);
+
+    observer.failure(null);
+    assert(countFailure == 1);
+}
+unittest
+{
+    int countPut = 0;
+    int countCompleted = 0;
+
+    auto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; });
+
+    .put(observer, 0);
+    assert(countPut == 1);
+
+    observer.completed();
+    assert(countCompleted == 1);
+
+    static assert(!hasFailure!(typeof(observer)));
+}
 unittest
 {
     int countPut = 0;
     int countFailure = 0;
+
     auto observer = makeObserver((int){ countPut++; }, (Exception){ countFailure++; });
+
     .put(observer, 0);
     assert(countPut == 1);
+
+    static assert(!hasCompleted!(typeof(observer)));
+
     observer.failure(null);
     assert(countFailure == 1);
 }
