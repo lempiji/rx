@@ -23,17 +23,14 @@ template isObservable(T, E)
 ///
 unittest
 {
-    struct TestDisposable
-    {
-        void dispose() { }
-    }
     struct TestObservable
     {
         alias ElementType = int;
-        TestDisposable subscribe(T)(T observer)
+
+        Disposable subscribe(T)(T observer)
         {
             static assert(isObserver!(T, int));
-            return TestDisposable();
+            return null;
         }
     }
 
@@ -143,6 +140,7 @@ unittest
 interface Observable(E)
 {
     alias ElementType = E;
+
     Disposable subscribe(Observer!E observer);
 }
 unittest
@@ -235,9 +233,81 @@ unittest
 // Defer
 //#########################
 ///Create observable by function that template parameter.
-DeferObservable!(f, E) defer(E, alias f)()
+auto defer(E, alias f)()
 {
-    return typeof(return)();
+    static struct DeferObservable
+    {
+        alias ElementType = E;
+
+    public:
+        auto subscribe(TObserver)(TObserver observer)
+        {
+            static struct DeferObserver
+            {
+            public:
+                this(TObserver observer, EventSignal signal)
+                {
+                    _observer = observer;
+                    _signal = signal;
+                }
+
+            public:
+                void put(E obj)
+                {
+                    if (_signal.signal) return;
+
+                    static if (hasFailure!TObserver)
+                    {
+                        try
+                        {
+                            .put(_observer, obj);
+                        }
+                        catch (Exception e)
+                        {
+                            _observer.failure(e);
+                        }
+                    }
+                    else
+                    {
+                        .put(_observer, obj);
+                    }
+                }
+
+                void completed()
+                {
+                    if (_signal.signal) return;
+                    _signal.setSignal();
+
+                    static if (hasCompleted!TObserver)
+                    {
+                        _observer.completed();
+                    }
+                }
+
+                void failure(Exception e)
+                {
+                    if (_signal.signal) return;
+                    _signal.setSignal();
+
+                    static if (hasFailure!TObserver)
+                    {
+                        _observer.failure(e);
+                    }
+                }
+
+            private:
+                TObserver _observer;
+                EventSignal _signal;
+            }
+
+            alias fun = unaryFun!f;
+            auto d = new SignalDisposable;
+            fun(DeferObserver(observer, d.signal));
+            return d;
+        }
+    }
+
+    return DeferObservable();
 }
 ///
 unittest
@@ -263,72 +333,43 @@ unittest
     assert(countPut == 3);
     assert(countCompleted == 1);
 }
-
-///
-struct DeferObserver(TObserver, E)
+unittest
 {
-public:
-    this(TObserver observer, EventSignal signal)
+    auto sub = defer!(int, (observer){
+        observer.put(0);
+        observer.failure(new Exception(""));
+        observer.put(1);
+    });
+
+    int countPut = 0;
+    int countFailure = 0;
+    struct A
     {
-        _observer = observer;
-        _signal = signal;
+        void put(int n) { countPut++; }
+        void failure(Exception e) { countFailure++; }
     }
 
-public:
-    void put(E obj)
-    {
-        if (_signal.signal) return;
-
-        static if (hasFailure!TObserver)
-        {
-            try
-            {
-                .put(_observer, obj);
-            }
-            catch (Exception e)
-            {
-                _observer.failure(e);
-            }
-        }
-        else
-        {
-            .put(_observer, obj);
-        }
-    }
-    void completed()
-    {
-        if (_signal.signal) return;
-        _signal.setSignal();
-
-        static if (hasCompleted!TObserver)
-        {
-            _observer.completed();
-        }
-    }
-    void failure(Exception e)
-    {
-        if (_signal.signal) return;
-        _signal.setSignal();
-
-        static if (hasFailure!TObserver)
-        {
-            _observer.failure(e);
-        }
-    }
-private:
-    TObserver _observer;
-    EventSignal _signal;
+    assert(countPut == 0);
+    assert(countFailure == 0);
+    auto d = sub.doSubscribe(A());
+    assert(countPut == 1);
+    assert(countFailure == 1);
 }
-///
-struct DeferObservable(alias f, E)
+unittest
 {
-    alias ElementType = E;
-public:
-    auto subscribe(T)(T observer)
+    auto sub = defer!(int, (observer){
+        observer.put(0);
+        observer.failure(new Exception(""));
+        observer.put(1);
+    });
+
+    int countPut = 0;
+    struct A
     {
-        alias fun = unaryFun!f;
-        auto d = new SignalDisposable;
-        fun(DeferObserver!(T, E)(observer, d.signal));
-        return d;
+        void put(int n) { countPut++; }
     }
+
+    assert(countPut == 0);
+    auto d = sub.doSubscribe(A());
+    assert(countPut == 1);
 }
