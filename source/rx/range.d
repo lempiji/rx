@@ -1,3 +1,6 @@
+/+++++++++++++++++++++++++++++
+ + This module defines some operations like range.
+ +/
 module rx.range;
 
 import rx.disposable;
@@ -8,9 +11,9 @@ import rx.util;
 import core.atomic : cas, atomicLoad;
 import std.range : put;
 
-//####################
-// Overview
-//####################
+/+++++++++++++++++++++++++++++
+ + Overview
+ +/
 unittest
 {
     import rx.subject;
@@ -38,68 +41,77 @@ unittest
 //####################
 // Drop
 //####################
-struct DropObserver(TObserver, E)
-{
-    mixin SimpleObserverImpl!(TObserver, E);
-public:
-    this(TObserver observer, size_t count)
-    {
-        _observer = observer;
-        _counter = new shared(AtomicCounter)(count);
-    }
-    static if (hasCompleted!TObserver || hasFailure!TObserver)
-    {
-        this(TObserver observer, size_t count, Disposable disposable)
-        {
-            _observer = observer;
-            _counter = new shared(AtomicCounter)(count);
-            _disposable = disposable;
-        }
-    }
-private:
-    void putImpl(E obj)
-    {
-        if (_counter.tryUpdateCount())
-        {
-            _observer.put(obj);
-        }
-    }
-private:
-    shared(AtomicCounter) _counter;
-}
-struct DropObservable(TObservable)
-{
-public:
-    alias ElementType = TObservable.ElementType;
-public:
-    this(TObservable observable, size_t n)
-    {
-        _observable = observable;
-        _count = n;
-    }
-public:
-    auto subscribe(TObserver)(TObserver observer)
-    {
-        alias ObserverType = DropObserver!(TObserver, ElementType);
-        static if (hasCompleted!TObserver || hasFailure!TObserver)
-        {
-            auto disposable = new SingleAssignmentDisposable;
-            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, _count, disposable))));
-            return disposable;
-        }
-        else
-        {
-            return doSubscribe(_observable, ObserverType(observer, _count));
-        }
-    }
-private:
-    TObservable _observable;
-    size_t _count;
-}
+///Creates the observable that results from discarding the first n elements from the given source.
 auto drop(TObservable)(auto ref TObservable observable, size_t n)
 {
-    return DropObservable!TObservable(observable, n);
+    static struct DropObservable
+    {
+    public:
+        alias ElementType = TObservable.ElementType;
+
+    public:
+        this(TObservable observable, size_t n)
+        {
+            _observable = observable;
+            _count = n;
+        }
+
+    public:
+        auto subscribe(TObserver)(TObserver observer)
+        {
+            static struct DropObserver
+            {
+                mixin SimpleObserverImpl!(TObserver, ElementType);
+
+            public:
+                this(TObserver observer, size_t count)
+                {
+                    _observer = observer;
+                    _counter = new shared(AtomicCounter)(count);
+                }
+                static if (hasCompleted!TObserver || hasFailure!TObserver)
+                {
+                    this(TObserver observer, size_t count, Disposable disposable)
+                    {
+                        _observer = observer;
+                        _counter = new shared(AtomicCounter)(count);
+                        _disposable = disposable;
+                    }
+                }
+
+            private:
+                void putImpl(ElementType obj)
+                {
+                    if (_counter.tryUpdateCount())
+                    {
+                        _observer.put(obj);
+                    }
+                }
+
+            private:
+                shared(AtomicCounter) _counter;
+            }
+
+            static if (hasCompleted!TObserver || hasFailure!TObserver)
+            {
+                auto disposable = new SingleAssignmentDisposable;
+                disposable.setDisposable(disposableObject(doSubscribe(_observable, DropObserver(observer, _count, disposable))));
+                return disposable;
+            }
+            else
+            {
+                return doSubscribe(_observable, DropObserver(observer, _count));
+            }
+        }
+
+    private:
+        TObservable _observable;
+        size_t _count;
+    }
+
+    return DropObservable(observable, n);
 }
+///
 unittest
 {
     import rx.subject;
@@ -131,86 +143,109 @@ unittest
 //####################
 // Take
 //####################
-struct TakeObserver(TObserver, E)
-{
-public:
-    this(TObserver observer, size_t count, Disposable disposable)
-    {
-        _observer = observer;
-        _count = count;
-        _disposable = disposable;
-    }
-public:
-    void put(E obj)
-    {
-        shared(size_t) oldValue = void;
-        size_t newValue = void;
-        do
-        {
-            oldValue = _count;
-            if (oldValue == 0) return;
-
-            newValue = atomicLoad(oldValue) - 1;
-        } while(!cas(&_count, oldValue, newValue));
-
-        _observer.put(obj);
-        if (newValue == 0)
-        {
-            static if (hasCompleted!TObserver)
-            {
-                _observer.completed();
-            }
-            _disposable.dispose();
-        }
-    }
-    void completed()
-    {
-        static if (hasCompleted!TObserver)
-        {
-            _observer.completed();
-        }
-        _disposable.dispose();
-    }
-    void failure(Exception e)
-    {
-        static if (hasFailure!TObserver)
-        {
-            _observer.failure(e);
-        }
-        _disposable.dispose();
-    }
-private:
-    TObserver _observer;
-    shared(size_t) _count;
-    Disposable _disposable;
-}
-
-struct TakeObservable(TObservable)
-{
-public:
-    alias ElementType = TObservable.ElementType;
-public:
-    this(TObservable observable, size_t n)
-    {
-        _observable = observable;
-        _count = n;
-    }
-public:
-    auto subscribe(TObserver)(TObserver observer)
-    {
-        alias ObserverType = TakeObserver!(TObserver, ElementType);
-        auto disposable = new SingleAssignmentDisposable;
-        disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, _count, disposable))));
-        return disposable;
-    }
-private:
-    TObservable _observable;
-    size_t _count;
-}
-
+///Creates a sub-observable consisting of only up to the first n elements of the given source.
 auto take(TObservable)(auto ref TObservable observable, size_t n)
 {
-    return TakeObservable!TObservable(observable, n);
+    static struct TakeObservable
+    {
+    public:
+        alias ElementType = TObservable.ElementType;
+
+    public:
+        this(TObservable observable, size_t n)
+        {
+            _observable = observable;
+            _count = n;
+        }
+
+    public:
+        auto subscribe(TObserver)(TObserver observer)
+        {
+            static struct TakeObserver
+            {
+            public:
+                this(TObserver observer, size_t count, Disposable disposable)
+                {
+                    _observer = observer;
+                    _count = count;
+                    _disposable = disposable;
+                }
+
+            public:
+                void put(ElementType obj)
+                {
+                    shared(size_t) oldValue = void;
+                    size_t newValue = void;
+                    do
+                    {
+                        oldValue = _count;
+                        if (oldValue == 0) return;
+
+                        newValue = atomicLoad(oldValue) - 1;
+                    } while(!cas(&_count, oldValue, newValue));
+
+                    _observer.put(obj);
+                    if (newValue == 0)
+                    {
+                        static if (hasCompleted!TObserver)
+                        {
+                            _observer.completed();
+                        }
+                        _disposable.dispose();
+                    }
+                }
+                void completed()
+                {
+                    static if (hasCompleted!TObserver)
+                    {
+                        _observer.completed();
+                    }
+                    _disposable.dispose();
+                }
+                void failure(Exception e)
+                {
+                    static if (hasFailure!TObserver)
+                    {
+                        _observer.failure(e);
+                    }
+                    _disposable.dispose();
+                }
+
+            private:
+                TObserver _observer;
+                shared(size_t) _count;
+                Disposable _disposable;
+            }
+
+            auto disposable = new SingleAssignmentDisposable;
+            disposable.setDisposable(disposableObject(doSubscribe(_observable, TakeObserver(observer, _count, disposable))));
+            return disposable;
+        }
+
+    private:
+        TObservable _observable;
+        size_t _count;
+    }
+
+    return TakeObservable(observable, n);
+}
+///
+unittest
+{
+    import std.array;
+    import rx.subject;
+
+    auto pub = new SubjectObject!int;
+    auto sub = appender!(int[]);
+
+    auto d = pub.take(2).subscribe(sub);
+    foreach (i; 0 .. 10)
+    {
+        pub.put(i);
+    }
+
+    import std.algorithm;
+    assert(equal(sub.data, [0, 1]));
 }
 unittest
 {
@@ -266,6 +301,7 @@ unittest
 //####################
 // TakeLast
 //####################
+///Creates a observable that take only a last element of the given source.
 auto takeLast(TObservable)(auto ref TObservable observable)
 {
     static struct TakeLastObservable
@@ -335,7 +371,7 @@ auto takeLast(TObservable)(auto ref TObservable observable)
 
     return TakeLastObservable(observable);
 }
-
+///
 unittest
 {
     import rx.subject;
@@ -343,12 +379,10 @@ unittest
 
     int putCount = 0;
     int completedCount = 0;
-    int failureCount = 0;
     struct TestObserver
     {
         void put(int n) { putCount++; }
         void completed() { completedCount++; }
-        void failure(Exception e) { failureCount++; }
     }
 
     auto d = sub.takeLast.subscribe(TestObserver());
@@ -361,6 +395,7 @@ unittest
     sub.completed();
     assert(putCount == 1);
     assert(completedCount == 1);
+    
     sub.put(100);
     assert(putCount == 1);
     assert(completedCount == 1);

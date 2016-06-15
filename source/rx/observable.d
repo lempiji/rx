@@ -38,7 +38,7 @@ unittest
     static assert(!isObservable!(TestObservable, Object));
 }
 
-///
+///Test if the observer can subscribe to the observable.
 template isSubscribable(TObservable, TObserver)
 {
     enum bool isSubscribable = is(typeof({
