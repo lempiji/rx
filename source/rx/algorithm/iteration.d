@@ -12,6 +12,7 @@ import std.range : put;
 //####################
 // Overview
 //####################
+///
 unittest
 {
     import rx.subject;
@@ -40,101 +41,71 @@ unittest
 //####################
 // Filter
 //####################
-struct FilterObserver(alias f, TObserver, E)
+///Implements the higher order filter function. The predicate is passed to std.functional.unaryFun, and can either accept a string, or any callable that can be executed via pred(element).
+template filter(alias pred)
 {
-    mixin SimpleObserverImpl!(TObserver, E);
-
-public:
-    this(TObserver observer)
+    auto filter(TObservable)(auto ref TObservable observable)
     {
-        _observer = observer;
-    }
-    static if (hasCompleted!TObserver || hasFailure!TObserver)
-    {
-        this(TObserver observer, Disposable disposable)
+        static struct FilterObservable
         {
-            _observer = observer;
-            _disposable = disposable;
+            alias ElementType = TObservable.ElementType;
+
+        public:
+            this(TObservable observable)
+            {
+                _observable = observable;
+            }
+
+        public:
+            auto subscribe(TObserver)(TObserver observer)
+            {
+                static struct FilterObserver
+                {
+                    mixin SimpleObserverImpl!(TObserver, ElementType);
+
+                public:
+                    this(TObserver observer)
+                    {
+                        _observer = observer;
+                    }
+                    static if (hasCompleted!TObserver || hasFailure!TObserver)
+                    {
+                        this(TObserver observer, Disposable disposable)
+                        {
+                            _observer = observer;
+                            _disposable = disposable;
+                        }
+                    }
+
+                private:
+                    void putImpl(ElementType obj)
+                    {
+                        alias fun = unaryFun!pred;
+                        if (fun(obj)) _observer.put(obj);
+                    }
+                }
+
+                alias ObserverType = FilterObserver;
+                static if (hasCompleted!TObserver || hasFailure!TObserver)
+                {
+                    auto disposable = new SingleAssignmentDisposable;
+                    disposable.setDisposable(disposableObject(doSubscribe(_observable, FilterObserver(observer, disposable))));
+                    return disposable;
+                }
+                else
+                {
+                    return doSubscribe(_observable, FilterObserver(observer));
+                }
+            }
+
+        private:
+            TObservable _observable;
         }
-    }
-private:
-    void putImpl(E obj)
-    {
-        alias fun = unaryFun!f;
-        if (fun(obj)) _observer.put(obj);
+
+        return FilterObservable(observable);
     }
 }
-unittest
-{
-    alias TObserver = FilterObserver!(o => true, Observer!int, int);
-
-    static assert(isObserver!(TObserver, int));
-}
-
-struct FilterObservable(alias f, TObservable)
-{
-    alias ElementType = TObservable.ElementType;
-public:
-    this(TObservable observable)
-    {
-        _observable = observable;
-    }
-
-public:
-    auto subscribe(TObserver)(TObserver observer)
-    {
-        alias ObserverType = FilterObserver!(f, TObserver, ElementType);
-        static if (hasCompleted!TObserver || hasFailure!TObserver)
-        {
-            auto disposable = new SingleAssignmentDisposable;
-            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, disposable))));
-            return disposable;
-        }
-        else
-        {
-            return doSubscribe(_observable, ObserverType(observer));
-        }
-    }
-
-private:
-    TObservable _observable;
-}
-unittest
-{
-    import rx.subject;
-
-    alias TObservable = FilterObservable!(o => true, Subject!int);
-
-    int putCount = 0;
-    int completedCount = 0;
-    int failureCount = 0;
-    struct TestObserver
-    {
-        void put(int n) { putCount++; }
-        void completed() { completedCount++; }
-        void failure(Exception) { failureCount++; }
-    }
-
-    auto sub = new SubjectObject!int;
-    auto observable = TObservable(sub);
-    auto disposable = observable.subscribe(TestObserver());
-    assert(putCount == 0);
-    sub.put(0);
-    assert(putCount == 1);
-    sub.put(1);
-    assert(putCount == 2);
-    disposable.dispose();
-    sub.put(2);
-    assert(putCount == 2);
-}
-
-template filter(alias f)
-{
-    FilterObservable!(f, TObservable) filter(TObservable)(auto ref TObservable observable)
-    {
-        return typeof(return)(observable);
-    }
-}
+///
 unittest
 {
     import rx.subject;
