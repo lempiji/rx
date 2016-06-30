@@ -1,0 +1,13 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"derelict-ft": "1.1.2",
+		"derelict-gl3": "1.0.18",
+		"derelict-sdl2": "2.0.0",
+		"derelict-util": "2.0.6",
+		"dlangui": "0.8.33",
+		"dsfml": "2.1.1",
+		"rx": {"path":"../../"},
+		"x11": "1.0.14"
+	}
+}

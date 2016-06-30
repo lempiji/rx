@@ -1,0 +1,224 @@
+DlangUI log file
+2016-07-01 00:54:13.569 I  Log level changed to Trace
+2016-07-01 00:54:13.585 I  Logger is initialized
+2016-07-01 00:54:13.585 D  myWinMain()
+2016-07-01 00:54:13.585 I  Current executable: f:\D\git\rx\examples\rx-dlangui\
+2016-07-01 00:54:13.585 I  Command line: 
+2016-07-01 00:54:13.585 I  Command line params: []
+2016-07-01 00:54:13.585 V  Creating platform
+2016-07-01 00:54:13.585 V  Registering window class
+2016-07-01 00:54:13.585 V  Initializing font manager
+2016-07-01 00:54:13.585 I  Creating Win32FontManager
+2016-07-01 00:54:13.585 I  Win32FontManager.initialize()
+2016-07-01 00:54:13.585 D  registerFont(SansSerif,Arial)
+2016-07-01 00:54:13.585 D  registerFont(SansSerif,Arial Black)
+2016-07-01 00:54:13.585 D  registerFont(SansSerif,Calibri)
+2016-07-01 00:54:13.585 D  registerFont(SansSerif,Calibri Light)
+2016-07-01 00:54:13.585 D  registerFont(Serif,Cambria)
+2016-07-01 00:54:13.585 D  registerFont(Serif,Cambria Math)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Candara)
+2016-07-01 00:54:13.586 D  registerFont(Cursive,Comic Sans MS)
+2016-07-01 00:54:13.586 D  registerFont(MonoSpace,Consolas)
+2016-07-01 00:54:13.586 D  registerFont(Serif,Constantia)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Corbel)
+2016-07-01 00:54:13.586 D  registerFont(MonoSpace,Courier New)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Ebrima)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Franklin Gothic Medium)
+2016-07-01 00:54:13.586 D  registerFont(Fantasy,Gabriola)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Gadugi)
+2016-07-01 00:54:13.586 D  registerFont(Serif,Georgia)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Impact)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Javanese Text)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Leelawadee UI)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Leelawadee UI Semilight)
+2016-07-01 00:54:13.586 D  registerFont(MonoSpace,Lucida Console)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Lucida Sans Unicode)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Malgun Gothic)
+2016-07-01 00:54:13.586 D  registerFont(Serif,Malgun Gothic Semilight)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft Himalaya)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft JhengHei)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft JhengHei UI)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft JhengHei Light)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft JhengHei UI Light)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft New Tai Lue)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft PhagsPa)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft Sans Serif)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft Tai Le)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft YaHei)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft YaHei UI)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft YaHei Light)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Microsoft YaHei UI Light)
+2016-07-01 00:54:13.586 D  registerFont(Cursive,Microsoft Yi Baiti)
+2016-07-01 00:54:13.586 D  registerFont(Serif,MingLiU-ExtB)
+2016-07-01 00:54:13.586 D  registerFont(Serif,PMingLiU-ExtB)
+2016-07-01 00:54:13.586 D  registerFont(Serif,MingLiU_HKSCS-ExtB)
+2016-07-01 00:54:13.586 D  registerFont(Cursive,Mongolian Baiti)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,MV Boli)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Myanmar Text)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Nirmala UI)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Nirmala UI Semilight)
+2016-07-01 00:54:13.586 D  registerFont(Serif,Palatino Linotype)
+2016-07-01 00:54:13.586 D  registerFont(Serif,Segoe MDL2 Assets)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Segoe Print)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Segoe Script)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Segoe UI)
+2016-07-01 00:54:13.586 D  registerFont(SansSerif,Segoe UI Black)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Segoe UI Emoji)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Segoe UI Historic)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Segoe UI Light)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Segoe UI Semibold)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Segoe UI Semilight)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Segoe UI Symbol)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,SimSun)
+2016-07-01 00:54:13.587 D  registerFont(MonoSpace,NSimSun)
+2016-07-01 00:54:13.587 D  registerFont(MonoSpace,SimSun-ExtB)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Sitka Small)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Sitka Text)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Sitka Subheading)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Sitka Heading)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Sitka Display)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Sitka Banner)
+2016-07-01 00:54:13.587 D  registerFont(Serif,Sylfaen)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Tahoma)
+2016-07-01 00:54:13.587 D  registerFont(Serif,Times New Roman)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Trebuchet MS)
+2016-07-01 00:54:13.587 D  registerFont(SansSerif,Verdana)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ü‡ÉSÉVÉbÉN)
+2016-07-01 00:54:13.587 D  registerFont(Serif,Yu Gothic UI)
+2016-07-01 00:54:13.587 D  registerFont(Serif,Yu Gothic UI Semibold)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ü‡ÉSÉVÉbÉN Light)
+2016-07-01 00:54:13.587 D  registerFont(Serif,Yu Gothic UI Light)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ü‡ÉSÉVÉbÉN Medium)
+2016-07-01 00:54:13.587 D  registerFont(Serif,Yu Gothic UI Semilight)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ÉÅÉCÉäÉI)
+2016-07-01 00:54:13.587 D  registerFont(Serif,Meiryo UI)
+2016-07-01 00:54:13.587 D  registerFont(MonoSpace,ÇlÇr ÉSÉVÉbÉN)
+2016-07-01 00:54:13.587 D  registerFont(Serif,MS UI Gothic)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ÇlÇr ÇoÉSÉVÉbÉN)
+2016-07-01 00:54:13.587 D  registerFont(MonoSpace,ÇlÇr ñæí©)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ÇlÇr Çoñæí©)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ü‡ñæí©)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ü‡ñæí© Demibold)
+2016-07-01 00:54:13.587 D  registerFont(Serif,ü‡ñæí© Light)
+2016-07-01 00:54:13.587 D  registerFont(MonoSpace,OCRB)
+2016-07-01 00:54:13.587 D  registerFont(MonoSpace,HGñæí©E)
+2016-07-01 00:54:13.587 D  registerFont(Serif,HGPñæí©E)
+2016-07-01 00:54:13.587 D  registerFont(Serif,HGSñæí©E)
+2016-07-01 00:54:13.587 D  registerFont(MonoSpace,HGënâpäpŒﬂØÃﬂëÃ)
+2016-07-01 00:54:13.587 D  registerFont(Serif,HGPënâpäpŒﬂØÃﬂëÃ)
+2016-07-01 00:54:13.587 D  registerFont(Serif,HGSënâpäpŒﬂØÃﬂëÃ)
+2016-07-01 00:54:13.587 D  registerFont(MonoSpace,HGënâpäp∫ﬁºØ∏UB)
+2016-07-01 00:54:13.587 D  registerFont(Serif,HGPënâpäp∫ﬁºØ∏UB)
+2016-07-01 00:54:13.588 D  registerFont(Serif,HGSënâpäp∫ﬁºØ∏UB)
+2016-07-01 00:54:13.588 D  registerFont(Serif,HGä€∫ﬁºØ∏M-PRO)
+2016-07-01 00:54:13.588 D  registerFont(MonoSpace,HG∫ﬁºØ∏E)
+2016-07-01 00:54:13.588 D  registerFont(Serif,HGP∫ﬁºØ∏E)
+2016-07-01 00:54:13.589 D  registerFont(Serif,HGS∫ﬁºØ∏E)
+2016-07-01 00:54:13.589 D  registerFont(Serif,Arial Unicode MS)
+2016-07-01 00:54:13.589 D  registerFont(Serif,Century)
+2016-07-01 00:54:13.589 D  registerFont(SansSerif,MS Reference Sans Serif)
+2016-07-01 00:54:13.589 D  registerFont(Cursive,Buxton Sketch)
+2016-07-01 00:54:13.589 D  registerFont(Cursive,Segoe Marker)
+2016-07-01 00:54:13.589 D  registerFont(SansSerif,SketchFlow Print)
+2016-07-01 00:54:13.589 D  registerFont(MonoSpace,IPAÉSÉVÉbÉN)
+2016-07-01 00:54:13.589 D  registerFont(Serif,IPA PÉSÉVÉbÉN)
+2016-07-01 00:54:13.589 D  registerFont(MonoSpace,IPAñæí©)
+2016-07-01 00:54:13.589 D  registerFont(Serif,IPA Pñæí©)
+2016-07-01 00:54:13.589 D  registerFont(MonoSpace,Myrica M)
+2016-07-01 00:54:13.589 D  registerFont(Serif,Myrica P)
+2016-07-01 00:54:13.589 D  registerFont(Serif,Myrica N)
+2016-07-01 00:54:13.589 D  registerFont(MonoSpace,Migu 1M)
+2016-07-01 00:54:13.589 I  Found 118 font faces
+2016-07-01 00:54:13.589 D  initResourceManagers()
+2016-07-01 00:54:13.590 I  Creating ImageCache
+2016-07-01 00:54:13.590 I  Creating DrawableCache
+2016-07-01 00:54:13.590 D  Calling initSharedResourceManagers()
+2016-07-01 00:54:13.590 D  Calling initStandardEditorActions()
+2016-07-01 00:54:13.590 D  Calling registerStandardWidgets()
+2016-07-01 00:54:13.590 D  Registering standard widgets for DML
+2016-07-01 00:54:13.590 D  initResourceManagers() -- finished
+2016-07-01 00:54:13.590 D  Creating default theme
+2016-07-01 00:54:13.590 D  Loading Derelict GL
+2016-07-01 00:54:13.592 D  Derelict GL - loaded
+2016-07-01 00:54:13.592 I  Entering UIAppMain: []
+2016-07-01 00:54:13.592 D  Creating window
+2016-07-01 00:54:13.592 D  Platform.createWindow is called
+2016-07-01 00:54:13.592 V  Platform.createWindow : setDefaultLanguageAndThemeIfNecessary
+2016-07-01 00:54:13.592 V  setDefaultLanguageAndThemeIfNecessary : setting UI language
+2016-07-01 00:54:13.592 V  Loading language file
+2016-07-01 00:54:13.592 D  Loading string resources from file @embedded@/std_en.ini
+2016-07-01 00:54:13.593 V  Calling onThemeChanged
+2016-07-01 00:54:13.593 V  setDefaultLanguageAndThemeIfNecessary : setting UI theme
+2016-07-01 00:54:13.593 V  uiTheme setting new theme theme_default
+2016-07-01 00:54:13.595 I  Applying loaded theme theme_default
+2016-07-01 00:54:13.595 V  Platform.createWindow : new Win32Window
+2016-07-01 00:54:13.599 D  Window onCreate
+2016-07-01 00:54:13.599 V  created window, adding to map
+2016-07-01 00:54:13.718 V  Reloading DerelictGL3
+2016-07-01 00:54:13.718 E  Derelict exception while reloading DerelictGL3derelict.util.exception.SymbolLoadException@C:\Users\lisri\AppData\Roaming\dub\packages\derelict-util-2.0.6\derelict-util\source\derelict\util\exception.d(35): Failed to load OpenGL symbol [glGetnTexImage]
+----------------
+0x00528BDA in void derelict.opengl3.internal.bindGLFunc(void**, immutable(char)[]) at C:\Users\lisri\AppData\Roaming\dub\packages\derelict-gl3-1.0.18\derelict-gl3\source\derelict\opengl3\internal.d(53)
+0x0052828E in D8derelict7opengl33gl317D at C:\Users\lisri\AppData\Roaming\dub\packages\derelict-gl3-1.0.18\derelict-gl3\source\derelict\opengl3\gl3.d(434)
+0x004E314F in bool dlangui.graphics.glsupport.initGLSupport(bool) at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\graphics\glsupport.d(703)
+0x004D518C in bool dlangui.platforms.windows.winapp.SharedGLContext.init(void*) at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(186)
+0x004B0C87 in D7dlangui9platforms7windows6winapp11W at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(275)
+0x00473C2B in D7dlangui9platforms7windows6winapp13W at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(963)
+0x00424413 in dlangui.platforms.common.platform.Window app.createAppWindow() at f:\D\git\rx\examples\rx-dlangui\source\app.d(57)
+0x00424168 in UIAppMain at f:\D\git\rx\examples\rx-dlangui\source\app.d(17)
+0x00455F0F in int dlangui.platforms.windows.winapp.myWinMain(void*, void*, char*, int) at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(1235)
+0x00434C5C in DLANGUIWinMain at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(1115)
+0x00424102 in WinMain at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\common\platform.d(1543)
+0x0057E39A in WinMainCRTStartup
+0x772938F4 in BaseThreadInitThunk
+0x77425DE3 in RtlUnicodeStringToInteger
+0x77425DAE in RtlUnicodeStringToInteger
+2016-07-01 00:54:13.937 V  Reloading DerelictGL
+2016-07-01 00:54:13.937 E  Derelict exception while reloading DerelictGLderelict.util.exception.SymbolLoadException@C:\Users\lisri\AppData\Roaming\dub\packages\derelict-util-2.0.6\derelict-util\source\derelict\util\exception.d(35): Failed to load OpenGL symbol [glGetnTexImage]
+----------------
+0x00528BDA in void derelict.opengl3.internal.bindGLFunc(void**, immutable(char)[]) at C:\Users\lisri\AppData\Roaming\dub\packages\derelict-gl3-1.0.18\derelict-gl3\source\derelict\opengl3\internal.d(53)
+0x0052828E in D8derelict7opengl33gl317D at C:\Users\lisri\AppData\Roaming\dub\packages\derelict-gl3-1.0.18\derelict-gl3\source\derelict\opengl3\gl3.d(434)
+0x005243DD in D8derelict7opengl32gl16D at C:\Users\lisri\AppData\Roaming\dub\packages\derelict-gl3-1.0.18\derelict-gl3\source\derelict\opengl3\gl.d(46)
+0x004E31B5 in bool dlangui.graphics.glsupport.initGLSupport(bool) at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\graphics\glsupport.d(712)
+0x004D518C in bool dlangui.platforms.windows.winapp.SharedGLContext.init(void*) at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(186)
+0x004B0C87 in D7dlangui9platforms7windows6winapp11W at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(275)
+0x00473C2B in D7dlangui9platforms7windows6winapp13W at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(963)
+0x00424413 in dlangui.platforms.common.platform.Window app.createAppWindow() at f:\D\git\rx\examples\rx-dlangui\source\app.d(57)
+0x00424168 in UIAppMain at f:\D\git\rx\examples\rx-dlangui\source\app.d(17)
+0x00455F0F in int dlangui.platforms.windows.winapp.myWinMain(void*, void*, char*, int) at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(1235)
+0x00434C5C in DLANGUIWinMain at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\windows\winapp.d(1115)
+0x00424102 in WinMain at C:\Users\lisri\AppData\Roaming\dub\packages\dlangui-0.8.33\dlangui\src\dlangui\platforms\common\platform.d(1543)
+0x0057E39A in WinMainCRTStartup
+0x772938F4 in BaseThreadInitThunk
+0x77425DE3 in RtlUnicodeStringToInteger
+0x77425DAE in RtlUnicodeStringToInteger
+2016-07-01 00:54:13.940 E  Neither DerelictGL3 nor DerelictGL were reloaded successfully
+2016-07-01 00:54:13.950 E  Failed to init OpenGL shaders
+2016-07-01 00:54:13.950 D  Window created
+2016-07-01 00:54:13.965 D  WM_WINDOWPOSCHANGED: WINDOWPOS(4E0742, 7606D0, 130, 130, 600, 400, 268441667)
+2016-07-01 00:54:13.965 D  onResize 584x361
+2016-07-01 00:54:13.970 D  Loading image from file @embedded@/editbox_background_disabled_focus.9.png
+2016-07-01 00:54:13.971 D  Loading image from file @embedded@/editbox_background_focus.9.png
+2016-07-01 00:54:13.971 D  Loading image from file @embedded@/editbox_background_disabled.9.png
+2016-07-01 00:54:13.971 D  Loading image from file @embedded@/editbox_background_normal.9.png
+2016-07-01 00:54:13.972 D  Loading image from file @embedded@/btn_pressed.9.png
+2016-07-01 00:54:13.972 D  Loading image from file @embedded@/btn_default.9.png
+2016-07-01 00:54:13.973 D  Loading image from file @embedded@/btn_normal.9.png
+2016-07-01 00:54:13.973 D  Loading image from file @embedded@/btn_hover.9.png
+2016-07-01 00:54:13.973 D  Loading image from file @embedded@/btn_disabled.9.png
+2016-07-01 00:54:13.974 D  resize: measure took 9 ms
+2016-07-01 00:54:13.975 D  resize: layout took 1 ms
+2016-07-01 00:54:32.984 D  Window.close()
+2016-07-01 00:54:32.985 D  WM_CLOSE: closing window 
+2016-07-01 00:54:32.994 D  WM_WINDOWPOSCHANGED: WINDOWPOS(4E0742, null, 130, 130, 600, 400, 536877207)
+2016-07-01 00:54:32.997 D  Window onDestroy
+2016-07-01 00:54:32.997 V  destroyed window, removing from map
+2016-07-01 00:54:33.009 E  Cannot find window in map by HWND
+2016-07-01 00:54:33.009 D  Window destructor
+2016-07-01 00:54:33.009 D  Destroying window
+2016-07-01 00:54:33.010 I  UIAppMain returned 0
+2016-07-01 00:54:33.010 I  Destroying DrawableCache
+2016-07-01 00:54:33.010 I  Destroying ImageCache
+2016-07-01 00:54:33.010 I  Destroying Win32FontManager
+2016-07-01 00:54:33.010 D  Destroying font manager
+2016-07-01 00:54:33.010 E  Non-zero DrawBuf instance count when exiting: 1
+2016-07-01 00:54:33.010 D  Exiting main
