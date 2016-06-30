@@ -1,3 +1,6 @@
+/+++++++++++++++++++++++++++++
+ + This module defines some algorithm like std.algorithm.iteration.
+ +/
 module rx.algorithm.iteration;
 
 import rx.disposable;
