@@ -97,3 +97,22 @@ public:
 private:
     size_t _count;
 }
+
+shared class TicketBase
+{
+    bool stamp()
+    {
+        return cas(&_flag, false, true);
+    }
+
+private:
+    bool _flag = false;
+}
+alias Ticket = shared(TicketBase);
+
+unittest
+{
+    auto t = new Ticket;
+    assert(t.stamp());
+    assert(!t.stamp());
+}
