@@ -1,0 +1,10 @@
+{
+	"name": "fizzbuzz",
+	"authors": [
+		"lempiji"
+	],
+	"description": "A example for rx.",
+	"dependencies": {
+		"rx": { "path": "../../" }
+	}
+}
