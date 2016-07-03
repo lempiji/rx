@@ -100,9 +100,16 @@ private:
 
 shared class TicketBase
 {
+public:
     bool stamp()
     {
         return cas(&_flag, false, true);
+    }
+
+public:
+    bool isStamped() @property
+    {
+        return atomicLoad(_flag);
     }
 
 private:
@@ -113,6 +120,8 @@ alias Ticket = shared(TicketBase);
 unittest
 {
     auto t = new Ticket;
+    assert(!t.isStamped);
     assert(t.stamp());
+    assert(t.isStamped);
     assert(!t.stamp());
 }
