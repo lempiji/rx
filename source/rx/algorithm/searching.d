@@ -726,3 +726,19 @@ unittest
     sub.completed();
     assert(result);
 }
+
+unittest
+{
+    import rx.subject : SubjectObject;
+    auto sub = new SubjectObject!int;
+
+    import std.array : appender;
+    auto buf = appender!(bool[]);
+
+    auto d = sub.all!(a => a % 2 == 0).doSubscribe(buf);
+
+    assert(buf.data.length == 0);
+    sub.put(1);
+    assert(buf.data.length == 1);
+    assert(buf.data[0] == false);
+}
