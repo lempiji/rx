@@ -581,6 +581,7 @@ unittest
 //####################
 // Fold
 //####################
+///
 auto fold(alias fun, TObservable, Seed)(auto ref TObservable observable, Seed seed)
 {
     import rx.range : takeLast;

@@ -221,6 +221,31 @@ unittest
     assert(buf2.data.length == 1);
     assert(buf1.data[0] == buf2.data[0]);
 }
+unittest
+{
+    static class CountObserver(T) : Observer!T
+    {
+    public:
+        size_t putCount;
+        size_t failureCount;
+        size_t completedCount;
+
+        void put(T) { putCount++; }
+        void failure(Exception) { failureCount++; }
+        void completed() { completedCount++; }
+    }
+
+    auto sub = new SubjectObject!int;
+    sub.completed();
+    auto observer = new CountObserver!int;
+    assert(observer.putCount == 0);
+    assert(observer.failureCount == 0);
+    assert(observer.completedCount == 0);
+    sub.subscribe(observer);
+    assert(observer.putCount == 0);
+    assert(observer.failureCount == 0);
+    assert(observer.completedCount == 1);
+}
 
 
 private class Subscription(TSubject, TObserver) : Disposable

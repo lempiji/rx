@@ -287,6 +287,7 @@ unittest
     assert(buf.data.length == 0);
 }
 
+///
 template any(alias pred = "true")
 {
     AnyObservable!(TObservable, pred) any(TObservable)(auto ref TObservable observable)
@@ -294,6 +295,7 @@ template any(alias pred = "true")
         return typeof(return)(observable);
     } 
 }
+///
 unittest
 {
     import rx.subject : SubjectObject;
@@ -321,10 +323,12 @@ unittest
     assert(result == true);
 }
 
-AnyObservable!(TObservable) any(TObservable)(auto ref TObservable observable)
+///
+AnyObservable!TObservable any(TObservable)(auto ref TObservable observable)
 {
     return typeof(return)(observable);
 }
+///
 unittest
 {
     import rx.subject : SubjectObject;
@@ -678,6 +682,7 @@ unittest
     assert(buf.data[0] == true);
 }
 
+///
 template all(alias pred = "true")
 {
     AllObservable!(TObservable, pred) all(TObservable)(auto ref TObservable observable)
@@ -685,6 +690,7 @@ template all(alias pred = "true")
         return typeof(return)(observable);
     }
 }
+///
 unittest
 {
     import rx.subject : SubjectObject;
@@ -710,10 +716,12 @@ unittest
     assert(result);
 }
 
-AllObservable!(TObservable) all(TObservable)(auto ref TObservable observable)
+///
+AllObservable!TObservable all(TObservable)(auto ref TObservable observable)
 {
     return typeof(return)(observable);
 }
+///
 unittest
 {
     import rx.subject : SubjectObject;
