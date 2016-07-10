@@ -1,0 +1,11 @@
+{
+	"name": "mvvm-dlangui",
+	"authors": ["lempiji"],
+	"dependencies": {
+		"rx": { "path": "../../" },
+		"dlangui": "~>0.8.30"
+	},
+	"description": "The example for MVVM on Dlang UI",
+	"copyright": "Copyright © 2016, lempiji",
+	"license": "MIT"
+}
