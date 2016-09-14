@@ -9,15 +9,18 @@ import core.thread : Thread;
 import std.range : put;
 import std.parallelism : TaskPool, taskPool, task;
 
+///
 interface Scheduler
 {
     void start(void delegate() op);
 }
+///
 interface AsyncScheduler : Scheduler
 {
     CancellationToken schedule(void delegate() op, Duration val);
 }
 
+///
 class LocalScheduler : Scheduler
 {
 public:
@@ -26,6 +29,7 @@ public:
         op();
     }
 }
+///
 class ThreadScheduler : AsyncScheduler
 {
     void start(void delegate() op)
@@ -46,6 +50,7 @@ class ThreadScheduler : AsyncScheduler
         return c;
     }
 }
+///
 class TaskPoolScheduler : AsyncScheduler
 {
 public:
@@ -75,30 +80,92 @@ public:
 private:
     TaskPool _pool;
 }
+///
+class HistoricalScheduler(T) : AsyncScheduler
+{
+    static assert(is(T : AsyncScheduler));
+
+public:
+    this(T innerScheduler)
+    {
+        _offset = Duration.zero;
+        _innerScheduler = innerScheduler;
+    }
+
+public:
+    void start(void delegate() op)
+    {
+        _innerScheduler.start(op);
+    }
+
+    CancellationToken schedule(void delegate() op, Duration val)
+    {
+        return _innerScheduler.schedule(op, val - _offset);
+    }
+
+    void roll(Duration val) { _offset += val; }
+
+private:
+    T _innerScheduler;
+    Duration _offset;
+}
+///
+HistoricalScheduler!TScheduler historicalScheduler(TScheduler)(auto ref TScheduler scheduler)
+{
+    return new typeof(return)(scheduler);
+}
+
 unittest
 {
-    import std.typetuple;
+    void test(AsyncScheduler scheduler)
+    {
+        bool done = false;
+        auto c = scheduler.schedule((){ done = true; }, dur!"msecs"(50));
+        assert(!done);
+        Thread.sleep(dur!"msecs"(100));
+        assert(done);
+    }
+
+    test(new ThreadScheduler);
+    test(new TaskPoolScheduler);
+    test(new HistoricalScheduler!ThreadScheduler(new ThreadScheduler));
+    test(new HistoricalScheduler!TaskPoolScheduler(new TaskPoolScheduler));
+}
+unittest
+{
+    void test(AsyncScheduler scheduler)
+    {
+        bool done = false;
+        auto c = scheduler.schedule((){ done = true; }, dur!"msecs"(50));
+        c.cancel();
+        Thread.sleep(dur!"msecs"(100));
+        assert(!done);
+    }
+
+    test(new ThreadScheduler);
+    test(new TaskPoolScheduler);
+    test(new HistoricalScheduler!ThreadScheduler(new ThreadScheduler));
+    test(new HistoricalScheduler!TaskPoolScheduler(new TaskPoolScheduler));
+}
+
+unittest
+{
+    import std.typetuple : TypeTuple;
     foreach (T; TypeTuple!(ThreadScheduler, TaskPoolScheduler))
     {
-        auto s = new T;
-        bool done = false;
-        auto c = s.schedule((){ done = true; }, dur!"msecs"(50));
-        Thread.sleep(dur!"msecs"(100));
+        auto scheduler = historicalScheduler(new T);
+        
+        scheduler.roll(dur!"seconds"(20));
+
+        auto done = false;
+        auto c = scheduler.schedule((){ done = true; }, dur!"seconds"(10));
+        Thread.sleep(dur!"msecs"(10)); // wait for a context switch
         assert(done);
     }
 }
 unittest
 {
-    import std.typetuple;
-    foreach (T; TypeTuple!(ThreadScheduler, TaskPoolScheduler))
-    {
-        auto s = new T;
-        bool done = false;
-        auto c = s.schedule((){ done = true; }, dur!"msecs"(50));
-        c.cancel();
-        Thread.sleep(dur!"msecs"(100));
-        assert(!done);
-    }
+    static assert(!__traits(compiles, { HistoricalScheduler!LocalScheduler s; }));
 }
 
 struct ObserveOnObserver(TObserver, TScheduler, E)
@@ -270,9 +337,8 @@ unittest
     import rx.util : EventSignal;
     enum N = 4;
 
-    foreach (T; TypeTuple!(LocalScheduler, ThreadScheduler, TaskPoolScheduler))
+    void test(Scheduler scheduler)
     {
-        auto scheduler = new T;
         auto signal = new EventSignal;
         shared count = 0;
         foreach (n; 0 .. N)
@@ -286,6 +352,12 @@ unittest
         signal.wait();
         assert(count == N);
     }
+
+    test(new LocalScheduler);
+    test(new ThreadScheduler);
+    test(new TaskPoolScheduler);
+    test(new HistoricalScheduler!ThreadScheduler(new ThreadScheduler));
+    test(new HistoricalScheduler!TaskPoolScheduler(new TaskPoolScheduler));
 }
 
 private __gshared Scheduler s_scheduler;
