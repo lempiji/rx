@@ -1,0 +1,2025 @@
+[
+	{
+		"file": "source\\rx\\algorithm\\iteration.d",
+		"name": "rx.algorithm.iteration",
+		"members": [
+			{
+				"members": [
+					{
+						"members": [
+							{
+								"endchar": 5,
+								"name": "filter",
+								"line": 50,
+								"type": "(auto ref TObservable observable)",
+								"storageClass": [
+									"auto"
+								],
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable",
+										"storageClass": [
+											"auto",
+											"ref"
+										]
+									}
+								],
+								"endline": 109,
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"name": "filter",
+						"line": 50,
+						"parameters": [
+							{
+								"name": "TObservable",
+								"kind": "type"
+							}
+						],
+						"char": 10,
+						"kind": "template"
+					}
+				],
+				"name": "filter",
+				"line": 48,
+				"comment": "Implements the higher order filter function. The predicate is passed to std.functional.unaryFun, and can either accept a string, or any callable that can be executed via pred(element).\nExample:\n\n---\nimport rx.subject;\nimport std.array : appender;\n\nSubject!int sub = new SubjectObject!int;\nauto filtered = sub.filter!(n => n % 2 == 0);\nauto buffer = appender!(int[])();\nauto disposable = filtered.subscribe(buffer);\nsub.put(0);\nsub.put(1);\nsub.put(2);\nsub.put(3);\nimport std.algorithm : equal;\nassert(equal(buffer.data, [0, 2][]));\n\n---\n",
+				"parameters": [
+					{
+						"name": "pred",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "fold",
+						"line": 585,
+						"type": "(auto ref TObservable observable, Seed seed)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "seed",
+								"type": "Seed"
+							}
+						],
+						"endline": 589,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "fold",
+				"line": 585,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "fun",
+						"kind": "alias"
+					},
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "Seed",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			}
+		],
+		"comment": " This module defines some algorithm like std.algorithm.iteration.\nExample:\n\n---\nimport rx.subject;\nimport std.algorithm : equal;\nimport std.array : appender;\nimport std.conv : to;\n\nauto subject = new SubjectObject!int;\nauto pub = subject\n    .filter!(n => n % 2 == 0)\n    .map!(o => to!string(o));\n\nauto buf = appender!(string[]);\nauto disposable = pub.subscribe(observerObject!string(buf));\n\nforeach (i; 0 .. 10)\n{\n    subject.put(i);\n}\n\nauto result = buf.data;\nassert(equal(result, [\"0\", \"2\", \"4\", \"6\", \"8\"]));\n\n---\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\algorithm\\searching.d",
+		"name": "rx.algorithm.searching",
+		"members": [
+			{
+				"members": [
+					{
+						"members": [
+							{
+								"endchar": 5,
+								"name": "any",
+								"line": 293,
+								"type": "AnyObservable!(TObservable, pred)(auto ref TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable",
+										"storageClass": [
+											"auto",
+											"ref"
+										]
+									}
+								],
+								"endline": 296,
+								"char": 39,
+								"kind": "function"
+							}
+						],
+						"name": "any",
+						"line": 293,
+						"parameters": [
+							{
+								"name": "TObservable",
+								"kind": "type"
+							}
+						],
+						"char": 39,
+						"kind": "template"
+					}
+				],
+				"name": "any",
+				"line": 291,
+				"comment": "\nExample:\n\n---\nimport rx.subject : SubjectObject;\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any!(\"a % 2 == 0\").doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == false);\nsub.put(0);\nassert(result == true);\n\n---\n",
+				"parameters": [
+					{
+						"name": "pred",
+						"defaultAlias": "\"true\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "any",
+						"line": 327,
+						"type": "AnyObservable!TObservable(auto ref TObservable observable)",
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 330,
+						"char": 27,
+						"kind": "function"
+					}
+				],
+				"name": "any",
+				"line": 327,
+				"comment": "\nExample:\n\n---\nimport rx.subject : SubjectObject;\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any().doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == true);\n\n---\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"char": 27,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"members": [
+							{
+								"endchar": 5,
+								"name": "all",
+								"line": 688,
+								"type": "AllObservable!(TObservable, pred)(auto ref TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable",
+										"storageClass": [
+											"auto",
+											"ref"
+										]
+									}
+								],
+								"endline": 691,
+								"char": 39,
+								"kind": "function"
+							}
+						],
+						"name": "all",
+						"line": 688,
+						"parameters": [
+							{
+								"name": "TObservable",
+								"kind": "type"
+							}
+						],
+						"char": 39,
+						"kind": "template"
+					}
+				],
+				"name": "all",
+				"line": 686,
+				"comment": "\nExample:\n\n---\nimport rx.subject : SubjectObject;\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all!\"a % 2 == 0\"().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n",
+				"parameters": [
+					{
+						"name": "pred",
+						"defaultAlias": "\"true\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "all",
+						"line": 720,
+						"type": "AllObservable!TObservable(auto ref TObservable observable)",
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 723,
+						"char": 27,
+						"kind": "function"
+					}
+				],
+				"name": "all",
+				"line": 720,
+				"comment": "\nExample:\n\n---\nimport rx.subject : SubjectObject;\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"char": 27,
+				"kind": "template"
+			}
+		],
+		"comment": " This module defines some algorithm like std.algorithm.searching.\nExample:\n\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nauto hasEven = sub.any!\"a % 2 == 0\"();\nauto result = false;\nauto d = hasEven.doSubscribe((bool b) { result = b; });\n\nsub.put(1);\nsub.put(3);\nsub.put(2);\nassert(result);\n\n---\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\disposable.d",
+		"name": "rx.disposable",
+		"members": [
+			{
+				"members": [
+					{
+						"name": "isDisposable",
+						"line": 13,
+						"storageClass": [
+							"enum"
+						],
+						"deco": "b",
+						"init": "is(typeof(()\r\n{\r\nT disposable = void;\r\ndisposable.dispose();\r\n}\r\n()))",
+						"char": 15,
+						"kind": "variable"
+					}
+				],
+				"name": "isDisposable",
+				"line": 11,
+				"comment": "Tests if something is a Disposable.\nExample:\n\n---\nstruct A { void dispose(){} }\nclass B { void dispose(){} }\ninterface C { void dispose(); }\n\nstatic assert(isDisposable!A);\nstatic assert(isDisposable!B);\nstatic assert(isDisposable!C);\n\n---\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "isCancelable",
+						"line": 33,
+						"storageClass": [
+							"enum"
+						],
+						"init": "isDisposable!T && is(typeof((inout int n = 0)\r\n{\r\nT disposable = void;\r\nbool b = disposable.isDisposed;\r\n}\r\n))",
+						"char": 10,
+						"kind": "variable"
+					}
+				],
+				"name": "isCancelable",
+				"line": 31,
+				"comment": "Tests if something is a Cancelable\nExample:\n\n---\nstruct A\n{\n    bool isDisposed() @property { return true; }\n    void dispose() { }\n}\nclass B\n{\n    bool isDisposed() @property { return true; }\n    void dispose() { }\n}\ninterface C\n{\n    bool isDisposed() @property;\n    void dispose();\n}\n\nstatic assert(isCancelable!A);\nstatic assert(isCancelable!B);\nstatic assert(isCancelable!C);\n\n---\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"name": "Disposable",
+				"line": 63,
+				"comment": "Wrapper for disposable objects.\n",
+				"members": [
+					{
+						"name": "dispose",
+						"line": 66,
+						"comment": "\n",
+						"storageClass": [
+							"abstract"
+						],
+						"deco": "FZv",
+						"char": 10,
+						"kind": "function"
+					}
+				],
+				"char": 1,
+				"kind": "interface"
+			},
+			{
+				"members": [
+					{
+						"name": "isDisposed",
+						"line": 72,
+						"comment": "\n",
+						"storageClass": [
+							"abstract"
+						],
+						"deco": "FNdZb",
+						"char": 10,
+						"kind": "function"
+					}
+				],
+				"name": "Cancelable",
+				"line": 69,
+				"comment": "Wrapper for cancelable objects.\n",
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
+				"char": 1,
+				"kind": "interface"
+			},
+			{
+				"members": [
+					{
+						"endchar": 5,
+						"name": "isDisposed",
+						"line": 80,
+						"comment": "\n",
+						"deco": "FNdZb",
+						"endline": 83,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Cancelable.isDisposed"
+						]
+					},
+					{
+						"name": "isCanceled",
+						"line": 85,
+						"comment": "\n",
+						"char": 22,
+						"kind": "alias"
+					},
+					{
+						"endchar": 5,
+						"name": "dispose",
+						"line": 89,
+						"comment": "\n",
+						"deco": "FZv",
+						"endline": 92,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Disposable.dispose"
+						]
+					},
+					{
+						"name": "cancel",
+						"line": 94,
+						"comment": "\n",
+						"char": 19,
+						"kind": "alias"
+					}
+				],
+				"name": "CancellationToken",
+				"line": 76,
+				"comment": "Simply implements for Cancelable interface. Its propagates notification that operations should be canceled.\n",
+				"interfaces": [
+					"rx.disposable.Cancelable"
+				],
+				"char": 1,
+				"kind": "class"
+			},
+			{
+				"members": [
+					{
+						"name": "DisposableObject",
+						"line": 119,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 123,
+								"comment": "\n",
+								"type": "(T disposable)",
+								"parameters": [
+									{
+										"name": "disposable",
+										"type": "T"
+									}
+								],
+								"endline": 126,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "dispose",
+								"line": 130,
+								"comment": "\n",
+								"type": "void()",
+								"endline": 133,
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"char": 1,
+						"kind": "class"
+					}
+				],
+				"name": "DisposableObject",
+				"line": 119,
+				"comment": "Class that implements the Disposable interface and wraps the dispose methods in virtual functions.\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "CancelableObject",
+						"line": 139,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 143,
+								"comment": "\n",
+								"type": "(T disposable)",
+								"parameters": [
+									{
+										"name": "disposable",
+										"type": "T"
+									}
+								],
+								"endline": 146,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "isDisposed",
+								"line": 150,
+								"comment": "\n",
+								"type": "@property bool()",
+								"endline": 153,
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"char": 1,
+						"kind": "class"
+					}
+				],
+				"name": "CancelableObject",
+				"line": 139,
+				"comment": "Class that implements the Cancelable interface and wraps the  isDisposed property in virtual functions.\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "disposableObject",
+						"line": 157,
+						"type": "(T disposable)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "disposable",
+								"type": "T"
+							}
+						],
+						"endline": 173,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "disposableObject",
+				"line": 157,
+				"comment": "Wraps dispose method in virtual functions.\nExample:\n\n---\nint count = 0;\nstruct TestDisposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nTestDisposable test;\nDisposable disposable = disposableObject(test);\nassert(count == 0);\ndisposable.dispose();\nassert(count == 1);\n\n---\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 5,
+						"name": "instance",
+						"line": 245,
+						"comment": "\n",
+						"storageClass": [
+							"static"
+						],
+						"deco": "FNdZC2rx10disposable10Disposable",
+						"endline": 250,
+						"char": 23,
+						"kind": "function"
+					}
+				],
+				"name": "NopDisposable",
+				"line": 235,
+				"comment": "Defines a instance property that return NOP Disposable.\nExample:\n\n---\nDisposable d1 = NopDisposable.instance;\nDisposable d2 = NopDisposable.instance;\nassert(d1 !is null);\nassert(d1 is d2);\n\n---\n",
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
+				"char": 7,
+				"kind": "class"
+			},
+			{
+				"members": [
+					{
+						"endchar": 5,
+						"name": "setDisposable",
+						"line": 286,
+						"comment": "\n",
+						"deco": "FC2rx10disposable10DisposableZv",
+						"parameters": [
+							{
+								"name": "disposable",
+								"deco": "C2rx10disposable10Disposable"
+							}
+						],
+						"endline": 290,
+						"char": 10,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "isDisposed",
+						"line": 294,
+						"comment": "\n",
+						"deco": "FNdZb",
+						"endline": 297,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Cancelable.isDisposed"
+						]
+					},
+					{
+						"endchar": 5,
+						"name": "dispose",
+						"line": 301,
+						"comment": "\n",
+						"deco": "FZv",
+						"endline": 306,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Disposable.dispose"
+						]
+					}
+				],
+				"name": "SingleAssignmentDisposable",
+				"line": 282,
+				"comment": "\nExample:\n\n---\nint count = 0;\nclass TestDisposable : Disposable\n{\n    void dispose() { count++; }\n}\nauto temp = new SingleAssignmentDisposable;\ntemp.setDisposable(new TestDisposable);\nassert(!temp.isDisposed);\nassert(count == 0);\ntemp.dispose();\nassert(temp.isDisposed);\nassert(count == 1);\n\n---\n",
+				"interfaces": [
+					"rx.disposable.Cancelable"
+				],
+				"char": 7,
+				"kind": "class"
+			},
+			{
+				"members": [
+					{
+						"endchar": 5,
+						"name": "isDisposed",
+						"line": 362,
+						"comment": "\n",
+						"deco": "FNdZb",
+						"endline": 365,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Cancelable.isDisposed"
+						]
+					},
+					{
+						"endchar": 5,
+						"name": "disposable",
+						"line": 368,
+						"comment": "\n",
+						"deco": "FNdC2rx10disposable10DisposableZv",
+						"parameters": [
+							{
+								"name": "value",
+								"deco": "C2rx10disposable10Disposable"
+							}
+						],
+						"endline": 385,
+						"char": 10,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "disposable",
+						"line": 388,
+						"comment": "\n",
+						"deco": "FNdZC2rx10disposable10Disposable",
+						"endline": 391,
+						"char": 16,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "dispose",
+						"line": 395,
+						"comment": "\n",
+						"deco": "FZv",
+						"endline": 408,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Disposable.dispose"
+						]
+					}
+				],
+				"name": "SerialDisposable",
+				"line": 352,
+				"comment": "\n",
+				"interfaces": [
+					"rx.disposable.Cancelable"
+				],
+				"char": 1,
+				"kind": "class"
+			},
+			{
+				"members": [
+					{
+						"endchar": 5,
+						"name": "signal",
+						"line": 459,
+						"comment": "\n",
+						"deco": "FNdZC2rx4util11EventSignal",
+						"endline": 462,
+						"char": 17,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "dispose",
+						"line": 466,
+						"comment": "\n",
+						"deco": "FZv",
+						"endline": 469,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Disposable.dispose"
+						]
+					}
+				],
+				"name": "SignalDisposable",
+				"line": 449,
+				"comment": "\n",
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
+				"char": 1,
+				"kind": "class"
+			},
+			{
+				"members": [
+					{
+						"endchar": 5,
+						"originalType": "(Disposable[] disposables...)",
+						"name": "this",
+						"line": 488,
+						"comment": "\n",
+						"deco": "FAC2rx10disposable10DisposableXC2rx10disposable19CompositeDisposable",
+						"parameters": [
+							{
+								"name": "disposables",
+								"deco": "AC2rx10disposable10Disposable"
+							}
+						],
+						"endline": 491,
+						"char": 5,
+						"kind": "constructor"
+					},
+					{
+						"endchar": 5,
+						"name": "dispose",
+						"line": 495,
+						"comment": "\n",
+						"deco": "FZv",
+						"endline": 498,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Disposable.dispose"
+						]
+					}
+				],
+				"name": "CompositeDisposable",
+				"line": 484,
+				"comment": "\nExample:\n\n---\nauto d1 = new SingleAssignmentDisposable;\nauto d2 = new SerialDisposable;\nauto d = new CompositeDisposable(d1, d2);\nd.dispose();\n\n---\n",
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
+				"char": 1,
+				"kind": "class"
+			},
+			{
+				"members": [
+					{
+						"endchar": 5,
+						"originalType": "(void delegate() dispose)",
+						"name": "this",
+						"line": 517,
+						"comment": "\n",
+						"deco": "FDFZvZC2rx10disposable20AnonymouseDisposable",
+						"parameters": [
+							{
+								"name": "dispose",
+								"deco": "DFZv"
+							}
+						],
+						"endline": 521,
+						"char": 5,
+						"kind": "constructor"
+					},
+					{
+						"endchar": 5,
+						"name": "dispose",
+						"line": 525,
+						"comment": "\n",
+						"deco": "FZv",
+						"endline": 532,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Disposable.dispose"
+						]
+					}
+				],
+				"name": "AnonymouseDisposable",
+				"line": 513,
+				"comment": "\nExample:\n\n---\nint count = 0;\nauto d = new AnonymouseDisposable({ count++; });\nassert(count == 0);\nd.dispose();\nassert(count == 1);\nd.dispose();\nassert(count == 1);\n\n---\n",
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
+				"char": 1,
+				"kind": "class"
+			}
+		],
+		"comment": " This module defines the concept of Disposable.\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\observable.d",
+		"name": "rx.observable",
+		"members": [
+			{
+				"members": [
+					{
+						"name": "isObservable",
+						"line": 16,
+						"storageClass": [
+							"enum"
+						],
+						"deco": "b",
+						"init": "is(T.ElementType : E) && is(typeof(()\r\n{\r\nT observable = void;\r\nObserver!E observer = void;\r\nauto d = observable.subscribe(observer);\r\nstatic assert(isDisposable!(typeof(d)));\r\n}\r\n()))",
+						"char": 15,
+						"kind": "variable"
+					}
+				],
+				"name": "isObservable",
+				"line": 14,
+				"comment": "Tests if something is a Observable.\nExample:\n\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    Disposable subscribe(T)(T observer)\n    {\n        static assert(isObserver!(T, int));\n        return null;\n    }\n}\n\nstatic assert( isObservable!(TestObservable, int));\nstatic assert(!isObservable!(TestObservable, Object));\n\n---\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "isSubscribable",
+						"line": 44,
+						"storageClass": [
+							"enum"
+						],
+						"deco": "b",
+						"init": "is(typeof(()\r\n{\r\nTObservable observable = void;\r\nTObserver observer = void;\r\nauto d = observable.subscribe(observer);\r\nstatic assert(isDisposable!(typeof(d)));\r\n}\r\n()))",
+						"char": 15,
+						"kind": "variable"
+					}
+				],
+				"name": "isSubscribable",
+				"line": 42,
+				"comment": "Test if the observer can subscribe to the observable.\nExample:\n\n---\nstruct TestDisposable\n{\n    void dispose() { }\n}\nstruct TestObserver\n{\n    void put(int n) { }\n    void completed() { }\n    void failure(Exception e) { }\n}\nstruct TestObservable\n{\n    TestDisposable subscribe(TestObserver observer)\n    {\n        return TestDisposable();\n    }\n}\n\nstatic assert(isSubscribable!(TestObservable, TestObserver));\n\n---\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "TObserver",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "doSubscribe",
+						"line": 76,
+						"type": "(auto ref TObservable observable, void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "doPut",
+								"type": "void delegate(E)"
+							},
+							{
+								"name": "doCompleted",
+								"type": "void delegate()"
+							},
+							{
+								"name": "doFailure",
+								"type": "void delegate(Exception)"
+							}
+						],
+						"endline": 79,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "doSubscribe",
+				"line": 76,
+				"comment": "The helper for subscribe easier.\nExample:\n\n---\nstruct TestObserver\n{\n    void put(int n) { }\n}\nstruct TestObservable1\n{\n    alias ElementType = int;\n    Disposable subscribe(Observer!int observer)\n    {\n        return null;\n    }\n}\nstruct TestObservable2\n{\n    alias ElementType = int;\n    Disposable subscribe(T)(T observer)\n    {\n        return null;\n    }\n}\n\nTestObservable1 o1;\nauto d0 = o1.doSubscribe((int n){}, (){}, (Exception e){});\nauto d1 = o1.doSubscribe((int n){}, (){});\nauto d2 = o1.doSubscribe((int n){}, (Exception e){});\nauto d3 = o1.doSubscribe((int n){});\nauto d4 = o1.doSubscribe(TestObserver());\nTestObservable2 o2;\nauto d5 = o2.doSubscribe((int n){}, (){}, (Exception e){});\nauto d6 = o2.doSubscribe((int n){}, (){});\nauto d7 = o2.doSubscribe((int n){}, (Exception e){});\nauto d8 = o2.doSubscribe((int n){});\nauto d9 = o2.doSubscribe(TestObserver());\n\n---\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "doSubscribe",
+						"line": 81,
+						"type": "(auto ref TObservable observable, void delegate(E) doPut, void delegate() doCompleted)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "doPut",
+								"type": "void delegate(E)"
+							},
+							{
+								"name": "doCompleted",
+								"type": "void delegate()"
+							}
+						],
+						"endline": 84,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "doSubscribe",
+				"line": 81,
+				"comment": "ditto\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "doSubscribe",
+						"line": 86,
+						"type": "(auto ref TObservable observable, void delegate(E) doPut, void delegate(Exception) doFailure)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "doPut",
+								"type": "void delegate(E)"
+							},
+							{
+								"name": "doFailure",
+								"type": "void delegate(Exception)"
+							}
+						],
+						"endline": 89,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "doSubscribe",
+				"line": 86,
+				"comment": "ditto\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "doSubscribe",
+						"line": 91,
+						"type": "(auto ref TObservable observable, auto ref TObserver observer)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "observer",
+								"type": "TObserver",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 100,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "doSubscribe",
+				"line": 91,
+				"comment": "ditto\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "TObserver",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "Observable",
+						"line": 140,
+						"members": [],
+						"char": 1,
+						"kind": "interface"
+					}
+				],
+				"name": "Observable",
+				"line": 140,
+				"comment": "Wrapper for Observable objects.\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "ObservableObject",
+						"line": 152,
+						"members": [],
+						"char": 1,
+						"kind": "class"
+					}
+				],
+				"name": "ObservableObject",
+				"line": 152,
+				"comment": "Class that implements Observable interface and wraps the subscribe method in virtual function.\n",
+				"parameters": [
+					{
+						"name": "R",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"members": [
+							{
+								"endchar": 5,
+								"name": "observableObject",
+								"line": 173,
+								"type": "Observable!E(auto ref R observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "R",
+										"storageClass": [
+											"auto",
+											"ref"
+										]
+									}
+								],
+								"endline": 183,
+								"char": 18,
+								"kind": "function"
+							}
+						],
+						"name": "observableObject",
+						"line": 173,
+						"parameters": [
+							{
+								"name": "R",
+								"kind": "type"
+							}
+						],
+						"char": 18,
+						"kind": "template"
+					}
+				],
+				"name": "observableObject",
+				"line": 171,
+				"comment": "Wraps subscribe method in virtual function.\nExample:\n\n---\nint subscribeCount = 0;\nclass TestObservable : Observable!int\n{\n    Disposable subscribe(Observer!int observer)\n    {\n        subscribeCount++;\n        return NopDisposable.instance;\n    }\n}\n\nauto test = new TestObservable;\nauto observable = observableObject!int(test);\nassert(observable is test);\nassert(subscribeCount == 0);\nauto d = observable.subscribe(null);\nassert(subscribeCount == 1);\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "defer",
+						"line": 236,
+						"type": "()",
+						"storageClass": [
+							"auto"
+						],
+						"endline": 311,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "defer",
+				"line": 236,
+				"comment": "Create observable by function that template parameter.\nExample:\n\n---\nauto sub = defer!(int, (observer){\n    observer.put(1);\n    observer.put(2);\n    observer.put(3);\n    observer.completed();\n});\n\nint countPut = 0;\nint countCompleted = 0;\nstruct A\n{\n    void put(int n) { countPut++; }\n    void completed() { countCompleted++; }\n}\n\nassert(countPut == 0);\nassert(countCompleted == 0);\nauto d = sub.doSubscribe(A());\nassert(countPut == 3);\nassert(countCompleted == 1);\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					},
+					{
+						"name": "f",
+						"kind": "alias"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			}
+		],
+		"comment": " This module defines the concept of Observable.\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\observer.d",
+		"name": "rx.observer",
+		"members": [
+			{
+				"members": [
+					{
+						"name": "hasCompleted",
+						"line": 13,
+						"storageClass": [
+							"enum"
+						],
+						"deco": "b",
+						"init": "is(typeof(()\r\n{\r\nT observer = void;\r\nobserver.completed();\r\n}\r\n()))",
+						"char": 15,
+						"kind": "variable"
+					}
+				],
+				"name": "hasCompleted",
+				"line": 11,
+				"comment": "Tests if something has completed method.\nExample:\n\n---\nstruct A\n{\n    void completed();\n}\nstruct B\n{\n    void _completed();\n}\n\nstatic assert( hasCompleted!A);\nstatic assert(!hasCompleted!B);\n\n---\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "hasFailure",
+						"line": 37,
+						"storageClass": [
+							"enum"
+						],
+						"deco": "b",
+						"init": "is(typeof(()\r\n{\r\nT observer = void;\r\nException e = void;\r\nobserver.failure(e);\r\n}\r\n()))",
+						"char": 15,
+						"kind": "variable"
+					}
+				],
+				"name": "hasFailure",
+				"line": 35,
+				"comment": "Tests if something has failure method.\nExample:\n\n---\nstruct A\n{\n    void failure(Exception e);\n}\nstruct B\n{\n    void _failure(Exception e);\n}\nstruct C\n{\n    void failure();\n}\n\nstatic assert(hasFailure!A);\nstatic assert(!hasFailure!B);\nstatic assert(!hasFailure!C);\n\n---\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "isObserver",
+						"line": 67,
+						"storageClass": [
+							"enum"
+						],
+						"deco": "b",
+						"init": "isOutputRange!(T, E) && hasCompleted!T && hasFailure!T",
+						"char": 15,
+						"kind": "variable"
+					}
+				],
+				"name": "isObserver",
+				"line": 65,
+				"comment": "Tests if something is Observer.\nExample:\n\n---\nstruct TestObserver\n{\n    void put(int n) { }\n    void completed() { }\n    void failure(Exception e) { }\n}\n\nstatic assert(isObserver!(TestObserver, int));\n\n---\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "Observer",
+						"line": 83,
+						"members": [
+							{
+								"name": "completed",
+								"line": 86,
+								"comment": "\n",
+								"type": "void()",
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "failure",
+								"line": 88,
+								"comment": "\n",
+								"type": "void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"char": 1,
+						"kind": "interface"
+					}
+				],
+				"name": "Observer",
+				"line": 83,
+				"comment": "Wraps completed and failure method in virtual function.\nExample:\n\n---\nalias TObserver = Observer!byte;\nstatic assert(isObserver!(TObserver, byte));\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "ObserverObject",
+						"line": 98,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 109,
+								"comment": "\n",
+								"type": "void()",
+								"endline": 115,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "failure",
+								"line": 117,
+								"comment": "\n",
+								"type": "void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 123,
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"char": 1,
+						"kind": "class"
+					}
+				],
+				"name": "ObserverObject",
+				"line": 98,
+				"comment": "Class that implements Observer interface and wraps the completed and failure method in virtual functions. This class extends the OutputRangeObject.\n",
+				"parameters": [
+					{
+						"name": "R",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "tuple"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"members": [
+							{
+								"endchar": 5,
+								"name": "observerObject",
+								"line": 132,
+								"type": "ObserverObject!(R, E)(R range)",
+								"parameters": [
+									{
+										"name": "range",
+										"type": "R"
+									}
+								],
+								"endline": 135,
+								"char": 27,
+								"kind": "function"
+							}
+						],
+						"name": "observerObject",
+						"line": 132,
+						"parameters": [
+							{
+								"name": "R",
+								"kind": "type"
+							}
+						],
+						"char": 27,
+						"kind": "template"
+					}
+				],
+				"name": "observerObject",
+				"line": 130,
+				"comment": "Wraps subscribe method in virtual function.\nExample:\n\n---\nstruct TestObserver\n{\n    void put(int n) { }\n    void put(Object obj) { }\n}\n\nObserver!int observer = observerObject!int(TestObserver());\nobserver.put(0);\nobserver.completed();\nobserver.failure(null);\nstatic assert(isObserver!(typeof(observer), int));\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "NopObserver",
+						"line": 244,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "instance",
+								"line": 256,
+								"comment": "\n",
+								"storageClass": [
+									"static"
+								],
+								"type": "Observer!E()",
+								"endline": 261,
+								"char": 23,
+								"kind": "function"
+							}
+						],
+						"char": 7,
+						"kind": "class"
+					}
+				],
+				"name": "NopObserver",
+				"line": 244,
+				"comment": "\nExample:\n\n---\nObserver!int o1 = NopObserver!int.instance;\nObserver!int o2 = NopObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 7,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "DoneObserver",
+						"line": 273,
+						"members": [],
+						"char": 7,
+						"kind": "class"
+					}
+				],
+				"name": "DoneObserver",
+				"line": 273,
+				"comment": "\nExample:\n\n---\nObserver!int o1 = DoneObserver!int.instance;\nObserver!int o2 = DoneObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 7,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "CompositeObserver",
+						"line": 319,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 332,
+								"comment": "\n",
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 336,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 338,
+								"comment": "\n",
+								"type": "void()",
+								"endline": 342,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "failure",
+								"line": 344,
+								"comment": "\n",
+								"type": "void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 348,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "add",
+								"line": 350,
+								"comment": "\n",
+								"type": "CompositeObserver!E(Observer!E observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "Observer!E"
+									}
+								],
+								"endline": 353,
+								"char": 25,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "remove",
+								"line": 355,
+								"comment": "\n",
+								"type": "Observer!E(Observer!E observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "Observer!E"
+									}
+								],
+								"endline": 365,
+								"char": 16,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "empty",
+								"line": 369,
+								"comment": "\n",
+								"storageClass": [
+									"static"
+								],
+								"type": "CompositeObserver!E()",
+								"endline": 374,
+								"char": 32,
+								"kind": "function"
+							}
+						],
+						"char": 8,
+						"kind": "class"
+					}
+				],
+				"name": "CompositeObserver",
+				"line": 319,
+				"comment": "\nExample:\n\n---\nint count = 0;\nstruct TestObserver\n{\n    void put(int n) { count++; }\n}\n\nauto c1 = new CompositeObserver!int;\nc1.put(0);\nauto o1 = observerObject!int(TestObserver());\nauto c2 = c1.add(o1);\nc1.put(0);\nassert(count == 0);\nc2.put(0);\nassert(count == 1);\nauto c3 = c2.add(observerObject!int(TestObserver()));\nc3.put(0);\nassert(count == 3);\nauto c4 = c3.remove(o1);\nc4.put(0);\nassert(count == 4);\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 8,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "makeObserver",
+						"line": 405,
+						"type": "(void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "doPut",
+								"type": "void delegate(E)"
+							},
+							{
+								"name": "doCompleted",
+								"type": "void delegate()"
+							},
+							{
+								"name": "doFailure",
+								"type": "void delegate(Exception)"
+							}
+						],
+						"endline": 436,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "makeObserver",
+				"line": 405,
+				"comment": "The helper for the own observer.\nExample:\n\n---\nint countPut = 0;\nint countCompleted = 0;\nint countFailure = 0;\n\nauto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; }, (Exception){ countFailure++; });\n\n.put(observer, 0);\nassert(countPut == 1);\n\nobserver.completed();\nassert(countCompleted == 1);\n\nobserver.failure(null);\nassert(countFailure == 1);\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "makeObserver",
+						"line": 438,
+						"type": "(void delegate(E) doPut, void delegate() doCompleted)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "doPut",
+								"type": "void delegate(E)"
+							},
+							{
+								"name": "doCompleted",
+								"type": "void delegate()"
+							}
+						],
+						"endline": 463,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "makeObserver",
+				"line": 438,
+				"comment": "ditto\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "makeObserver",
+						"line": 465,
+						"type": "(void delegate(E) doPut, void delegate(Exception) doFailure)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "doPut",
+								"type": "void delegate(E)"
+							},
+							{
+								"name": "doFailure",
+								"type": "void delegate(Exception)"
+							}
+						],
+						"endline": 490,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "makeObserver",
+				"line": 465,
+				"comment": "ditto\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			}
+		],
+		"comment": " This module defines the concept of Observer.\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\range.d",
+		"name": "rx.range",
+		"members": [
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "drop",
+						"line": 45,
+						"type": "(auto ref TObservable observable, size_t n)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "n",
+								"type": "size_t"
+							}
+						],
+						"endline": 113,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "drop",
+				"line": 45,
+				"comment": "Creates the observable that results from discarding the first n elements from the given source.\nExample:\n\n---\nimport rx.subject;\nauto subject = new SubjectObject!int;\nauto dropped = subject.drop(1);\nstatic assert(isObservable!(typeof(dropped), int));\n\nimport std.array : appender;\nauto buf = appender!(int[]);\nauto disposable = dropped.subscribe(buf);\n\nsubject.put(0);\nassert(buf.data.length == 0);\nsubject.put(1);\nassert(buf.data.length == 1);\n\nauto buf2 = appender!(int[]);\ndropped.subscribe(buf2);\nassert(buf2.data.length == 0);\nsubject.put(2);\nassert(buf2.data.length == 0);\nassert(buf.data.length == 2);\nsubject.put(3);\nassert(buf2.data.length == 1);\nassert(buf.data.length == 3);\n\n---\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "take",
+						"line": 147,
+						"type": "(auto ref TObservable observable, size_t n)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "n",
+								"type": "size_t"
+							}
+						],
+						"endline": 231,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "take",
+				"line": 147,
+				"comment": "Creates a sub-observable consisting of only up to the first n elements of the given source.\nExample:\n\n---\nimport std.array;\nimport rx.subject;\n\nauto pub = new SubjectObject!int;\nauto sub = appender!(int[]);\n\nauto d = pub.take(2).subscribe(sub);\nforeach (i; 0 .. 10)\n{\n    pub.put(i);\n}\n\nimport std.algorithm;\nassert(equal(sub.data, [0, 1]));\n\n---\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "takeLast",
+						"line": 305,
+						"type": "(auto ref TObservable observable)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 373,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "takeLast",
+				"line": 305,
+				"comment": "Creates a observable that take only a last element of the given source.\nExample:\n\n---\nimport rx.subject;\nauto sub = new SubjectObject!int;\n\nint putCount = 0;\nint completedCount = 0;\nstruct TestObserver\n{\n    void put(int n) { putCount++; }\n    void completed() { completedCount++; }\n}\n\nauto d = sub.takeLast.subscribe(TestObserver());\n\nassert(putCount == 0);\nsub.put(1);\nassert(putCount == 0);\nsub.put(10);\nassert(putCount == 0);\nsub.completed();\nassert(putCount == 1);\nassert(completedCount == 1);\n\nsub.put(100);\nassert(putCount == 1);\nassert(completedCount == 1);\n\n---\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			}
+		],
+		"comment": " This module defines some operations like range.\nExample:\nOverview\n---\nimport rx.subject;\nimport std.algorithm : equal;\nimport std.array : appender;\nimport std.conv : to;\n\nauto subject = new SubjectObject!int;\nauto pub = subject\n    .drop(2)\n    .take(3);\n\nauto buf = appender!(int[]);\nauto disposable = pub.subscribe(observerObject!int(buf));\n\nforeach (i; 0 .. 10)\n{\n    subject.put(i);\n}\n\nauto result = buf.data;\nassert(equal(result, [2, 3, 4]));\n\n---\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\subject.d",
+		"name": "rx.subject",
+		"members": [
+			{
+				"members": [
+					{
+						"name": "Subject",
+						"line": 14,
+						"members": [],
+						"char": 1,
+						"kind": "interface"
+					}
+				],
+				"name": "Subject",
+				"line": 14,
+				"comment": "Represents an object that is both an observable sequence as well as an observer.\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "SubjectObject",
+						"line": 17,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 28,
+								"comment": "\n",
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 32,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 34,
+								"comment": "\n",
+								"type": "void()",
+								"endline": 46,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "failure",
+								"line": 48,
+								"comment": "\n",
+								"type": "void(Exception error)",
+								"parameters": [
+									{
+										"name": "error",
+										"type": "Exception"
+									}
+								],
+								"endline": 60,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 63,
+										"type": "Disposable(T observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "T"
+											}
+										],
+										"endline": 66,
+										"char": 16,
+										"kind": "function"
+									}
+								],
+								"name": "subscribe",
+								"line": 63,
+								"comment": "\n",
+								"parameters": [
+									{
+										"name": "T",
+										"kind": "type"
+									}
+								],
+								"char": 16,
+								"kind": "template"
+							},
+							{
+								"endchar": 5,
+								"name": "subscribe",
+								"line": 68,
+								"comment": "\n",
+								"type": "Disposable(Observer!E observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "Observer!E"
+									}
+								],
+								"endline": 104,
+								"char": 16,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "unsubscribe",
+								"line": 107,
+								"comment": "\n",
+								"type": "void(Observer!E observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "Observer!E"
+									}
+								],
+								"endline": 127,
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"char": 1,
+						"kind": "class"
+					}
+				],
+				"name": "SubjectObject",
+				"line": 17,
+				"comment": "Represents an object that is both an observable sequence as well as an observer. Each notification is broadcasted to all subscribed observers.\nExample:\n\n---\nimport std.array : appender;\nauto data = appender!(int[])();\nauto subject = new SubjectObject!int;\nauto disposable = subject.subscribe(observerObject!(int)(data));\nassert(disposable !is null);\nsubject.put(0);\nsubject.put(1);\n\nimport std.algorithm : equal;\nassert(equal(data.data, [0, 1]));\n\ndisposable.dispose();\nsubject.put(2);\nassert(equal(data.data, [0, 1]));\n\n---\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			}
+		],
+		"comment": " This module defines the Subject and some implements.\n",
+		"kind": "module"
+	}
+]

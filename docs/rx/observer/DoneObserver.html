@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Class DoneObserver</title>
+		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
+		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script>
+		<script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
+	</head>
+	<body onload="setupDdox();">
+		<nav id="main-nav">
+						<ul class="tree-view">
+							<li class="tree-view">
+								<a href="#" class="package">rx</a>
+						<ul class="tree-view">
+							<li class="collapsed tree-view">
+								<a href="#" class="package">algorithm</a>
+						<ul class="tree-view">
+							<li>
+								<a href="../../rx/algorithm/iteration.html" class=" module">iteration</a>
+							</li>
+							<li>
+								<a href="../../rx/algorithm/searching.html" class=" module">searching</a>
+							</li>
+						</ul>
+							</li>
+							<li>
+								<a href="../../rx/disposable.html" class=" module">disposable</a>
+							</li>
+							<li>
+								<a href="../../rx/observable.html" class=" module">observable</a>
+							</li>
+							<li>
+								<a href="../../rx/observer.html" class="selected module">observer</a>
+							</li>
+							<li>
+								<a href="../../rx/range.html" class=" module">range</a>
+							</li>
+							<li>
+								<a href="../../rx/subject.html" class=" module">subject</a>
+							</li>
+						</ul>
+							</li>
+						</ul>
+				<noscript>
+					<p style="color: red">The search functionality needs JavaScript enabled</p>
+				</noscript>
+				<div id="symbolSearchPane" style="display: none">
+					<p>
+						<input id="symbolSearch" type="text" placeholder="Search for symbols" onchange="performSymbolSearch(24);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+					</p>
+	<ul id="symbolSearchResults" style="display: none"></ul>
+	<script type="application/javascript" src="../../symbols.js"></script>
+	<script type="application/javascript">
+var symbolSearchRootDir = "../../";
+$('#symbolSearchPane').show();
+	</script>
+				</div>
+		</nav>
+		<div id="main-contents">
+			<h1>Class DoneObserver</h1>
+			<section>
+				<p></p>
+
+					<section>
+						<h3>Template arguments</h3>
+						<div class="prototype">
+							<code class="lang-d"><span class="kwd">class</span> <span class="typ">DoneObserver</span><span class="pun">(</span><span class="pln">E</span><span class="pun">)</span>;
+							</code>
+						</div>
+					</section>
+					<section>
+						<h3>Inherits from</h3>
+						<ul>
+							<li>
+								<code class="prettyprint lang-d"><span class="typ">Object</span></code>
+ (base class)
+							</li>
+						</ul>
+					</section>
+<section><h3>Example</h3>
+<pre class="code"><code class="lang-d"><a href="../../rx/observer/Observer.html"><span class="typ">Observer</span></a><span class="pun">!</span><span class="typ">int </span><span class="pln">o1 </span><span class="pun">= </span><span class="typ">DoneObserver</span><span class="pun">!</span><span class="typ">int<wbr/></span><span class="pun">.</span><span class="pln">instance</span><span class="pun">;
+<a href="../../rx/observer/Observer.html"></span><span class="typ">Observer</span></a><span class="pun">!</span><span class="typ">int </span><span class="pln">o2 </span><span class="pun">= </span><span class="typ">DoneObserver</span><span class="pun">!</span><span class="typ">int<wbr/></span><span class="pun">.</span><span class="pln">instance</span><span class="pun">;
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">o1 </span><span class="pun">!</span><span class="kwd">is null</span><span class="pun">);
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">o1 </span><span class="kwd">is </span><span class="pln">o2</span><span class="pun">);
+</span></code></pre>
+</section>
+
+			</section>
+			<section>
+				<h2>Authors</h2>
+
+			</section>
+			<section>
+				<h2>Copyright</h2>
+
+			</section>
+			<section>
+				<h2>License</h2>
+
+			</section>
+		</div>
+	</body>
+</html>

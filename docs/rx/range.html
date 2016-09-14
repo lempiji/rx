@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Module rx.range</title>
+		<link rel="stylesheet" type="text/css" href="../styles/ddox.css"/>
+		<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../scripts/jquery.js">/**/</script>
+		<script type="text/javascript" src="../scripts/ddox.js">/**/</script>
+	</head>
+	<body onload="setupDdox();">
+		<nav id="main-nav">
+						<ul class="tree-view">
+							<li class="tree-view">
+								<a href="#" class="package">rx</a>
+						<ul class="tree-view">
+							<li class="collapsed tree-view">
+								<a href="#" class="package">algorithm</a>
+						<ul class="tree-view">
+							<li>
+								<a href="../rx/algorithm/iteration.html" class=" module">iteration</a>
+							</li>
+							<li>
+								<a href="../rx/algorithm/searching.html" class=" module">searching</a>
+							</li>
+						</ul>
+							</li>
+							<li>
+								<a href="../rx/disposable.html" class=" module">disposable</a>
+							</li>
+							<li>
+								<a href="../rx/observable.html" class=" module">observable</a>
+							</li>
+							<li>
+								<a href="../rx/observer.html" class=" module">observer</a>
+							</li>
+							<li>
+								<a href="../rx/range.html" class="selected module">range</a>
+							</li>
+							<li>
+								<a href="../rx/subject.html" class=" module">subject</a>
+							</li>
+						</ul>
+							</li>
+						</ul>
+				<noscript>
+					<p style="color: red">The search functionality needs JavaScript enabled</p>
+				</noscript>
+				<div id="symbolSearchPane" style="display: none">
+					<p>
+						<input id="symbolSearch" type="text" placeholder="Search for symbols" onchange="performSymbolSearch(24);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+					</p>
+	<ul id="symbolSearchResults" style="display: none"></ul>
+	<script type="application/javascript" src="../symbols.js"></script>
+	<script type="application/javascript">
+var symbolSearchRootDir = "../";
+$('#symbolSearchPane').show();
+	</script>
+				</div>
+		</nav>
+		<div id="main-contents">
+			<h1>Module rx.range</h1>
+			<p>This module defines some operations like range.
+</p>
+
+			<section><section><h2>Example</h2>
+<p>Overview
+</p>
+<pre class="code"><code class="lang-d"><span class="kwd">import <a href="../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pun">;
+</span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">algorithm </span><span class="pun">: </span><span class="pln">equal</span><span class="pun">;
+</span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">array </span><span class="pun">: </span><span class="pln">appender</span><span class="pun">;
+</span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">conv </span><span class="pun">: </span><span class="pln">to</span><span class="pun">;
+
+</span><span class="kwd">auto </span><span class="pln">subject </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SubjectObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
+</span><span class="kwd">auto </span><span class="pln">pub </span><span class="pun">= </span><span class="pln">subject
+    <wbr/></span><span class="pun">.</span><span class="pln">drop</span><span class="pun">(</span><span class="lit">2</span><span class="pun">)
+    <a href="../rx/range/take.html"></span><wbr/><span class="pun">.</span><span class="pln">take</span></a><span class="pun">(</span><span class="lit">3</span><span class="pun">);
+
+</span><span class="kwd">auto </span><span class="pln">buf </span><span class="pun">= </span><span class="pln">appender</span><span class="pun">!(</span><span class="typ">int</span><span class="pun">[]);
+</span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">pub<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">observerObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">(</span><span class="pln">buf</span><span class="pun">));
+
+</span><span class="kwd">foreach </span><span class="pun">(</span><span class="pln">i</span><span class="pun">; </span><span class="lit">0 </span><span class="pun">.. </span><span class="lit">10</span><span class="pun">)
+{
+    </span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="pln">i</span><span class="pun">);
+}
+
+</span><span class="kwd">auto </span><span class="pln">result </span><span class="pun">= </span><span class="pln">buf<wbr/></span><span class="pun">.</span><span class="pln">data</span><span class="pun">;
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">equal</span><span class="pun">(</span><span class="pln">result</span><span class="pun">, [</span><span class="lit">2</span><span class="pun">, </span><span class="lit">3</span><span class="pun">, </span><span class="lit">4</span><span class="pun">]));
+</span></code></pre>
+</section>
+</section>
+			<section>
+				<h2>Functions</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a id="drop" class="public" href="../rx/range/drop.html">
+								<code>drop</code>
+							</a>
+						</td>
+						<td>Creates the observable that results from discarding the first n elements from the given source.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="take" class="public" href="../rx/range/take.html">
+								<code>take</code>
+							</a>
+						</td>
+						<td>Creates a sub-observable consisting of only up to the first n elements of the given source.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="takeLast" class="public" href="../rx/range/takeLast.html">
+								<code>takeLast</code>
+							</a>
+						</td>
+						<td>Creates a observable that take only a last element of the given source.
+</td>
+					</tr>
+				</table>
+			</section>
+			<section>
+				<h2>Authors</h2>
+
+			</section>
+			<section>
+				<h2>Copyright</h2>
+
+			</section>
+			<section>
+				<h2>License</h2>
+
+			</section>
+		</div>
+	</body>
+</html>

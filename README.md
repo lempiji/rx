@@ -37,7 +37,7 @@ void main()
 }
 ```
 
-And [more examples](https://github.com/lempiji/rx/tree/master/examples)
+And [more examples](https://github.com/lempiji/rx/tree/master/examples) or [Documents](https://lempiji.github.io/rx)
 
 ### Usage
 Setting dependencies in dub.json

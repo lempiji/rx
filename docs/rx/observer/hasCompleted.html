@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Enum member hasCompleted</title>
+		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
+		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script>
+		<script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
+	</head>
+	<body onload="setupDdox();">
+		<nav id="main-nav">
+						<ul class="tree-view">
+							<li class="tree-view">
+								<a href="#" class="package">rx</a>
+						<ul class="tree-view">
+							<li class="collapsed tree-view">
+								<a href="#" class="package">algorithm</a>
+						<ul class="tree-view">
+							<li>
+								<a href="../../rx/algorithm/iteration.html" class=" module">iteration</a>
+							</li>
+							<li>
+								<a href="../../rx/algorithm/searching.html" class=" module">searching</a>
+							</li>
+						</ul>
+							</li>
+							<li>
+								<a href="../../rx/disposable.html" class=" module">disposable</a>
+							</li>
+							<li>
+								<a href="../../rx/observable.html" class=" module">observable</a>
+							</li>
+							<li>
+								<a href="../../rx/observer.html" class="selected module">observer</a>
+							</li>
+							<li>
+								<a href="../../rx/range.html" class=" module">range</a>
+							</li>
+							<li>
+								<a href="../../rx/subject.html" class=" module">subject</a>
+							</li>
+						</ul>
+							</li>
+						</ul>
+				<noscript>
+					<p style="color: red">The search functionality needs JavaScript enabled</p>
+				</noscript>
+				<div id="symbolSearchPane" style="display: none">
+					<p>
+						<input id="symbolSearch" type="text" placeholder="Search for symbols" onchange="performSymbolSearch(24);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+					</p>
+	<ul id="symbolSearchResults" style="display: none"></ul>
+	<script type="application/javascript" src="../../symbols.js"></script>
+	<script type="application/javascript">
+var symbolSearchRootDir = "../../";
+$('#symbolSearchPane').show();
+	</script>
+				</div>
+		</nav>
+		<div id="main-contents">
+			<h1>Enum member hasCompleted</h1>
+			<section>
+				<p>Tests if something has completed method.
+</p>
+
+					<section>
+						<h3>Declaration</h3>
+						<div class="prototype">
+							<code class="lang-d">
+<span class="kwd">enum</span> <span class="pln">hasCompleted</span><span class="pun">(</span><span class="pln">T</span><span class="pun">)</span> <span class="pun">=</span> <span class="kwd">is</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(()
+{
+</span><span class="pln">T observer </span><span class="pun">= </span><span class="typ">void</span><span class="pun">;
+</span><span class="pln">observer<wbr/></span><span class="pun">.</span><span class="pln">completed</span><span class="pun">();
+}
+()))</span><span class="pun">;</span>
+							</code>
+						</div>
+					</section>
+<section><h3>Example</h3>
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">A
+</span><span class="pun">{
+    </span><span class="typ">void </span><span class="pln">completed</span><span class="pun">();
+}
+</span><span class="kwd">struct </span><span class="pln">B
+</span><span class="pun">{
+    </span><span class="typ">void </span><span class="pln">_completed</span><span class="pun">();
+}
+
+</span><span class="kwd">static assert</span><span class="pun">( </span><span class="pln">hasCompleted</span><span class="pun">!</span><span class="pln">A</span><span class="pun">);
+</span><span class="kwd">static assert</span><span class="pun">(!</span><span class="pln">hasCompleted</span><span class="pun">!</span><span class="pln">B</span><span class="pun">);
+</span></code></pre>
+</section>
+
+			</section>
+			<section>
+				<h2>Authors</h2>
+
+			</section>
+			<section>
+				<h2>Copyright</h2>
+
+			</section>
+			<section>
+				<h2>License</h2>
+
+			</section>
+		</div>
+	</body>
+</html>

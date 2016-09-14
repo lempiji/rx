@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Module rx.disposable</title>
+		<link rel="stylesheet" type="text/css" href="../styles/ddox.css"/>
+		<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../scripts/jquery.js">/**/</script>
+		<script type="text/javascript" src="../scripts/ddox.js">/**/</script>
+	</head>
+	<body onload="setupDdox();">
+		<nav id="main-nav">
+						<ul class="tree-view">
+							<li class="tree-view">
+								<a href="#" class="package">rx</a>
+						<ul class="tree-view">
+							<li class="collapsed tree-view">
+								<a href="#" class="package">algorithm</a>
+						<ul class="tree-view">
+							<li>
+								<a href="../rx/algorithm/iteration.html" class=" module">iteration</a>
+							</li>
+							<li>
+								<a href="../rx/algorithm/searching.html" class=" module">searching</a>
+							</li>
+						</ul>
+							</li>
+							<li>
+								<a href="../rx/disposable.html" class="selected module">disposable</a>
+							</li>
+							<li>
+								<a href="../rx/observable.html" class=" module">observable</a>
+							</li>
+							<li>
+								<a href="../rx/observer.html" class=" module">observer</a>
+							</li>
+							<li>
+								<a href="../rx/range.html" class=" module">range</a>
+							</li>
+							<li>
+								<a href="../rx/subject.html" class=" module">subject</a>
+							</li>
+						</ul>
+							</li>
+						</ul>
+				<noscript>
+					<p style="color: red">The search functionality needs JavaScript enabled</p>
+				</noscript>
+				<div id="symbolSearchPane" style="display: none">
+					<p>
+						<input id="symbolSearch" type="text" placeholder="Search for symbols" onchange="performSymbolSearch(24);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+					</p>
+	<ul id="symbolSearchResults" style="display: none"></ul>
+	<script type="application/javascript" src="../symbols.js"></script>
+	<script type="application/javascript">
+var symbolSearchRootDir = "../";
+$('#symbolSearchPane').show();
+	</script>
+				</div>
+		</nav>
+		<div id="main-contents">
+			<h1>Module rx.disposable</h1>
+			<p>This module defines the concept of Disposable.
+</p>
+
+			<section></section>
+			<section>
+				<h2>Functions</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a id="disposableObject" class="public" href="../rx/disposable/disposableObject.html">
+								<code>disposableObject</code>
+							</a>
+						</td>
+						<td>Wraps dispose method in virtual functions.
+</td>
+					</tr>
+				</table>
+			</section>
+			<section>
+				<h2>Interfaces</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a id="Cancelable" class="public" href="../rx/disposable/Cancelable.html">
+								<code>Cancelable</code>
+							</a>
+						</td>
+						<td>Wrapper for cancelable objects.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="Disposable" class="public" href="../rx/disposable/Disposable.html">
+								<code>Disposable</code>
+							</a>
+						</td>
+						<td>Wrapper for disposable objects.
+</td>
+					</tr>
+				</table>
+			</section>
+			<section>
+				<h2>Classes</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a id="AnonymouseDisposable" class="public" href="../rx/disposable/AnonymouseDisposable.html">
+								<code>AnonymouseDisposable</code>
+							</a>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a id="CancelableObject" class="public" href="../rx/disposable/CancelableObject.html">
+								<code>CancelableObject</code>
+							</a>
+						</td>
+						<td>Class that implements the Cancelable interface and wraps the  isDisposed property in virtual functions.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="CancellationToken" class="public" href="../rx/disposable/CancellationToken.html">
+								<code>CancellationToken</code>
+							</a>
+						</td>
+						<td>Simply implements for Cancelable interface. Its propagates notification that operations should be canceled.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="CompositeDisposable" class="public" href="../rx/disposable/CompositeDisposable.html">
+								<code>CompositeDisposable</code>
+							</a>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a id="DisposableObject" class="public" href="../rx/disposable/DisposableObject.html">
+								<code>DisposableObject</code>
+							</a>
+						</td>
+						<td>Class that implements the Disposable interface and wraps the dispose methods in virtual functions.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="NopDisposable" class="public" href="../rx/disposable/NopDisposable.html">
+								<code>NopDisposable</code>
+							</a>
+						</td>
+						<td>Defines a instance property that return NOP Disposable.
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="SerialDisposable" class="public" href="../rx/disposable/SerialDisposable.html">
+								<code>SerialDisposable</code>
+							</a>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a id="SignalDisposable" class="public" href="../rx/disposable/SignalDisposable.html">
+								<code>SignalDisposable</code>
+							</a>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							<a id="SingleAssignmentDisposable" class="public" href="../rx/disposable/SingleAssignmentDisposable.html">
+								<code>SingleAssignmentDisposable</code>
+							</a>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</section>
+			<section>
+				<h2>Enum values</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a id="isCancelable" class="public" href="../rx/disposable/isCancelable.html">
+								<code>isCancelable</code>
+							</a>
+						</td>
+						<td>
+						</td>
+						<td>Tests if something is a Cancelable
+</td>
+					</tr>
+					<tr>
+						<td>
+							<a id="isDisposable" class="public" href="../rx/disposable/isDisposable.html">
+								<code>isDisposable</code>
+							</a>
+						</td>
+						<td>
+						</td>
+						<td>Tests if something is a Disposable.
+</td>
+					</tr>
+				</table>
+			</section>
+			<section>
+				<h2>Authors</h2>
+
+			</section>
+			<section>
+				<h2>Copyright</h2>
+
+			</section>
+			<section>
+				<h2>License</h2>
+
+			</section>
+		</div>
+	</body>
+</html>
