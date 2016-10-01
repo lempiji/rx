@@ -3,7 +3,7 @@
 	"authors": ["lempiji"],
 	"dependencies": {
 		"rx": { "path": "../../" },
-		"dlangui": "~>0.8.30"
+		"dlangui": "~>0.9.6"
 	},
 	"description": "The example for MVVM on Dlang UI",
 	"copyright": "Copyright © 2016, lempiji",
