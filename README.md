@@ -45,13 +45,13 @@ Setting dependencies in dub.json
 {
     ...
     "dependencies": {
-        "rx": "~>0.0.5"
+        "rx": "~>0.1.0"
     }
 }
 ```
 or dub.sdl
 ```
-dependency "rx" version="~>0.0.5"
+dependency "rx" version="~>0.1.0"
 ```
 
 ### License
