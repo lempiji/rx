@@ -344,7 +344,7 @@ unittest
 
 unittest
 {
-    import rx.algorithm.iteration : filter;
+    import rx.algorithm : filter;
     import rx.subject : SubjectObject;
 
     auto sub = new SubjectObject!int;
