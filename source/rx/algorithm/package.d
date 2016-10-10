@@ -1,13 +1,14 @@
 module rx.algorithm;
 
+public import rx.algorithm.all;
+public import rx.algorithm.any;
 public import rx.algorithm.filter;
+public import rx.algorithm.fold;
 public import rx.algorithm.map;
+public import rx.algorithm.merge;
 public import rx.algorithm.scan;
 public import rx.algorithm.tee;
-public import rx.algorithm.merge;
-public import rx.algorithm.fold;
-public import rx.algorithm.searching;
-public import rx.algorithm.timer;
+public import rx.algorithm.throttle;
 
 
 //####################
@@ -16,8 +17,7 @@ public import rx.algorithm.timer;
 ///
 unittest
 {
-    import rx.observer : observerObject;
-    import rx.subject : SubjectObject;
+    import rx;
     import std.algorithm : equal;
     import std.array : appender;
     import std.conv : to;
@@ -28,7 +28,7 @@ unittest
         .map!(o => to!string(o));
 
     auto buf = appender!(string[]);
-    auto disposable = pub.subscribe(observerObject!string(buf));
+    auto disposable = pub.doSubscribe(buf);
     scope(exit) disposable.dispose();
 
     foreach (i; 0 .. 10)
@@ -38,4 +38,21 @@ unittest
 
     auto result = buf.data;
     assert(equal(result, ["0", "2", "4", "6", "8"]));
+}
+
+///
+unittest
+{
+    import rx;
+    auto sub = new SubjectObject!int;
+
+    auto hasEven = sub.any!"a % 2 == 0"();
+    auto result = false;
+    auto disposable = hasEven.doSubscribe((bool b) { result = b; });
+    scope(exit) disposable.dispose();
+
+    sub.put(1);
+    sub.put(3);
+    sub.put(2);
+    assert(result);
 }

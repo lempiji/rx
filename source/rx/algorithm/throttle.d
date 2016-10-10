@@ -1,4 +1,4 @@
-module rx.algorithm.timer;
+module rx.algorithm.throttle;
 
 import core.time;
 import core.thread;
