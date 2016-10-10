@@ -18,10 +18,28 @@
 								<a href="#" class="package">algorithm</a>
 						<ul class="tree-view">
 							<li>
-								<a href="../../../rx/algorithm/iteration.html" class="selected module">iteration</a>
+								<a href="../../../rx/algorithm/all.html" class=" module">all</a>
 							</li>
 							<li>
-								<a href="../../../rx/algorithm/searching.html" class=" module">searching</a>
+								<a href="../../../rx/algorithm/any.html" class=" module">any</a>
+							</li>
+							<li>
+								<a href="../../../rx/algorithm/filter.html" class="selected module">filter</a>
+							</li>
+							<li>
+								<a href="../../../rx/algorithm/fold.html" class=" module">fold</a>
+							</li>
+							<li>
+								<a href="../../../rx/algorithm/map.html" class=" module">map</a>
+							</li>
+							<li>
+								<a href="../../../rx/algorithm/merge.html" class=" module">merge</a>
+							</li>
+							<li>
+								<a href="../../../rx/algorithm/scan.html" class=" module">scan</a>
+							</li>
+							<li>
+								<a href="../../../rx/algorithm/tee.html" class=" module">tee</a>
 							</li>
 						</ul>
 							</li>
@@ -82,24 +100,27 @@ $('#symbolSearchPane').show();
 							</tr>
 							<tr>
 								<td>
-									<a href="../../../rx/algorithm/iteration/filter.filter.html">filter</a>
+									<a href="../../../rx/algorithm/filter/filter.filter.html">filter</a>
 								</td>
 								<td></td>
 							</tr>
 						</table>
 					</section>
 <section><h3>Example</h3>
-<pre class="code"><code class="lang-d"><span class="kwd">import <a href="../../../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pun">;
+<pre class="code"><code class="lang-d"><span class="kwd">import <a href="../../../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pln"> </span><span class="pun">: </span><span class="typ">Subject</span><span class="pun">, </span><span class="typ">SubjectObject</span><span class="pun">;
 </span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">array </span><span class="pun">: </span><span class="pln">appender</span><span class="pun">;
 
 </span><span class="typ">Subject</span><span class="pun">!</span><span class="typ">int </span><span class="pln">sub </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SubjectObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
 </span><span class="kwd">auto </span><span class="pln">filtered </span><span class="pun">= </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">filter</span><span class="pun">!(</span><span class="pln">n </span><span class="pun">=&gt; </span><span class="pln">n </span><span class="pun">% </span><span class="lit">2 </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
 </span><span class="kwd">auto </span><span class="pln">buffer </span><span class="pun">= </span><span class="pln">appender</span><span class="pun">!(</span><span class="typ">int</span><span class="pun">[])();
 </span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">filtered<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">buffer</span><span class="pun">);
+</span><span class="kwd">scope</span><span class="pun">(</span><span class="pln">exit</span><span class="pun">) </span><span class="pln">disposable<wbr/></span><span class="pun">.</span><span class="pln">dispose</span><span class="pun">();
+
 </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);
 </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">1</span><span class="pun">);
 </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">2</span><span class="pun">);
 </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">3</span><span class="pun">);
+
 </span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">algorithm </span><span class="pun">: </span><span class="pln">equal</span><span class="pun">;
 </span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">equal</span><span class="pun">(</span><span class="pln">buffer<wbr/></span><span class="pun">.</span><span class="pln">data</span><span class="pun">, [</span><span class="lit">0</span><span class="pun">, </span><span class="lit">2</span><span class="pun">][]));
 </span></code></pre>
