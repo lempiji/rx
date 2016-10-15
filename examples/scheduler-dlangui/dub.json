@@ -1,0 +1,13 @@
+{
+	"name": "scheduler-dlangui",
+	"authors": [
+		"lempiji"
+	],
+	"dependencies": {
+		"rx": { "path": "../../" },
+		"dlangui": "~>0.9.27"
+	},
+	"description": "A minimal D application.",
+	"copyright": "Copyright © 2016, lempiji",
+	"license": "MIT"
+}
