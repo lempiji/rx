@@ -33,23 +33,24 @@ class SimpleViewModel
 
     void clearTitle()
     {
-        title.value = "";
+        if (isActive.value)
+            title.value = "";
     }
 }
 
 unittest
 {
-    auto model = new IndexViewModel;
+    auto model = new SimpleViewModel;
     assert(model.isActive.value == false);
     assert(model.title.value == "");
 
     model.title.value = "ABC";
 
     assert(model.title.value == "ABC");
-    model.resetTitle();
+    model.clearTitle();
     assert(model.title.value == "ABC");
 
     model.isActive.value = true;
-    model.resetTitle();
+    model.clearTitle();
     assert(model.title.value == "");
 }

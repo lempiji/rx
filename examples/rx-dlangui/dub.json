@@ -7,7 +7,7 @@
 		"rx": {
 			"path": "../../"
 		},
-		"dlangui": "~>0.9.6"
+		"dlangui": "~>0.9.27"
 	},
 	"sourceFiles-windows": [
 		"$PACKAGE_DIR/src/win_app.def"
