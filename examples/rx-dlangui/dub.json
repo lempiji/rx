@@ -1,11 +1,17 @@
 {
 	"name": "rx-dlangui",
-	"authors": ["lempiji"],
+	"authors": [
+		"lempiji"
+	],
 	"dependencies": {
-		"rx": { "path": "../../" },
+		"rx": {
+			"path": "../../"
+		},
 		"dlangui": "~>0.9.6"
 	},
-	"sourceFiles-windows": ["$PACKAGE_DIR/src/win_app.def"],
+	"sourceFiles-windows": [
+		"$PACKAGE_DIR/src/win_app.def"
+	],
 	"description": "The example for rx with Dlang UI.",
 	"copyright": "Copyright © 2016, lempiji",
 	"license": "public domain"

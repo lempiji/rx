@@ -41,6 +41,7 @@ template filter(alias pred)
                     {
                         _observer = observer;
                     }
+
                     static if (hasCompleted!TObserver || hasFailure!TObserver)
                     {
                         this(TObserver observer, Disposable disposable)
@@ -54,7 +55,8 @@ template filter(alias pred)
                     void putImpl(ElementType obj)
                     {
                         alias fun = unaryFun!pred;
-                        if (fun(obj)) _observer.put(obj);
+                        if (fun(obj))
+                            _observer.put(obj);
                     }
                 }
 
@@ -62,7 +64,8 @@ template filter(alias pred)
                 static if (hasCompleted!TObserver || hasFailure!TObserver)
                 {
                     auto disposable = new SingleAssignmentDisposable;
-                    disposable.setDisposable(disposableObject(doSubscribe(_observable, FilterObserver(observer, disposable))));
+                    disposable.setDisposable(disposableObject(doSubscribe(_observable,
+                            FilterObserver(observer, disposable))));
                     return disposable;
                 }
                 else
@@ -89,7 +92,8 @@ unittest
     auto filtered = sub.filter!(n => n % 2 == 0);
     auto buffer = appender!(int[])();
     auto disposable = filtered.subscribe(buffer);
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     sub.put(0);
     sub.put(1);
@@ -97,6 +101,7 @@ unittest
     sub.put(3);
 
     import std.algorithm : equal;
+
     assert(equal(buffer.data, [0, 2][]));
 }
 
@@ -109,7 +114,8 @@ unittest
     auto filtered = sub.filter!"a % 2 == 0";
     auto buffer = appender!(int[])();
     auto disposable = filtered.subscribe(buffer);
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     sub.put(0);
     sub.put(1);
@@ -117,5 +123,6 @@ unittest
     sub.put(3);
 
     import std.algorithm : equal;
+
     assert(equal(buffer.data, [0, 2][]));
 }

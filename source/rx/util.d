@@ -10,9 +10,11 @@ T exchange(T, U)(ref shared(T) store, U val)
     do
     {
         temp = store;
-    } while(!cas(&store, temp, val));
+    }
+    while (!cas(&store, temp, val));
     return atomicLoad(temp);
 }
+
 unittest
 {
     shared(int) n = 1;
@@ -53,7 +55,8 @@ public:
     {
         synchronized (_mutex)
         {
-            if (_signal) return;
+            if (_signal)
+                return;
             _condition.wait();
         }
     }
@@ -63,6 +66,7 @@ private:
     Condition _condition;
     bool _signal;
 }
+
 unittest
 {
     auto event = new EventSignal;
@@ -78,6 +82,7 @@ public:
     {
         _count = n;
     }
+
 public:
     bool tryUpdateCount() @trusted
     {
@@ -90,10 +95,12 @@ public:
                 return true;
 
             newValue = oldValue - 1;
-        } while (!cas(&_count, oldValue, newValue));
+        }
+        while (!cas(&_count, oldValue, newValue));
 
         return false;
     }
+
 private:
     size_t _count;
 }
@@ -115,6 +122,7 @@ public:
 private:
     bool _flag = false;
 }
+
 alias Ticket = shared(TicketBase);
 
 unittest

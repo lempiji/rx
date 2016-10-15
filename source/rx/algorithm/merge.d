@@ -14,6 +14,7 @@ import rx.util;
 struct MergeObservable(TObservable1, TObservable2)
 {
     import std.traits : CommonType;
+
     alias ElementType = CommonType!(TObservable1.ElementType, TObservable2.ElementType);
 
 public:
@@ -45,13 +46,14 @@ MergeObservable!(T1, T2) merge(T1, T2)(auto ref T1 observable1, auto ref T2 obse
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto s1 = new SubjectObject!int;
     auto s2 = new SubjectObject!short;
 
     auto merged = s1.merge(s2);
 
     int count = 0;
-    auto d = merged.doSubscribe((int n){ count++; });
+    auto d = merged.doSubscribe((int n) { count++; });
 
     assert(count == 0);
     s1.put(1);

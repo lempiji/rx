@@ -3,17 +3,25 @@ module mvvm.models.simple;
 import std.stdio;
 import mvvm.common;
 
-
 class SimpleViewModel
 {
     private ReactiveProperty!string _title;
-    public inout(ReactiveProperty!string) title() inout @property { return _title; }
+    public inout(ReactiveProperty!string) title() inout @property
+    {
+        return _title;
+    }
 
     private ReactiveProperty!bool _isActive;
-    public inout(ReactiveProperty!bool) isActive() inout @property { return _isActive; }
+    public inout(ReactiveProperty!bool) isActive() inout @property
+    {
+        return _isActive;
+    }
 
     private Command _clearTitleCommand;
-    public inout(Command) clearTitleCommand() inout @property { return _clearTitleCommand; }
+    public inout(Command) clearTitleCommand() inout @property
+    {
+        return _clearTitleCommand;
+    }
 
     this()
     {
@@ -34,7 +42,7 @@ unittest
     auto model = new IndexViewModel;
     assert(model.isActive.value == false);
     assert(model.title.value == "");
-    
+
     model.title.value = "ABC";
 
     assert(model.title.value == "ABC");

@@ -14,9 +14,9 @@ extern (C) int UIAppMain(string[] args)
 {
     auto window = Platform.instance.createWindow("Sample Window", null);
 
-	auto view = createSimpleView();
+    auto view = createSimpleView();
     window.mainWidget = view;
-	auto viewModel = new SimpleViewModel;
+    auto viewModel = new SimpleViewModel;
 
     // bind command and properties
     bindText(view.childById!EditLine("txtTitle"), viewModel.title);

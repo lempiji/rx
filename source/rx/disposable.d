@@ -11,16 +11,31 @@ import rx.util;
 template isDisposable(T)
 {
     enum bool isDisposable = is(typeof({
-            T disposable = void;
-            disposable.dispose();
-        }()));
+                T disposable = void;
+                disposable.dispose();
+            }()));
 }
 ///
 unittest
 {
-    struct A { void dispose(){} }
-    class B { void dispose(){} }
-    interface C { void dispose(); }
+    struct A
+    {
+        void dispose()
+        {
+        }
+    }
+
+    class B
+    {
+        void dispose()
+        {
+        }
+    }
+
+    interface C
+    {
+        void dispose();
+    }
 
     static assert(isDisposable!A);
     static assert(isDisposable!B);
@@ -30,24 +45,38 @@ unittest
 ///Tests if something is a Cancelable
 template isCancelable(T)
 {
-    enum isCancelable = isDisposable!T && is(typeof((inout int n = 0){
-            T disposable = void;
-            bool b = disposable.isDisposed;
-        }));
+    enum isCancelable = isDisposable!T && is(typeof((inout int n = 0) {
+                T disposable = void;
+                bool b = disposable.isDisposed;
+            }));
 }
 ///
 unittest
 {
     struct A
     {
-        bool isDisposed() @property { return true; }
-        void dispose() { }
+        bool isDisposed() @property
+        {
+            return true;
+        }
+
+        void dispose()
+        {
+        }
     }
+
     class B
     {
-        bool isDisposed() @property { return true; }
-        void dispose() { }
+        bool isDisposed() @property
+        {
+            return true;
+        }
+
+        void dispose()
+        {
+        }
     }
+
     interface C
     {
         bool isDisposed() @property;
@@ -96,6 +125,7 @@ public:
 private:
     shared(bool) _disposed;
 }
+
 unittest
 {
     auto c = new CancellationToken;
@@ -105,6 +135,7 @@ unittest
     assert(c.isDisposed);
     assert(c.isCanceled);
 }
+
 unittest
 {
     auto c = new CancellationToken;
@@ -190,6 +221,7 @@ unittest
     disposable.dispose();
     assert(count == 1);
 }
+
 unittest
 {
     int count = 0;
@@ -200,6 +232,7 @@ unittest
             count++;
         }
     }
+
     auto test = new TestDisposable;
     Disposable disposable = disposableObject(test);
     assert(disposable is test);
@@ -207,17 +240,23 @@ unittest
     disposable.dispose();
     assert(count == 1);
 }
+
 unittest
 {
     int count = 0;
     struct TestCancelable
     {
-        bool isDisposed() @property { return _disposed; }
+        bool isDisposed() @property
+        {
+            return _disposed;
+        }
+
         void dispose()
         {
             count++;
             _disposed = true;
         }
+
         bool _disposed;
     }
 
@@ -235,16 +274,21 @@ unittest
 final class NopDisposable : Disposable
 {
 private:
-    this() { }
+    this()
+    {
+    }
 
 public:
-    void dispose() { }
+    void dispose()
+    {
+    }
 
 public:
     ///
     static Disposable instance() @property
     {
         import std.concurrency : initOnce;
+
         static __gshared NopDisposable inst;
         return initOnce!inst(new NopDisposable);
     }
@@ -261,18 +305,26 @@ unittest
 package final class DisposedMarker : Cancelable
 {
 private:
-    this() { }
+    this()
+    {
+    }
 
 public:
-    bool isDisposed() @property { return true; }
+    bool isDisposed() @property
+    {
+        return true;
+    }
 
 public:
-    void dispose() { }
+    void dispose()
+    {
+    }
 
 public:
     static Cancelable instance()
     {
         import std.concurrency : initOnce;
+
         static __gshared DisposedMarker inst;
         return initOnce!inst(new DisposedMarker);
     }
@@ -286,14 +338,16 @@ public:
     void setDisposable(Disposable disposable)
     {
         import core.atomic;
-        if (!cas(&_disposable, shared(Disposable).init, cast(shared)disposable)) assert(false);
+
+        if (!cas(&_disposable, shared(Disposable).init, cast(shared) disposable))
+            assert(false);
     }
 
 public:
     ///
     bool isDisposed() @property
     {
-        return _disposable is cast(shared)DisposedMarker.instance;
+        return _disposable is cast(shared) DisposedMarker.instance;
     }
 
 public:
@@ -301,8 +355,10 @@ public:
     void dispose()
     {
         import rx.util;
-        auto temp = exchange(_disposable, cast(shared)DisposedMarker.instance);
-        if (temp !is null) temp.dispose();
+
+        auto temp = exchange(_disposable, cast(shared) DisposedMarker.instance);
+        if (temp !is null)
+            temp.dispose();
     }
 
 private:
@@ -314,8 +370,12 @@ unittest
     int count = 0;
     class TestDisposable : Disposable
     {
-        void dispose() { count++; }
+        void dispose()
+        {
+            count++;
+        }
     }
+
     auto temp = new SingleAssignmentDisposable;
     temp.setDisposable(new TestDisposable);
     assert(!temp.isDisposed);
@@ -324,24 +384,30 @@ unittest
     assert(temp.isDisposed);
     assert(count == 1);
 }
+
 unittest
 {
     static assert(isDisposable!SingleAssignmentDisposable);
 }
+
 unittest
 {
     import core.exception;
+
     class TestDisposable : Disposable
     {
-        void dispose() { }
+        void dispose()
+        {
+        }
     }
+
     auto temp = new SingleAssignmentDisposable;
     temp.setDisposable(new TestDisposable);
     try
     {
         temp.setDisposable(new TestDisposable);
     }
-    catch(AssertError)
+    catch (AssertError)
     {
         return;
     }
@@ -404,7 +470,8 @@ public:
                 _disposable = null;
             }
         }
-        if (old !is null) old.dispose();
+        if (old !is null)
+            old.dispose();
     }
 
 private:
@@ -412,12 +479,16 @@ private:
     bool _disposed;
     Disposable _disposable;
 }
+
 unittest
 {
     int count = 0;
     struct A
     {
-        void dispose() { count++; }
+        void dispose()
+        {
+            count++;
+        }
     }
 
     auto d = new SerialDisposable;
@@ -430,12 +501,16 @@ unittest
     d.disposable = disposableObject(A());
     assert(count == 3);
 }
+
 unittest
 {
     int count = 0;
     struct A
     {
-        void dispose() { count++; }
+        void dispose()
+        {
+            count++;
+        }
     }
 
     auto d = new SerialDisposable;
@@ -471,6 +546,7 @@ public:
 private:
     EventSignal _signal;
 }
+
 unittest
 {
     auto d = new SignalDisposable;
@@ -494,7 +570,8 @@ public:
     ///
     void dispose()
     {
-        foreach (ref d; _disposables) d.dispose();
+        foreach (ref d; _disposables)
+            d.dispose();
     }
 
 private:

@@ -22,9 +22,7 @@ unittest
     import std.conv : to;
 
     auto subject = new SubjectObject!int;
-    auto pub = subject
-        .drop(2)
-        .take(3);
+    auto pub = subject.drop(2).take(3);
 
     auto buf = appender!(int[]);
     auto disposable = pub.subscribe(observerObject!int(buf));
@@ -69,6 +67,7 @@ auto drop(TObservable)(auto ref TObservable observable, size_t n)
                     _observer = observer;
                     _counter = new shared(AtomicCounter)(count);
                 }
+
                 static if (hasCompleted!TObserver || hasFailure!TObserver)
                 {
                     this(TObserver observer, size_t count, Disposable disposable)
@@ -95,7 +94,8 @@ auto drop(TObservable)(auto ref TObservable observable, size_t n)
             static if (hasCompleted!TObserver || hasFailure!TObserver)
             {
                 auto disposable = new SingleAssignmentDisposable;
-                disposable.setDisposable(disposableObject(doSubscribe(_observable, DropObserver(observer, _count, disposable))));
+                disposable.setDisposable(disposableObject(doSubscribe(_observable,
+                        DropObserver(observer, _count, disposable))));
                 return disposable;
             }
             else
@@ -115,11 +115,13 @@ auto drop(TObservable)(auto ref TObservable observable, size_t n)
 unittest
 {
     import rx.subject;
+
     auto subject = new SubjectObject!int;
     auto dropped = subject.drop(1);
     static assert(isObservable!(typeof(dropped), int));
 
     import std.array : appender;
+
     auto buf = appender!(int[]);
     auto disposable = dropped.subscribe(buf);
 
@@ -138,7 +140,6 @@ unittest
     assert(buf2.data.length == 1);
     assert(buf.data.length == 3);
 }
-
 
 //####################
 // Take
@@ -179,10 +180,12 @@ auto take(TObservable)(auto ref TObservable observable, size_t n)
                     do
                     {
                         oldValue = _count;
-                        if (oldValue == 0) return;
+                        if (oldValue == 0)
+                            return;
 
                         newValue = atomicLoad(oldValue) - 1;
-                    } while(!cas(&_count, oldValue, newValue));
+                    }
+                    while (!cas(&_count, oldValue, newValue));
 
                     _observer.put(obj);
                     if (newValue == 0)
@@ -194,6 +197,7 @@ auto take(TObservable)(auto ref TObservable observable, size_t n)
                         _disposable.dispose();
                     }
                 }
+
                 void completed()
                 {
                     static if (hasCompleted!TObserver)
@@ -202,6 +206,7 @@ auto take(TObservable)(auto ref TObservable observable, size_t n)
                     }
                     _disposable.dispose();
                 }
+
                 void failure(Exception e)
                 {
                     static if (hasFailure!TObserver)
@@ -218,7 +223,8 @@ auto take(TObservable)(auto ref TObservable observable, size_t n)
             }
 
             auto disposable = new SingleAssignmentDisposable;
-            disposable.setDisposable(disposableObject(doSubscribe(_observable, TakeObserver(observer, _count, disposable))));
+            disposable.setDisposable(disposableObject(doSubscribe(_observable,
+                    TakeObserver(observer, _count, disposable))));
             return disposable;
         }
 
@@ -245,16 +251,20 @@ unittest
     }
 
     import std.algorithm;
+
     assert(equal(sub.data, [0, 1]));
 }
+
 unittest
 {
     import rx.subject;
+
     auto subject = new SubjectObject!int;
     auto taken = subject.take(1);
     static assert(isObservable!(typeof(taken), int));
 
     import std.array : appender;
+
     auto buf = appender!(int[]);
     auto disposable = taken.subscribe(buf);
 
@@ -273,9 +283,11 @@ unittest
     assert(buf2.data.length == 1);
     assert(buf.data.length == 1);
 }
+
 unittest
 {
     import rx.subject;
+
     auto sub = new SubjectObject!int;
     auto taken = sub.take(2);
 
@@ -283,8 +295,15 @@ unittest
     int countCompleted = 0;
     struct TestObserver
     {
-        void put(int n) { countPut++; }
-        void completed() { countCompleted++; }
+        void put(int n)
+        {
+            countPut++;
+        }
+
+        void completed()
+        {
+            countCompleted++;
+        }
     }
 
     auto d = taken.doSubscribe(TestObserver());
@@ -296,7 +315,6 @@ unittest
     assert(countPut == 2);
     assert(countCompleted == 1);
 }
-
 
 //####################
 // TakeLast
@@ -336,7 +354,8 @@ auto takeLast(TObservable)(auto ref TObservable observable)
 
                 void completed()
                 {
-                    if (_hasValue) _observer.put(_current);
+                    if (_hasValue)
+                        _observer.put(_current);
 
                     static if (hasCompleted!TObserver)
                     {
@@ -361,7 +380,8 @@ auto takeLast(TObservable)(auto ref TObservable observable)
             }
 
             auto d = new SingleAssignmentDisposable;
-            d.setDisposable(disposableObject(doSubscribe(_observable, new TakeLastObserver(observer, d))));
+            d.setDisposable(disposableObject(doSubscribe(_observable,
+                    new TakeLastObserver(observer, d))));
             return d;
         }
 
@@ -375,14 +395,22 @@ auto takeLast(TObservable)(auto ref TObservable observable)
 unittest
 {
     import rx.subject;
+
     auto sub = new SubjectObject!int;
 
     int putCount = 0;
     int completedCount = 0;
     struct TestObserver
     {
-        void put(int n) { putCount++; }
-        void completed() { completedCount++; }
+        void put(int n)
+        {
+            putCount++;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
     }
 
     auto d = sub.takeLast.subscribe(TestObserver());
@@ -395,7 +423,7 @@ unittest
     sub.completed();
     assert(putCount == 1);
     assert(completedCount == 1);
-    
+
     sub.put(100);
     assert(putCount == 1);
     assert(completedCount == 1);

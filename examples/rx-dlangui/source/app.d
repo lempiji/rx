@@ -8,30 +8,30 @@ import std.conv;
 import event;
 import model;
 
-
 mixin APP_ENTRY_POINT;
 
 /// entry point for dlangui based application
 extern (C) int UIAppMain(string[] args)
 {
-	auto window = createAppWindow();
-	auto appModel = new MyModel;
+    auto window = createAppWindow();
+    auto appModel = new MyModel;
 
     auto counter = window.mainWidget.childById!EditLine("counter");
 
-	appModel.counter.doSubscribe((int n){
-		counter.text = to!dstring(n);
-	});
-	counter.text = to!dstring(appModel.count);
+    appModel.counter.doSubscribe((int n) { counter.text = to!dstring(n); });
+    counter.text = to!dstring(appModel.count);
 
-	Disposable[] events;
-	events ~= window.mainWidget.childById!Button("btnIncrement").click.asObservable().doSubscribe((Widget _) { appModel.increment(); });
-	events ~= window.mainWidget.childById!Button("btnDecrement").click.asObservable().doSubscribe((Widget _) { appModel.decrement(); });
+    Disposable[] events;
+    events ~= window.mainWidget.childById!Button("btnIncrement")
+        .click.asObservable().doSubscribe((Widget _) { appModel.increment(); });
+    events ~= window.mainWidget.childById!Button("btnDecrement")
+        .click.asObservable().doSubscribe((Widget _) { appModel.decrement(); });
 
-	window.mainWidget.childById!Button("btnDetach").click = (Widget _) {
-		foreach (e; events) e.dispose();
-		return true;
-	};
+    window.mainWidget.childById!Button("btnDetach").click = (Widget _) {
+        foreach (e; events)
+            e.dispose();
+        return true;
+    };
 
     // close window on Close button click
     window.mainWidget.childById!Button("btnClose").click = delegate(Widget _) {
@@ -46,11 +46,12 @@ extern (C) int UIAppMain(string[] args)
     return Platform.instance.enterMessageLoop();
 }
 
-
 Window createAppWindow()
-{    // create window
+{
+    // create window
     Log.d("Creating window");
-    if (!Platform.instance) {
+    if (!Platform.instance)
+    {
         Log.e("Platform.instance is null!!!");
     }
 
@@ -84,6 +85,5 @@ Window createAppWindow()
         }
     });
 
-
-	return window;
+    return window;
 }

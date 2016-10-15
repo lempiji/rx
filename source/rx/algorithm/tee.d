@@ -58,7 +58,8 @@ public:
         static if (hasCompleted!T || hasFailure!T)
         {
             auto disposable = new SingleAssignmentDisposable;
-            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, disposable))));
+            disposable.setDisposable(disposableObject(doSubscribe(_observable,
+                    ObserverType(observer, disposable))));
             return disposable;
         }
         else
@@ -74,7 +75,8 @@ private:
 ///
 template tee(alias f)
 {
-    TeeObservable!(f, TObservable, TObservable.ElementType) tee(TObservable)(auto ref TObservable observable)
+    TeeObservable!(f, TObservable, TObservable.ElementType) tee(TObservable)(
+            auto ref TObservable observable)
     {
         return typeof(return)(observable);
     }
@@ -83,17 +85,17 @@ template tee(alias f)
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     import std.array : appender;
+
     auto buf1 = appender!(int[]);
     auto buf2 = appender!(int[]);
 
     import rx.algorithm : map;
-    auto disposable = sub
-        .tee!(i => buf1.put(i))()
-        .map!(i => i * 2)()
-        .subscribe(buf2);
+
+    auto disposable = sub.tee!(i => buf1.put(i))().map!(i => i * 2)().subscribe(buf2);
 
     sub.put(1);
     sub.put(2);
@@ -101,30 +103,42 @@ unittest
     sub.put(3);
 
     import std.algorithm : equal;
+
     assert(equal(buf1.data, [1, 2]));
     assert(equal(buf2.data, [2, 4]));
 }
+
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     int countPut = 0;
     int countFailure = 0;
     struct Test
     {
-        void put(int) { countPut++; }
-        void failure(Exception) { countFailure++; }
+        void put(int)
+        {
+            countPut++;
+        }
+
+        void failure(Exception)
+        {
+            countFailure++;
+        }
     }
 
     int foo(int n)
     {
-        if (n == 0) throw new Exception("");
+        if (n == 0)
+            throw new Exception("");
         return n * 2;
     }
 
     auto d = sub.tee!foo().doSubscribe(Test());
-    scope(exit) d.dispose();
+    scope (exit)
+        d.dispose();
 
     assert(countPut == 0);
     sub.put(1);

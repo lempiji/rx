@@ -10,7 +10,6 @@ public import rx.algorithm.scan;
 public import rx.algorithm.tee;
 public import rx.algorithm.throttle;
 
-
 //####################
 // Overview
 //####################
@@ -23,13 +22,12 @@ unittest
     import std.conv : to;
 
     auto subject = new SubjectObject!int;
-    auto pub = subject
-        .filter!(n => n % 2 == 0)
-        .map!(o => to!string(o));
+    auto pub = subject.filter!(n => n % 2 == 0).map!(o => to!string(o));
 
     auto buf = appender!(string[]);
     auto disposable = pub.doSubscribe(buf);
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     foreach (i; 0 .. 10)
     {
@@ -44,12 +42,14 @@ unittest
 unittest
 {
     import rx;
+
     auto sub = new SubjectObject!int;
 
     auto hasEven = sub.any!"a % 2 == 0"();
     auto result = false;
     auto disposable = hasEven.doSubscribe((bool b) { result = b; });
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     sub.put(1);
     sub.put(3);

@@ -1,7 +1,7 @@
 /+++++++++++++++++++++++++++++
  + This module defines the Subject and some implements.
  +/
- module rx.subject;
+module rx.subject;
 
 import rx.disposable;
 import rx.observer;
@@ -11,7 +11,9 @@ import core.atomic : atomicLoad, cas;
 import std.range : put;
 
 ///Represents an object that is both an observable sequence as well as an observer.
-interface Subject(E) : Observer!E, Observable!E { }
+interface Subject(E) : Observer!E, Observable!E
+{
+}
 
 ///Represents an object that is both an observable sequence as well as an observer. Each notification is broadcasted to all subscribed observers.
 class SubjectObject(E) : Subject!E
@@ -20,7 +22,7 @@ class SubjectObject(E) : Subject!E
 public:
     this()
     {
-        _observer = cast(shared)NopObserver!E.instance;
+        _observer = cast(shared) NopObserver!E.instance;
     }
 
 public:
@@ -34,28 +36,32 @@ public:
     void completed()
     {
         shared(Observer!E) oldObserver = void;
-        shared(Observer!E) newObserver = cast(shared)DoneObserver!E.instance;
+        shared(Observer!E) newObserver = cast(shared) DoneObserver!E.instance;
         Observer!E temp = void;
         do
         {
             oldObserver = _observer;
             temp = atomicLoad(oldObserver);
-            if (cast(DoneObserver!E)temp) break;
-        } while (!cas(&_observer, oldObserver, newObserver));
+            if (cast(DoneObserver!E) temp)
+                break;
+        }
+        while (!cas(&_observer, oldObserver, newObserver));
         temp.completed();
     }
     ///
     void failure(Exception error)
     {
         shared(Observer!E) oldObserver = void;
-        shared(Observer!E) newObserver = cast(shared)new DoneObserver!E(error);
+        shared(Observer!E) newObserver = cast(shared) new DoneObserver!E(error);
         Observer!E temp = void;
         do
         {
             oldObserver = _observer;
             temp = atomicLoad(oldObserver);
-            if (cast(DoneObserver!E)temp) break;
-        } while (!cas(&_observer, oldObserver, newObserver));
+            if (cast(DoneObserver!E) temp)
+                break;
+        }
+        while (!cas(&_observer, oldObserver, newObserver));
         temp.failure(error);
     }
 
@@ -80,25 +86,26 @@ public:
                 return NopDisposable.instance;
             }
 
-            if (auto fail = cast(DoneObserver!E)temp)
+            if (auto fail = cast(DoneObserver!E) temp)
             {
                 observer.failure(fail.exception);
                 return NopDisposable.instance;
             }
 
-            if (auto composite = cast(CompositeObserver!E)temp)
+            if (auto composite = cast(CompositeObserver!E) temp)
             {
-                newObserver = cast(shared)composite.add(observer);
+                newObserver = cast(shared) composite.add(observer);
             }
-            else if (auto nop = cast(NopObserver!E)temp)
+            else if (auto nop = cast(NopObserver!E) temp)
             {
-                newObserver = cast(shared)observer;
+                newObserver = cast(shared) observer;
             }
             else
             {
                 newObserver = cast(shared)(new CompositeObserver!E([temp, observer]));
             }
-        } while (!cas(&_observer, oldObserver, newObserver));
+        }
+        while (!cas(&_observer, oldObserver, newObserver));
 
         return subscription(this, observer);
     }
@@ -113,17 +120,19 @@ public:
             oldObserver = _observer;
 
             auto temp = atomicLoad(oldObserver);
-            if (auto composite = cast(CompositeObserver!E)temp)
+            if (auto composite = cast(CompositeObserver!E) temp)
             {
-                newObserver = cast(shared)composite.remove(observer);
+                newObserver = cast(shared) composite.remove(observer);
             }
             else
             {
-                if (temp !is observer) return;
+                if (temp !is observer)
+                    return;
 
-                newObserver = cast(shared)NopObserver!E.instance;
+                newObserver = cast(shared) NopObserver!E.instance;
             }
-        } while (!cas(&_observer, oldObserver, newObserver));
+        }
+        while (!cas(&_observer, oldObserver, newObserver));
     }
 
 private:
@@ -134,6 +143,7 @@ private:
 unittest
 {
     import std.array : appender;
+
     auto data = appender!(int[])();
     auto subject = new SubjectObject!int;
     auto disposable = subject.subscribe(observerObject!(int)(data));
@@ -142,6 +152,7 @@ unittest
     subject.put(1);
 
     import std.algorithm : equal;
+
     assert(equal(data.data, [0, 1]));
 
     disposable.dispose();
@@ -156,6 +167,7 @@ unittest
     static assert(!isObservable!(SubjectObject!int, string));
     static assert(!isObservable!(SubjectObject!int, string));
 }
+
 unittest
 {
     int putCount = 0;
@@ -163,9 +175,20 @@ unittest
     int failureCount = 0;
     struct TestObserver
     {
-        void put(int n) { putCount++; }
-        void completed() { completedCount++; }
-        void failure(Exception) { failureCount++; }
+        void put(int n)
+        {
+            putCount++;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
+
+        void failure(Exception)
+        {
+            failureCount++;
+        }
     }
 
     auto subject = new SubjectObject!int;
@@ -188,9 +211,20 @@ unittest
     int failureCount = 0;
     struct TestObserver
     {
-        void put(int n) { putCount++; }
-        void completed() { completedCount++; }
-        void failure(Exception) { failureCount++; }
+        void put(int n)
+        {
+            putCount++;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
+
+        void failure(Exception)
+        {
+            failureCount++;
+        }
     }
 
     auto subject = new SubjectObject!int;
@@ -205,9 +239,11 @@ unittest
     assert(putCount == 2);
     assert(failureCount == 1);
 }
+
 unittest
 {
     import std.array : appender;
+
     auto buf1 = appender!(int[]);
     auto buf2 = appender!(int[]);
     auto subject = new SubjectObject!int;
@@ -221,6 +257,7 @@ unittest
     assert(buf2.data.length == 1);
     assert(buf1.data[0] == buf2.data[0]);
 }
+
 unittest
 {
     static class CountObserver(T) : Observer!T
@@ -230,9 +267,20 @@ unittest
         size_t failureCount;
         size_t completedCount;
 
-        void put(T) { putCount++; }
-        void failure(Exception) { failureCount++; }
-        void completed() { completedCount++; }
+        void put(T)
+        {
+            putCount++;
+        }
+
+        void failure(Exception)
+        {
+            failureCount++;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
     }
 
     auto sub = new SubjectObject!int;
@@ -247,7 +295,6 @@ unittest
     assert(observer.completedCount == 1);
 }
 
-
 private class Subscription(TSubject, TObserver) : Disposable
 {
 public:
@@ -256,6 +303,7 @@ public:
         _subject = subject;
         _observer = observer;
     }
+
 public:
     void dispose()
     {
@@ -265,12 +313,14 @@ public:
             _subject = null;
         }
     }
+
 private:
     TSubject _subject;
     TObserver _observer;
 }
 
-private Subscription!(TSubject, TObserver) subscription(TSubject, TObserver)(TSubject subject, TObserver observer)
+private Subscription!(TSubject, TObserver) subscription(TSubject, TObserver)(
+        TSubject subject, TObserver observer)
 {
     return new typeof(return)(subject, observer);
 }

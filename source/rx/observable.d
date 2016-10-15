@@ -14,11 +14,11 @@ import rx.util;
 template isObservable(T, E)
 {
     enum bool isObservable = is(T.ElementType : E) && is(typeof({
-            T observable = void;
-            Observer!E observer = void;
-            auto d = observable.subscribe(observer);
-            static assert(isDisposable!(typeof(d)));
-        }()));
+                T observable = void;
+                Observer!E observer = void;
+                auto d = observable.subscribe(observer);
+                static assert(isDisposable!(typeof(d)));
+            }()));
 }
 ///
 unittest
@@ -34,7 +34,7 @@ unittest
         }
     }
 
-    static assert( isObservable!(TestObservable, int));
+    static assert(isObservable!(TestObservable, int));
     static assert(!isObservable!(TestObservable, Object));
 }
 
@@ -42,25 +42,37 @@ unittest
 template isSubscribable(TObservable, TObserver)
 {
     enum bool isSubscribable = is(typeof({
-            TObservable observable = void;
-            TObserver observer = void;
-            auto d = observable.subscribe(observer);
-            static assert(isDisposable!(typeof(d)));
-        }()));
+                TObservable observable = void;
+                TObserver observer = void;
+                auto d = observable.subscribe(observer);
+                static assert(isDisposable!(typeof(d)));
+            }()));
 }
 ///
 unittest
 {
     struct TestDisposable
     {
-        void dispose() { }
+        void dispose()
+        {
+        }
     }
+
     struct TestObserver
     {
-        void put(int n) { }
-        void completed() { }
-        void failure(Exception e) { }
+        void put(int n)
+        {
+        }
+
+        void completed()
+        {
+        }
+
+        void failure(Exception e)
+        {
+        }
     }
+
     struct TestObservable
     {
         TestDisposable subscribe(TestObserver observer)
@@ -73,17 +85,20 @@ unittest
 }
 
 ///The helper for subscribe easier.
-auto doSubscribe(TObservable, E)(auto ref TObservable observable, void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)
+auto doSubscribe(TObservable, E)(auto ref TObservable observable, void delegate(E) doPut,
+        void delegate() doCompleted, void delegate(Exception) doFailure)
 {
     return doSubscribe(observable, makeObserver(doPut, doCompleted, doFailure));
 }
 ///ditto
-auto doSubscribe(TObservable, E)(auto ref TObservable observable, void delegate(E) doPut, void delegate() doCompleted)
+auto doSubscribe(TObservable, E)(auto ref TObservable observable,
+        void delegate(E) doPut, void delegate() doCompleted)
 {
     return doSubscribe(observable, makeObserver(doPut, doCompleted));
 }
 ///ditto
-auto doSubscribe(TObservable, E)(auto ref TObservable observable, void delegate(E) doPut, void delegate(Exception) doFailure)
+auto doSubscribe(TObservable, E)(auto ref TObservable observable,
+        void delegate(E) doPut, void delegate(Exception) doFailure)
 {
     return doSubscribe(observable, makeObserver(doPut, doFailure));
 }
@@ -103,8 +118,11 @@ unittest
 {
     struct TestObserver
     {
-        void put(int n) { }
+        void put(int n)
+        {
+        }
     }
+
     struct TestObservable1
     {
         alias ElementType = int;
@@ -113,6 +131,7 @@ unittest
             return null;
         }
     }
+
     struct TestObservable2
     {
         alias ElementType = int;
@@ -123,16 +142,16 @@ unittest
     }
 
     TestObservable1 o1;
-    auto d0 = o1.doSubscribe((int n){}, (){}, (Exception e){});
-    auto d1 = o1.doSubscribe((int n){}, (){});
-    auto d2 = o1.doSubscribe((int n){}, (Exception e){});
-    auto d3 = o1.doSubscribe((int n){});
+    auto d0 = o1.doSubscribe((int n) {  }, () {  }, (Exception e) {  });
+    auto d1 = o1.doSubscribe((int n) {  }, () {  });
+    auto d2 = o1.doSubscribe((int n) {  }, (Exception e) {  });
+    auto d3 = o1.doSubscribe((int n) {  });
     auto d4 = o1.doSubscribe(TestObserver());
     TestObservable2 o2;
-    auto d5 = o2.doSubscribe((int n){}, (){}, (Exception e){});
-    auto d6 = o2.doSubscribe((int n){}, (){});
-    auto d7 = o2.doSubscribe((int n){}, (Exception e){});
-    auto d8 = o2.doSubscribe((int n){});
+    auto d5 = o2.doSubscribe((int n) {  }, () {  }, (Exception e) {  });
+    auto d6 = o2.doSubscribe((int n) {  }, () {  });
+    auto d7 = o2.doSubscribe((int n) {  }, (Exception e) {  });
+    auto d8 = o2.doSubscribe((int n) {  });
     auto d9 = o2.doSubscribe(TestObserver());
 }
 
@@ -143,6 +162,7 @@ interface Observable(E)
 
     Disposable subscribe(Observer!E observer);
 }
+
 unittest
 {
     static assert(isObservable!(Observable!int, int));
@@ -202,6 +222,7 @@ unittest
     auto d = observable.subscribe(null);
     assert(subscribeCount == 1);
 }
+
 unittest
 {
     int disposeCount = 0;
@@ -209,8 +230,12 @@ unittest
 
     struct TestDisposable
     {
-        void dispose() { disposeCount++; }
+        void dispose()
+        {
+            disposeCount++;
+        }
     }
+
     struct TestObservable
     {
         TestDisposable subscribe(Observer!int observer)
@@ -254,7 +279,8 @@ auto defer(E, alias f)()
             public:
                 void put(E obj)
                 {
-                    if (_signal.signal) return;
+                    if (_signal.signal)
+                        return;
 
                     static if (hasFailure!TObserver)
                     {
@@ -275,7 +301,8 @@ auto defer(E, alias f)()
 
                 void completed()
                 {
-                    if (_signal.signal) return;
+                    if (_signal.signal)
+                        return;
                     _signal.setSignal();
 
                     static if (hasCompleted!TObserver)
@@ -286,7 +313,8 @@ auto defer(E, alias f)()
 
                 void failure(Exception e)
                 {
-                    if (_signal.signal) return;
+                    if (_signal.signal)
+                        return;
                     _signal.setSignal();
 
                     static if (hasFailure!TObserver)
@@ -312,7 +340,7 @@ auto defer(E, alias f)()
 ///
 unittest
 {
-    auto sub = defer!(int, (observer){
+    auto sub = defer!(int, (observer) {
         observer.put(1);
         observer.put(2);
         observer.put(3);
@@ -323,8 +351,15 @@ unittest
     int countCompleted = 0;
     struct A
     {
-        void put(int n) { countPut++; }
-        void completed() { countCompleted++; }
+        void put(int n)
+        {
+            countPut++;
+        }
+
+        void completed()
+        {
+            countCompleted++;
+        }
     }
 
     assert(countPut == 0);
@@ -333,9 +368,10 @@ unittest
     assert(countPut == 3);
     assert(countCompleted == 1);
 }
+
 unittest
 {
-    auto sub = defer!(int, (observer){
+    auto sub = defer!(int, (observer) {
         observer.put(0);
         observer.failure(new Exception(""));
         observer.put(1);
@@ -345,8 +381,15 @@ unittest
     int countFailure = 0;
     struct A
     {
-        void put(int n) { countPut++; }
-        void failure(Exception e) { countFailure++; }
+        void put(int n)
+        {
+            countPut++;
+        }
+
+        void failure(Exception e)
+        {
+            countFailure++;
+        }
     }
 
     assert(countPut == 0);
@@ -355,9 +398,10 @@ unittest
     assert(countPut == 1);
     assert(countFailure == 1);
 }
+
 unittest
 {
-    auto sub = defer!(int, (observer){
+    auto sub = defer!(int, (observer) {
         observer.put(0);
         observer.failure(new Exception(""));
         observer.put(1);
@@ -366,7 +410,10 @@ unittest
     int countPut = 0;
     struct A
     {
-        void put(int n) { countPut++; }
+        void put(int n)
+        {
+            countPut++;
+        }
     }
 
     assert(countPut == 0);

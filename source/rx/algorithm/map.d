@@ -23,6 +23,7 @@ public:
     {
         _observer = observer;
     }
+
     static if (hasCompleted!TObserver || hasFailure!TObserver)
     {
         this(TObserver observer, Disposable disposable)
@@ -38,9 +39,11 @@ private:
         _observer.put(fun(obj));
     }
 }
+
 unittest
 {
     import std.conv : to;
+
     alias TObserver = MapObserver!(o => to!string(o), Observer!string, int);
 
     static assert(isObserver!(TObserver, int));
@@ -48,7 +51,9 @@ unittest
 
 struct MapObservable(alias f, TObservable)
 {
-    alias ElementType = typeof({ return unaryFun!(f)(TObservable.ElementType.init); }());
+    alias ElementType = typeof({
+        return unaryFun!(f)(TObservable.ElementType.init);
+    }());
 
 public:
     this(TObservable observable)
@@ -63,7 +68,8 @@ public:
         static if (hasCompleted!TObserver || hasFailure!TObserver)
         {
             auto disposable = new SingleAssignmentDisposable;
-            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, disposable))));
+            disposable.setDisposable(disposableObject(doSubscribe(_observable,
+                    ObserverType(observer, disposable))));
             return disposable;
         }
         else
@@ -75,6 +81,7 @@ public:
 private:
     TObservable _observable;
 }
+
 unittest
 {
     import rx.subject;
@@ -89,9 +96,20 @@ unittest
     int failureCount = 0;
     struct TestObserver
     {
-        void put(string n) { putCount++; }
-        void completed() { completedCount++; }
-        void failure(Exception) { failureCount++; }
+        void put(string n)
+        {
+            putCount++;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
+
+        void failure(Exception)
+        {
+            failureCount++;
+        }
     }
 
     auto sub = new SubjectObject!int;
@@ -129,13 +147,15 @@ unittest
 
     auto buffer = appender!(string[])();
     auto disposable = mapped.subscribe(buffer);
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     sub.put(0);
     sub.put(1);
     sub.put(2);
 
     import std.algorithm : equal;
+
     assert(equal(buffer.data, ["0", "1", "2"][]));
 }
 ///
@@ -152,12 +172,14 @@ unittest
 
     auto buffer = appender!(int[])();
     auto disposable = mapped.subscribe(buffer);
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     sub.put(0);
     sub.put(1);
     sub.put(2);
 
     import std.algorithm : equal;
+
     assert(equal(buffer.data, [0, 2, 4][]));
 }

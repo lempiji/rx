@@ -11,7 +11,6 @@ import rx.util;
 import std.functional : unaryFun;
 import std.range : isOutputRange, put;
 
-
 struct AllObserver(TObserver, E, alias pred = "true")
 {
     static assert(isOutputRange!(TObserver, bool), "TObserver must be OutputRange of bool.");
@@ -22,7 +21,7 @@ public:
     this(TObserver observer, Disposable cancel)
     {
         _observer = observer;
-        _cancel = cast(shared)cancel;
+        _cancel = cast(shared) cancel;
         _ticket = new Ticket;
         _hasValue = new Ticket;
     }
@@ -42,16 +41,18 @@ public:
             }
             catch (Exception e)
             {
-                if (!_ticket.stamp()) return;
+                if (!_ticket.stamp())
+                    return;
 
                 _observer.failure(e);
                 dispose();
                 return;
             }
-            
+
             if (!res)
             {
-                if (!_ticket.stamp()) return;
+                if (!_ticket.stamp())
+                    return;
 
                 _observer.put(false);
                 static if (hasCompleted!TObserver)
@@ -66,7 +67,8 @@ public:
         {
             if (!fun(obj))
             {
-                if (!_ticket.stamp()) return;
+                if (!_ticket.stamp())
+                    return;
 
                 _observer.put(false);
                 static if (hasCompleted!TObserver)
@@ -81,7 +83,8 @@ public:
 
     void failure(Exception e)
     {
-        if (!_ticket.stamp()) return;
+        if (!_ticket.stamp())
+            return;
 
         static if (hasFailure!TObserver)
         {
@@ -93,7 +96,8 @@ public:
 
     void completed()
     {
-        if (!_ticket.stamp()) return;
+        if (!_ticket.stamp())
+            return;
 
         _observer.put(_hasValue.isStamped);
         static if (hasCompleted!TObserver)
@@ -107,7 +111,8 @@ public:
     void dispose()
     {
         auto cancel = exchange(_cancel, null);
-        if (cancel !is null) cancel.dispose();
+        if (cancel !is null)
+            cancel.dispose();
     }
 
 private:
@@ -119,8 +124,11 @@ private:
 
 unittest
 {
-    static assert(!__traits(compiles, { AllObserver!(Observer!string, int) observer; }));
+    static assert(!__traits(compiles, {
+            AllObserver!(Observer!string, int) observer;
+        }));
 }
+
 unittest
 {
     alias TObserver = AllObserver!(Observer!bool, int);
@@ -129,15 +137,29 @@ unittest
     static assert(hasFailure!(TObserver));
     static assert(hasCompleted!(TObserver));
 }
+
 unittest
 {
     alias TObserver = AllObserver!(Observer!bool, int);
-    
+
     static class CounterObserver : Observer!bool
     {
-        void put(bool obj) { putCount++; lastValue = obj; }
-        void failure(Exception e) { failureCount++; lastException = e; }
-        void completed() { completedCount++; }
+        void put(bool obj)
+        {
+            putCount++;
+            lastValue = obj;
+        }
+
+        void failure(Exception e)
+        {
+            failureCount++;
+            lastException = e;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
 
         size_t putCount = 0;
         size_t failureCount = 0;
@@ -145,13 +167,16 @@ unittest
         bool lastValue;
         Exception lastException;
     }
+
     static class CounterDisposable : Disposable
     {
-        void dispose() { disposeCount++; }
+        void dispose()
+        {
+            disposeCount++;
+        }
 
         size_t disposeCount = 0;
     }
-
 
     {
         auto counterObserver = new CounterObserver;
@@ -165,7 +190,7 @@ unittest
         assert(counterObserver.completedCount == 1);
         assert(counterDisposable.disposeCount == 1);
     }
-    
+
     {
         auto counterObserver = new CounterObserver;
         auto counterDisposable = new CounterDisposable;
@@ -191,15 +216,29 @@ unittest
         assert(counterDisposable.disposeCount == 1);
     }
 }
+
 unittest
 {
     alias TObserver = AllObserver!(Observer!bool, int, "a % 2 == 0");
-    
+
     static class CounterObserver : Observer!bool
     {
-        void put(bool obj) { putCount++; lastValue = obj; }
-        void failure(Exception e) { failureCount++; lastException = e; }
-        void completed() { completedCount++; }
+        void put(bool obj)
+        {
+            putCount++;
+            lastValue = obj;
+        }
+
+        void failure(Exception e)
+        {
+            failureCount++;
+            lastException = e;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
 
         size_t putCount = 0;
         size_t failureCount = 0;
@@ -207,9 +246,13 @@ unittest
         bool lastValue;
         Exception lastException;
     }
+
     static class CounterDisposable : Disposable
     {
-        void dispose() { disposeCount++; }
+        void dispose()
+        {
+            disposeCount++;
+        }
 
         size_t disposeCount = 0;
     }
@@ -226,7 +269,7 @@ unittest
         assert(counterObserver.completedCount == 1);
         assert(counterDisposable.disposeCount == 1);
     }
-    
+
     {
         auto counterObserver = new CounterObserver;
         auto counterDisposable = new CounterDisposable;
@@ -240,6 +283,7 @@ unittest
         assert(counterDisposable.disposeCount == 1);
     }
 }
+
 unittest
 {
     bool testThrow(int)
@@ -248,12 +292,25 @@ unittest
     }
 
     alias TObserver = AllObserver!(Observer!bool, int, testThrow);
-    
+
     static class CounterObserver : Observer!bool
     {
-        void put(bool obj) { putCount++; lastValue = obj; }
-        void failure(Exception e) { failureCount++; lastException = e; }
-        void completed() { completedCount++; }
+        void put(bool obj)
+        {
+            putCount++;
+            lastValue = obj;
+        }
+
+        void failure(Exception e)
+        {
+            failureCount++;
+            lastException = e;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
 
         size_t putCount = 0;
         size_t failureCount = 0;
@@ -261,9 +318,13 @@ unittest
         bool lastValue;
         Exception lastException;
     }
+
     static class CounterDisposable : Disposable
     {
-        void dispose() { disposeCount++; }
+        void dispose()
+        {
+            disposeCount++;
+        }
 
         size_t disposeCount = 0;
     }
@@ -282,11 +343,13 @@ unittest
         assert(counterDisposable.disposeCount == 1);
     }
 }
+
 unittest
 {
     import std.array : Appender, appender;
+
     alias TObserver = AllObserver!(Appender!(bool[]), int);
-    
+
     auto buf = appender!(bool[]);
     auto observer = TObserver(buf, NopDisposable.instance);
 
@@ -313,23 +376,27 @@ public:
         alias ObserverType = AllObserver!(TObserver, TObservable.ElementType, pred);
 
         auto subscription = new SingleAssignmentDisposable;
-        subscription.setDisposable(disposableObject(_observable.doSubscribe(ObserverType(observer, subscription))));
+        subscription.setDisposable(disposableObject(_observable.doSubscribe(ObserverType(observer,
+                subscription))));
         return subscription;
     }
 
 private:
     TObservable _observable;
 }
+
 unittest
 {
     alias TObservable = AllObservable!(Observable!int);
-    
+
     static assert(isObservable!(TObservable, bool));
 
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     import std.array : appender;
+
     auto buf = appender!(bool[]);
 
     auto observable = TObservable(sub);
@@ -353,6 +420,7 @@ template all(alias pred = "true")
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     bool result = false;
@@ -362,9 +430,11 @@ unittest
     sub.completed();
     assert(result);
 }
+
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     bool result = false;
@@ -384,8 +454,9 @@ AllObservable!TObservable all(TObservable)(auto ref TObservable observable)
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
-    
+
     bool result = false;
     sub.all().doSubscribe((bool res) { result = res; });
 
@@ -397,9 +468,11 @@ unittest
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     import std.array : appender;
+
     auto buf = appender!(bool[]);
 
     auto d = sub.all!(a => a % 2 == 0).doSubscribe(buf);

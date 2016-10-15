@@ -11,7 +11,6 @@ import rx.util;
 import std.functional : unaryFun;
 import std.range : put;
 
-
 struct AnyObserver(TObserver, E, alias pred = "true")
 {
     this() @disable;
@@ -27,7 +26,8 @@ struct AnyObserver(TObserver, E, alias pred = "true")
         alias fun = unaryFun!pred;
         if (fun(obj))
         {
-            if (!_ticket.stamp()) return;
+            if (!_ticket.stamp())
+                return;
 
             _observer.put(true);
             _cancel.dispose();
@@ -36,10 +36,11 @@ struct AnyObserver(TObserver, E, alias pred = "true")
 
     void failure(Exception)
     {
-        if (!_ticket.stamp()) return;
+        if (!_ticket.stamp())
+            return;
 
         _observer.put(false);
-        
+
         static if (hasCompleted!TObserver)
         {
             _observer.completed();
@@ -49,7 +50,8 @@ struct AnyObserver(TObserver, E, alias pred = "true")
 
     void completed()
     {
-        if (!_ticket.stamp()) return;
+        if (!_ticket.stamp())
+            return;
 
         _observer.put(false);
         static if (hasCompleted!TObserver)
@@ -64,16 +66,20 @@ private:
     Disposable _cancel;
     Ticket _ticket;
 }
+
 unittest
 {
     import std.array : Appender;
+
     alias Buffer = Appender!(bool[]);
     alias TObserver = AnyObserver!(Buffer, int);
     assert(isObserver!(TObserver, int));
 }
+
 unittest
 {
     import std.array : Appender, appender;
+
     alias TObserver = AnyObserver!(Appender!(bool[]), int);
     auto buf = appender!(bool[]);
     auto a = TObserver(buf, NopDisposable.instance);
@@ -89,9 +95,11 @@ unittest
     b.put(1);
     assert(buf.data.length == 1);
 }
+
 unittest
 {
     import std.array : Appender, appender;
+
     alias TObserver = AnyObserver!(Appender!(bool[]), int);
 
     auto buf = appender!(bool[]);
@@ -111,9 +119,11 @@ unittest
         assert(buf.data[0] == false);
     }
 }
+
 unittest
 {
     import std.array : Appender, appender;
+
     alias TObserver = AnyObserver!(Appender!(bool[]), int, "a % 2 == 0");
 
     auto buf = appender!(bool[]);
@@ -141,22 +151,26 @@ struct AnyObservable(TObservable, alias pred = "true")
         alias ObserverType = AnyObserver!(TObserver, TObservable.ElementType, pred);
 
         auto subscription = new SingleAssignmentDisposable;
-        subscription.setDisposable(disposableObject(_observable.doSubscribe(ObserverType(observer, subscription))));
+        subscription.setDisposable(disposableObject(_observable.doSubscribe(ObserverType(observer,
+                subscription))));
         return subscription;
     }
 
 private:
     TObservable _observable;
 }
+
 unittest
 {
     alias TObservable = AnyObservable!(Observable!int);
 
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
     auto o1 = TObservable(sub);
 
     import std.array : appender;
+
     auto buf = appender!(bool[]);
     auto d = o1.subscribe(buf);
 
@@ -167,15 +181,18 @@ unittest
 
     d.dispose();
 }
+
 unittest
 {
     alias TObservable = AnyObservable!(Observable!int, "a % 2 == 0");
 
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
     auto o1 = TObservable(sub);
 
     import std.array : appender;
+
     auto buf = appender!(bool[]);
     auto d = o1.subscribe(buf);
 
@@ -188,15 +205,18 @@ unittest
 
     d.dispose();
 }
+
 unittest
 {
     alias TObservable = AnyObservable!(Observable!int, a => a % 3 == 0);
 
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
     auto o1 = TObservable(sub);
 
     import std.array : appender;
+
     auto buf = appender!(bool[]);
     auto d = o1.subscribe(buf);
 
@@ -209,15 +229,18 @@ unittest
 
     d.dispose();
 }
+
 unittest
 {
     alias TObservable = AnyObservable!(Observable!int);
 
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
     auto o1 = TObservable(sub);
 
     import std.array : appender;
+
     auto buf = appender!(bool[]);
     auto d = o1.subscribe(buf);
 
@@ -231,15 +254,18 @@ unittest
 
     d.dispose();
 }
+
 unittest
 {
     alias TObservable = AnyObservable!(Observable!int);
 
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
     auto o1 = TObservable(sub);
 
     import std.array : appender;
+
     auto buf = appender!(bool[]);
     auto d = o1.subscribe(buf);
 
@@ -253,15 +279,18 @@ unittest
 
     d.dispose();
 }
+
 unittest
 {
     alias TObservable = AnyObservable!(Observable!int);
 
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
     auto observable = TObservable(sub);
 
     import std.array : appender;
+
     auto buf = appender!(bool[]);
     auto d = observable.subscribe(buf);
 
@@ -278,12 +307,13 @@ template any(alias pred = "true")
     AnyObservable!(TObservable, pred) any(TObservable)(auto ref TObservable observable)
     {
         return typeof(return)(observable);
-    } 
+    }
 }
 ///
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     bool result = false;
@@ -295,9 +325,11 @@ unittest
     sub.put(0);
     assert(result == true);
 }
+
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     bool result = false;
@@ -317,6 +349,7 @@ AnyObservable!TObservable any(TObservable)(auto ref TObservable observable)
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
     bool result = false;
@@ -335,7 +368,7 @@ unittest
     auto sub = new SubjectObject!int;
 
     bool result = true;
-    sub.filter!"a % 2 == 0"().any().doSubscribe((bool t){ result = t; });
+    sub.filter!"a % 2 == 0"().any().doSubscribe((bool t) { result = t; });
 
     assert(result == true);
     sub.completed();

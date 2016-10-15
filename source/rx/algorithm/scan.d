@@ -24,6 +24,7 @@ public:
         _observer = observer;
         _current = seed;
     }
+
     static if (hasCompleted!TObserver || hasFailure!TObserver)
     {
         this(TObserver observer, TAccumulate seed, Disposable disposable)
@@ -45,11 +46,13 @@ public:
 private:
     TAccumulate _current;
 }
+
 unittest
 {
     import std.array : appender;
+
     auto buf = appender!(int[]);
-    alias TObserver = ScanObserver!((a,b)=> a + b, typeof(buf), int, int);
+    alias TObserver = ScanObserver!((a, b) => a + b, typeof(buf), int, int);
     auto observer = TObserver(buf, 0);
     foreach (i; 1 .. 6)
     {
@@ -82,7 +85,8 @@ public:
         static if (hasCompleted!TObserver || hasFailure!TObserver)
         {
             auto disposable = new SingleAssignmentDisposable;
-            disposable.setDisposable(disposableObject(doSubscribe(_observable, ObserverType(observer, _seed, disposable))));
+            disposable.setDisposable(disposableObject(doSubscribe(_observable,
+                    ObserverType(observer, _seed, disposable))));
             return disposable;
         }
         else
@@ -95,20 +99,24 @@ private:
     TObservable _observable;
     TAccumulate _seed;
 }
+
 unittest
 {
-    alias Scan = ScanObservable!((a,b)=>a+b, Observable!int, int);
+    alias Scan = ScanObservable!((a, b) => a + b, Observable!int, int);
     static assert(isObservable!(Scan, int));
 }
+
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto sub = new SubjectObject!int;
 
-    alias Scan = ScanObservable!((a,b)=>a+b, Observable!int, int);
+    alias Scan = ScanObservable!((a, b) => a + b, Observable!int, int);
     auto s = Scan(sub, 0);
 
     import std.stdio : writeln;
+
     auto disposable = s.subscribe((int i) => writeln(i));
     static assert(isDisposable!(typeof(disposable)));
 }
@@ -125,15 +133,18 @@ template scan(alias f)
 unittest
 {
     import rx.subject : SubjectObject;
+
     auto subject = new SubjectObject!int;
 
     auto sum = subject.scan!((a, b) => a + b)(0);
     static assert(isObservable!(typeof(sum), int));
 
     import std.array : appender;
+
     auto buf = appender!(int[]);
     auto disposable = sum.subscribe(buf);
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     foreach (_; 0 .. 5)
     {
@@ -143,5 +154,6 @@ unittest
     auto result = buf.data;
     assert(result.length == 5);
     import std.algorithm : equal;
+
     assert(equal(result, [1, 2, 3, 4, 5]));
 }

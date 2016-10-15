@@ -5,7 +5,6 @@ import rx;
 import std.range : isOutputRange, put;
 import std.traits;
 
-
 class ReactiveProperty(T) : Subject!T
 {
 public:
@@ -13,7 +12,7 @@ public:
     {
         this(T.init);
     }
-    
+
     this(T value)
     {
         _subject = new SubjectObject!T;
@@ -25,6 +24,7 @@ public:
     {
         return _value;
     }
+
     void value(T value) @property
     {
         if (_value != value)
@@ -71,7 +71,7 @@ interface Command
 {
     void execute();
     bool canExecute() const @property;
-    inout(Observable!bool) canExecuteObservable() inout @property; 
+    inout(Observable!bool) canExecuteObservable() inout @property;
 }
 
 class DelegateCommand : Command
@@ -90,7 +90,8 @@ class DelegateCommand : Command
 
     void execute()
     {
-        if (_onExecute !is null && _canExecute) _onExecute();
+        if (_onExecute !is null && _canExecute)
+            _onExecute();
     }
 
     bool canExecute() const @property
@@ -119,8 +120,13 @@ Disposable bindText(TSubject)(EditWidgetBase editWidget, TSubject property)
     static assert(isOutputRange!(TSubject, string));
 
     import std.conv : to;
-    auto d1 = editWidget.contentChange.asObservable().doSubscribe((EditableContent _) { .put(property, to!string(editWidget.text)); });
-    auto d2 = property.doSubscribe((string value) { editWidget.text = to!dstring(value); });
+
+    auto d1 = editWidget.contentChange.asObservable().doSubscribe((EditableContent _) {
+        .put(property, to!string(editWidget.text));
+    });
+    auto d2 = property.doSubscribe((string value) {
+        editWidget.text = to!dstring(value);
+    });
     return new CompositeDisposable(d1, d2);
 }
 
@@ -129,13 +135,20 @@ Disposable bindText(TObservable)(TextWidget textWidget, TObservable property)
     static assert(isObservable!(TObservable, string));
 
     import std.conv : to;
-    return disposableObject(property.doSubscribe((string value) { textWidget.text = to!dstring(value); }));
+
+    return disposableObject(property.doSubscribe((string value) {
+            textWidget.text = to!dstring(value);
+        }));
 }
 
 Disposable bind(Button button, Command command)
 {
-    auto d1 = button.click.asObservable().doSubscribe((Widget _) { command.execute(); });
-    auto d2 = command.canExecuteObservable.doSubscribe((bool b) { button.enabled = b; });
+    auto d1 = button.click.asObservable().doSubscribe((Widget _) {
+        command.execute();
+    });
+    auto d2 = command.canExecuteObservable.doSubscribe((bool b) {
+        button.enabled = b;
+    });
     return new CompositeDisposable(d1, d2);
 }
 
@@ -143,8 +156,10 @@ Disposable bind(TSubject)(SwitchButton button, TSubject property)
 {
     static assert(isObservable!(TSubject, bool));
     static assert(isOutputRange!(TSubject, bool));
-    
-    auto d1 = button.click.asObservable().doSubscribe((Widget _) { .put(property, button.checked); });
+
+    auto d1 = button.click.asObservable().doSubscribe((Widget _) {
+        .put(property, button.checked);
+    });
     auto d2 = property.doSubscribe((bool b) { button.checked = b; });
     return new CompositeDisposable(d1, d2);
 }
@@ -152,45 +167,42 @@ Disposable bind(TSubject)(SwitchButton button, TSubject property)
 //Utility
 
 ///Wrap a Signal!T as Observable
-auto asObservable(T)(ref T signal)
-if (is(T == Signal!U, U) && is(U == interface))
+auto asObservable(T)(ref T signal) if (is(T == Signal!U, U) && is(U == interface))
 {
-	static if (is(T == Signal!U, U))
-	{
-		alias return_t = ReturnType!(__traits(getMember, U, __traits(allMembers, U)[0]));
-		alias param_t = ParameterTypeTuple!(__traits(getMember, U, __traits(allMembers, U)[0]));
-		static assert(param_t.length == 1);
-	}
+    static if (is(T == Signal!U, U))
+    {
+        alias return_t = ReturnType!(__traits(getMember, U, __traits(allMembers, U)[0]));
+        alias param_t = ParameterTypeTuple!(__traits(getMember, U, __traits(allMembers, U)[0]));
+        static assert(param_t.length == 1);
+    }
 
-	static struct LocalObservable
-	{
-		alias ElementType = param_t[0];
-		this(ref T signal)
-		{
-			_subscribe = (Observer!ElementType o) {
-				auto dg = (ElementType w) {
-					o.put(w);
-					static if (is(return_t == bool))
-					{
-						return true;
-					}
-				};
+    static struct LocalObservable
+    {
+        alias ElementType = param_t[0];
+        this(ref T signal)
+        {
+            _subscribe = (Observer!ElementType o) {
+                auto dg = (ElementType w) {
+                    o.put(w);
+                    static if (is(return_t == bool))
+                    {
+                        return true;
+                    }
+                };
 
-				signal.connect(dg);
+                signal.connect(dg);
 
-				return new AnonymouseDisposable({
-					signal.disconnect(dg);
-				});
-			};
-		}
+                return new AnonymouseDisposable({ signal.disconnect(dg); });
+            };
+        }
 
-		auto subscribe(U)(U observer)
-		{
-			return _subscribe(observerObject!ElementType(observer));
-		}
+        auto subscribe(U)(U observer)
+        {
+            return _subscribe(observerObject!ElementType(observer));
+        }
 
-		Disposable delegate(Observer!ElementType) _subscribe;
-	}
+        Disposable delegate(Observer!ElementType) _subscribe;
+    }
 
-	return LocalObservable(signal);
+    return LocalObservable(signal);
 }

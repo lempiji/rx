@@ -4,7 +4,9 @@
 		"lempiji"
 	],
 	"dependencies": {
-		"rx": { "path": "../../" },
+		"rx": {
+			"path": "../../"
+		},
 		"dlangui": "~>0.9.27"
 	},
 	"description": "A minimal D application.",

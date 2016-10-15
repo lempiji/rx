@@ -1,7 +1,7 @@
 /+++++++++++++++++++++++++++++
  + This module defines the concept of Observer.
  +/
- module rx.observer;
+module rx.observer;
 
 import std.range.primitives;
 import std.range.interfaces;
@@ -10,10 +10,12 @@ import std.typetuple;
 ///Tests if something has completed method.
 template hasCompleted(T)
 {
+    //dfmt off
     enum bool hasCompleted = is(typeof({
             T observer = void;
             observer.completed();
         }()));
+    //dfmt on
 }
 ///
 unittest
@@ -22,23 +24,26 @@ unittest
     {
         void completed();
     }
+
     struct B
     {
         void _completed();
     }
 
-    static assert( hasCompleted!A);
+    static assert(hasCompleted!A);
     static assert(!hasCompleted!B);
 }
 
 ///Tests if something has failure method.
 template hasFailure(T)
 {
+    //dfmt off
     enum bool hasFailure = is(typeof({
             T observer = void;
             Exception e = void;
             observer.failure(e);
         }()));
+    //dfmt on
 }
 ///
 unittest
@@ -47,10 +52,12 @@ unittest
     {
         void failure(Exception e);
     }
+
     struct B
     {
         void _failure(Exception e);
     }
+
     struct C
     {
         void failure();
@@ -71,9 +78,17 @@ unittest
 {
     struct TestObserver
     {
-        void put(int n) { }
-        void completed() { }
-        void failure(Exception e) { }
+        void put(int n)
+        {
+        }
+
+        void completed()
+        {
+        }
+
+        void failure(Exception e)
+        {
+        }
     }
 
     static assert(isObserver!(TestObserver, int));
@@ -139,8 +154,13 @@ unittest
 {
     struct TestObserver
     {
-        void put(int n) { }
-        void put(Object obj) { }
+        void put(int n)
+        {
+        }
+
+        void put(Object obj)
+        {
+        }
     }
 
     Observer!int observer = observerObject!int(TestObserver());
@@ -158,9 +178,20 @@ unittest
 
     class TestObserver : Observer!int
     {
-        void put(int n) { putCount++; }
-        void completed() { completedCount++; }
-        void failure(Exception e) { failureCount++; }
+        void put(int n)
+        {
+            putCount++;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
+
+        void failure(Exception e)
+        {
+            failureCount++;
+        }
     }
 
     static assert(isObserver!(TestObserver, int));
@@ -186,9 +217,20 @@ unittest
 
     struct TestObserver
     {
-        void put(int n) { putCount++; }
-        void completed() { completedCount++; }
-        void failure(Exception e) { failureCount++; }
+        void put(int n)
+        {
+            putCount++;
+        }
+
+        void completed()
+        {
+            completedCount++;
+        }
+
+        void failure(Exception e)
+        {
+            failureCount++;
+        }
     }
 
     static assert(isObserver!(TestObserver, int));
@@ -210,23 +252,46 @@ unittest
 {
     struct TestObserver1
     {
-        void put(int n) { }
+        void put(int n)
+        {
+        }
     }
+
     struct TestObserver2
     {
-        void put(int n) { }
-        void completed() { }
+        void put(int n)
+        {
+        }
+
+        void completed()
+        {
+        }
     }
+
     struct TestObserver3
     {
-        void put(int n) { }
-        void failure(Exception e) { }
+        void put(int n)
+        {
+        }
+
+        void failure(Exception e)
+        {
+        }
     }
+
     struct TestObserver4
     {
-        void put(int n) { }
-        void completed() { }
-        void failure(Exception e) { }
+        void put(int n)
+        {
+        }
+
+        void completed()
+        {
+        }
+
+        void failure(Exception e)
+        {
+        }
     }
 
     Observer!int o1 = observerObject!int(TestObserver1());
@@ -234,28 +299,41 @@ unittest
     Observer!int o3 = observerObject!int(TestObserver3());
     Observer!int o4 = observerObject!int(TestObserver4());
 
+    //dfmt off
     o1.put(0); o1.completed(); o1.failure(null);
     o2.put(0); o2.completed(); o2.failure(null);
     o3.put(0); o3.completed(); o3.failure(null);
     o4.put(0); o4.completed(); o4.failure(null);
+    //dfmt on
 }
 
 ///
 final class NopObserver(E) : Observer!E
 {
 private:
-    this() { };
+    this()
+    {
+    }
 
 public:
-    void put(E) { }
-    void completed() { }
-    void failure(Exception) { }
+    void put(E)
+    {
+    }
+
+    void completed()
+    {
+    }
+
+    void failure(Exception)
+    {
+    }
 
 public:
     ///
     static Observer!E instance()
     {
         import std.concurrency : initOnce;
+
         static __gshared NopObserver!E inst;
         return initOnce!inst(new NopObserver!E);
     }
@@ -273,7 +351,9 @@ unittest
 final class DoneObserver(E) : Observer!E
 {
 private:
-    this() { };
+    this()
+    {
+    }
 public:
     this(Exception e)
     {
@@ -281,13 +361,27 @@ public:
     }
 
 public:
-    Exception exception() @property { return _exception; };
-    void exception(Exception e) @property { _exception = e; }
+    Exception exception() @property
+    {
+        return _exception;
+    }
+    void exception(Exception e) @property
+    {
+        _exception = e;
+    }
 
 public:
-    void put(E) { }
-    void completed() { }
-    void failure(Exception) { }
+    void put(E)
+    {
+    }
+
+    void completed()
+    {
+    }
+
+    void failure(Exception)
+    {
+    }
 
 private:
     Exception _exception;
@@ -296,6 +390,7 @@ public:
     static Observer!E instance()
     {
         import std.concurrency : initOnce;
+
         static __gshared DoneObserver!E inst;
         return initOnce!inst(new DoneObserver!E);
     }
@@ -308,6 +403,7 @@ unittest
     assert(o1 !is null);
     assert(o1 is o2);
 }
+
 unittest
 {
     auto e = new Exception("test");
@@ -319,7 +415,9 @@ unittest
 public class CompositeObserver(E) : Observer!E
 {
 private:
-    this() { }
+    this()
+    {
+    }
 
 public:
     this(Observer!E[] observers)
@@ -355,11 +453,15 @@ public:
     Observer!E remove(Observer!E observer)
     {
         import std.algorithm : countUntil;
-        auto i = _observers.countUntil(observer);
-        if (i < 0) return this;
 
-        if (_observers.length == 1) return CompositeObserver!E.empty;
-        if (_observers.length == 2) return _observers[1 - i];
+        auto i = _observers.countUntil(observer);
+        if (i < 0)
+            return this;
+
+        if (_observers.length == 1)
+            return CompositeObserver!E.empty;
+        if (_observers.length == 2)
+            return _observers[1 - i];
 
         return new CompositeObserver!E(_observers[0 .. i] ~ _observers[i + 1 .. $]);
     }
@@ -369,6 +471,7 @@ public:
     static CompositeObserver!E empty()
     {
         import std.concurrency : initOnce;
+
         static __gshared CompositeObserver!E inst;
         return initOnce!inst(new CompositeObserver!E);
     }
@@ -382,7 +485,10 @@ unittest
     int count = 0;
     struct TestObserver
     {
-        void put(int n) { count++; }
+        void put(int n)
+        {
+            count++;
+        }
     }
 
     auto c1 = new CompositeObserver!int;
@@ -402,7 +508,8 @@ unittest
 }
 
 ///The helper for the own observer.
-auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)
+auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted,
+        void delegate(Exception) doFailure)
 {
     static struct AnonymouseObserver
     {
@@ -413,19 +520,26 @@ auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted, void d
             _doCompleted = doCompleted;
             _doFailure = doFailure;
         }
+
     public:
         void put(E obj)
         {
-            if (_doPut !is null) _doPut(obj);
+            if (_doPut !is null)
+                _doPut(obj);
         }
+
         void completed()
         {
-            if (_doCompleted !is null) _doCompleted();
+            if (_doCompleted !is null)
+                _doCompleted();
         }
+
         void failure(Exception e)
         {
-            if (_doFailure !is null) _doFailure(e);
+            if (_doFailure !is null)
+                _doFailure(e);
         }
+
     private:
         void delegate(E) _doPut;
         void delegate() _doCompleted;
@@ -445,15 +559,20 @@ auto makeObserver(E)(void delegate(E) doPut, void delegate() doCompleted)
             _doPut = doPut;
             _doCompleted = doCompleted;
         }
+
     public:
         void put(E obj)
         {
-            if (_doPut !is null) _doPut(obj);
+            if (_doPut !is null)
+                _doPut(obj);
         }
+
         void completed()
         {
-            if (_doCompleted !is null) _doCompleted();
+            if (_doCompleted !is null)
+                _doCompleted();
         }
+
     private:
         void delegate(E) _doPut;
         void delegate() _doCompleted;
@@ -472,15 +591,20 @@ auto makeObserver(E)(void delegate(E) doPut, void delegate(Exception) doFailure)
             _doPut = doPut;
             _doFailure = doFailure;
         }
+
     public:
         void put(E obj)
         {
-            if (_doPut !is null) _doPut(obj);
+            if (_doPut !is null)
+                _doPut(obj);
         }
+
         void failure(Exception e)
         {
-            if (_doFailure !is null) _doFailure(e);
+            if (_doFailure !is null)
+                _doFailure(e);
         }
+
     private:
         void delegate(E) _doPut;
         void delegate(Exception) _doFailure;
@@ -495,7 +619,9 @@ unittest
     int countCompleted = 0;
     int countFailure = 0;
 
-    auto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; }, (Exception){ countFailure++; });
+    auto observer = makeObserver((int) { countPut++; }, () { countCompleted++; }, (Exception) {
+        countFailure++;
+    });
 
     .put(observer, 0);
     assert(countPut == 1);
@@ -506,12 +632,13 @@ unittest
     observer.failure(null);
     assert(countFailure == 1);
 }
+
 unittest
 {
     int countPut = 0;
     int countCompleted = 0;
 
-    auto observer = makeObserver((int){ countPut++; }, (){ countCompleted++; });
+    auto observer = makeObserver((int) { countPut++; }, () { countCompleted++; });
 
     .put(observer, 0);
     assert(countPut == 1);
@@ -521,12 +648,15 @@ unittest
 
     static assert(!hasFailure!(typeof(observer)));
 }
+
 unittest
 {
     int countPut = 0;
     int countFailure = 0;
 
-    auto observer = makeObserver((int){ countPut++; }, (Exception){ countFailure++; });
+    auto observer = makeObserver((int) { countPut++; }, (Exception) {
+        countFailure++;
+    });
 
     .put(observer, 0);
     assert(countPut == 1);
@@ -548,7 +678,7 @@ public:
             {
                 putImpl(obj);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _observer.failure(e);
                 _disposable.dispose();
@@ -559,6 +689,7 @@ public:
             putImpl(obj);
         }
     }
+
     static if (hasCompleted!TObserver)
     {
         void completed()

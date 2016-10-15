@@ -8,14 +8,15 @@ import rx.observer;
 import rx.observable;
 import rx.scheduler;
 
-
 //#########################
 // Throttle
 //#########################
-ThrottleObservable!(T, TScheduler, T.ElementType) throttle(T, TScheduler : AsyncScheduler)(T observable, Duration val, TScheduler scheduler)
+ThrottleObservable!(T, TScheduler, T.ElementType) throttle(T, TScheduler : AsyncScheduler)(
+        T observable, Duration val, TScheduler scheduler)
 {
     return typeof(return)(observable, scheduler, val);
 }
+
 ThrottleObservable!(T, TaskPoolScheduler, T.ElementType) throttle(T)(T observable, Duration val)
 {
     return typeof(return)(observable, new TaskPoolScheduler, val);
@@ -31,6 +32,7 @@ public:
         _dueTime = val;
         _disposable = disposable;
     }
+
 public:
     void put(E obj)
     {
@@ -61,6 +63,7 @@ public:
             _disposable.disposable = _scheduler.schedule({ _observer.put(obj); }, _dueTime);
         }
     }
+
     void completed()
     {
         static if (hasCompleted!TObserver)
@@ -69,6 +72,7 @@ public:
         }
         _disposable.dispose();
     }
+
     void failure(Exception e)
     {
         static if (hasFailure!TObserver)
@@ -77,12 +81,14 @@ public:
         }
         _disposable.dispose();
     }
+
 private:
     TObserver _observer;
     TScheduler _scheduler;
     Duration _dueTime;
     SerialDisposable _disposable;
 }
+
 struct ThrottleObservable(TObservable, TScheduler, E)
 {
     alias ElementType = E;
@@ -93,6 +99,7 @@ public:
         _scheduler = scheduler;
         _dueTime = val;
     }
+
 public:
     auto subscribe(T)(T observer)
     {
@@ -101,22 +108,23 @@ public:
         auto outer = _observable.doSubscribe(ObserverType(observer, _scheduler, _dueTime, inner));
         return new CompositeDisposable(disposableObject(outer), inner);
     }
+
 private:
     TObservable _observable;
     TScheduler _scheduler;
     Duration _dueTime;
 }
+
 unittest
 {
     import std.array;
     import rx.subject;
+
     auto s = new TaskPoolScheduler;
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub
-        .throttle(dur!"msecs"(50), s)
-        .doSubscribe(buf);
+    auto d = sub.throttle(dur!"msecs"(50), s).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -125,18 +133,19 @@ unittest
     Thread.sleep(dur!"msecs"(100));
 
     import std.algorithm : equal;
+
     assert(equal(buf.data, [9]));
 }
+
 unittest
 {
     import std.array;
     import rx.subject;
+
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub
-        .throttle(dur!"msecs"(50))
-        .doSubscribe(buf);
+    auto d = sub.throttle(dur!"msecs"(50)).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -145,18 +154,19 @@ unittest
     Thread.sleep(dur!"msecs"(100));
 
     import std.algorithm : equal;
+
     assert(equal(buf.data, [9]));
 }
+
 unittest
 {
     import std.array;
     import rx.subject;
+
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub
-        .throttle(dur!"msecs"(50))
-        .doSubscribe(buf);
+    auto d = sub.throttle(dur!"msecs"(50)).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -166,18 +176,19 @@ unittest
     Thread.sleep(dur!"msecs"(100));
 
     import std.algorithm : equal;
+
     assert(buf.data.length == 0);
 }
+
 unittest
 {
     import std.array;
     import rx.subject;
+
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub
-        .throttle(dur!"msecs"(50))
-        .doSubscribe(buf);
+    auto d = sub.throttle(dur!"msecs"(50)).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -187,18 +198,19 @@ unittest
     Thread.sleep(dur!"msecs"(100));
 
     import std.algorithm : equal;
+
     assert(buf.data.length == 0);
 }
+
 unittest
 {
     import std.array;
     import rx.subject;
+
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub
-        .throttle(dur!"msecs"(50))
-        .doSubscribe(buf);
+    auto d = sub.throttle(dur!"msecs"(50)).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -208,5 +220,6 @@ unittest
     Thread.sleep(dur!"msecs"(100));
 
     import std.algorithm : equal;
+
     assert(buf.data.length == 0);
 }

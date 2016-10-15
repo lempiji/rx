@@ -5,6 +5,8 @@
 	],
 	"description": "A example for rx.",
 	"dependencies": {
-		"rx": { "path": "../../" }
+		"rx": {
+			"path": "../../"
+		}
 	}
 }
