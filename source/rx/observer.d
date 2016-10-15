@@ -3,8 +3,7 @@
  +/
 module rx.observer;
 
-import std.range.primitives;
-import std.range.interfaces;
+import std.range;
 import std.typetuple;
 
 ///Tests if something has completed method.
