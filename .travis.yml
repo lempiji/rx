@@ -3,4 +3,3 @@ language: d
 d:
   - dmd
   - ldc
-  - gdc
