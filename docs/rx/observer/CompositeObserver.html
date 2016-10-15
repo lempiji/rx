@@ -159,7 +159,10 @@ $('#symbolSearchPane').show();
 <pre class="code"><code class="lang-d"><span class="typ">int </span><span class="pln">count </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
 </span><span class="kwd">struct </span><span class="typ">TestObserver
 </span><span class="pun">{
-    </span><span class="typ">void <a href="../../rx/observer/CompositeObserver.put.html"></span><span class="pln">put</span></a><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) { </span><span class="pln">count</span><span class="pun">++; }
+    </span><span class="typ">void <a href="../../rx/observer/CompositeObserver.put.html"></span><span class="pln">put</span></a><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">)
+    {
+        </span><span class="pln">count</span><span class="pun">++;
+    }
 }
 
 </span><span class="kwd">auto </span><span class="pln">c1 </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">CompositeObserver</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;

@@ -134,8 +134,11 @@ $('#symbolSearchPane').show();
 <section><h3>Example</h3>
 <pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="typ">TestObserver
 </span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) { }
+    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">)
+    {
+    }
 }
+
 </span><span class="kwd">struct </span><span class="typ">TestObservable1
 </span><span class="pun">{
     </span><span class="kwd">alias </span><span class="typ">ElementType </span><span class="pun">= </span><span class="typ">int</span><span class="pun">;
@@ -144,6 +147,7 @@ $('#symbolSearchPane').show();
         </span><span class="kwd">return null</span><span class="pun">;
     }
 }
+
 </span><span class="kwd">struct </span><span class="typ">TestObservable2
 </span><span class="pun">{
     </span><span class="kwd">alias </span><span class="typ">ElementType </span><span class="pun">= </span><span class="typ">int</span><span class="pun">;
@@ -154,16 +158,16 @@ $('#symbolSearchPane').show();
 }
 
 </span><span class="typ">TestObservable1 </span><span class="pln">o1</span><span class="pun">;
-</span><span class="kwd">auto </span><span class="pln">d0 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">){}, (){}, (</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">){});
-</span><span class="kwd">auto </span><span class="pln">d1 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">){}, (){});
-</span><span class="kwd">auto </span><span class="pln">d2 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">){}, (</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">){});
-</span><span class="kwd">auto </span><span class="pln">d3 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">){});
+</span><span class="kwd">auto </span><span class="pln">d0 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) {  }, () {  }, (</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">) {  });
+</span><span class="kwd">auto </span><span class="pln">d1 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) {  }, () {  });
+</span><span class="kwd">auto </span><span class="pln">d2 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) {  }, (</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">) {  });
+</span><span class="kwd">auto </span><span class="pln">d3 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) {  });
 </span><span class="kwd">auto </span><span class="pln">d4 </span><span class="pun">= </span><span class="pln">o1<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">(</span><span class="typ">TestObserver</span><span class="pun">());
 </span><span class="typ">TestObservable2 </span><span class="pln">o2</span><span class="pun">;
-</span><span class="kwd">auto </span><span class="pln">d5 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">){}, (){}, (</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">){});
-</span><span class="kwd">auto </span><span class="pln">d6 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">){}, (){});
-</span><span class="kwd">auto </span><span class="pln">d7 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">){}, (</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">){});
-</span><span class="kwd">auto </span><span class="pln">d8 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">){});
+</span><span class="kwd">auto </span><span class="pln">d5 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) {  }, () {  }, (</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">) {  });
+</span><span class="kwd">auto </span><span class="pln">d6 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) {  }, () {  });
+</span><span class="kwd">auto </span><span class="pln">d7 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) {  }, (</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">) {  });
+</span><span class="kwd">auto </span><span class="pln">d8 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">((</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) {  });
 </span><span class="kwd">auto </span><span class="pln">d9 </span><span class="pun">= </span><span class="pln">o2<wbr/></span><span class="pun">.</span><span class="pln">doSubscribe</span><span class="pun">(</span><span class="typ">TestObserver</span><span class="pun">());
 </span></code></pre>
 </section>

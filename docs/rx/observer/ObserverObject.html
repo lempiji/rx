@@ -109,8 +109,13 @@ $('#symbolSearchPane').show();
 <section><h3>Example</h3>
 <pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="typ">TestObserver
 </span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) { }
-    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">Object </span><span class="pln">obj</span><span class="pun">) { }
+    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">)
+    {
+    }
+
+    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">Object </span><span class="pln">obj</span><span class="pun">)
+    {
+    }
 }
 
 <a href="../../rx/observer/Observer.html"></span><span class="typ">Observer</span></a><span class="pun">!</span><span class="typ">int </span><span class="pln">observer </span><span class="pun">= <a href="../../rx/observer/observerObject.observerObject.html"></span><span class="pln">observerObject</span></a><span class="pun">!</span><span class="typ">int</span><span class="pun">(</span><span class="typ">TestObserver</span><span class="pun">());

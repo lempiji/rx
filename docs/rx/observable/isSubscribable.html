@@ -100,14 +100,26 @@ $('#symbolSearchPane').show();
 <section><h3>Example</h3>
 <pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="typ">TestDisposable
 </span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">() { }
+    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">()
+    {
+    }
 }
+
 </span><span class="kwd">struct </span><span class="typ">TestObserver
 </span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) { }
-    </span><span class="typ">void </span><span class="pln">completed</span><span class="pun">() { }
-    </span><span class="typ">void </span><span class="pln">failure</span><span class="pun">(</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">) { }
+    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">)
+    {
+    }
+
+    </span><span class="typ">void </span><span class="pln">completed</span><span class="pun">()
+    {
+    }
+
+    </span><span class="typ">void </span><span class="pln">failure</span><span class="pun">(</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">)
+    {
+    }
 }
+
 </span><span class="kwd">struct </span><span class="typ">TestObservable
 </span><span class="pun">{
     </span><span class="typ">TestDisposable </span><span class="pln">subscribe</span><span class="pun">(</span><span class="typ">TestObserver </span><span class="pln">observer</span><span class="pun">)

@@ -91,7 +91,7 @@ $('#symbolSearchPane').show();
 						</div>
 					</section>
 <section><h3>Example</h3>
-<pre class="code"><code class="lang-d"><span class="kwd">auto </span><span class="pln">sub </span><span class="pun">= </span><span class="pln">defer</span><span class="pun">!(</span><span class="typ">int</span><span class="pun">, (</span><span class="pln">observer</span><span class="pun">){
+<pre class="code"><code class="lang-d"><span class="kwd">auto </span><span class="pln">sub </span><span class="pun">= </span><span class="pln">defer</span><span class="pun">!(</span><span class="typ">int</span><span class="pun">, (</span><span class="pln">observer</span><span class="pun">) {
     </span><span class="pln">observer<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">1</span><span class="pun">);
     </span><span class="pln">observer<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">2</span><span class="pun">);
     </span><span class="pln">observer<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">3</span><span class="pun">);
@@ -102,8 +102,15 @@ $('#symbolSearchPane').show();
 </span><span class="typ">int </span><span class="pln">countCompleted </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
 </span><span class="kwd">struct </span><span class="pln">A
 </span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">) { </span><span class="pln">countPut</span><span class="pun">++; }
-    </span><span class="typ">void </span><span class="pln">completed</span><span class="pun">() { </span><span class="pln">countCompleted</span><span class="pun">++; }
+    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">)
+    {
+        </span><span class="pln">countPut</span><span class="pun">++;
+    }
+
+    </span><span class="typ">void </span><span class="pln">completed</span><span class="pun">()
+    {
+        </span><span class="pln">countCompleted</span><span class="pun">++;
+    }
 }
 
 </span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">countPut </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);

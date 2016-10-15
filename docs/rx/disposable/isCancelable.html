@@ -98,14 +98,28 @@ $('#symbolSearchPane').show();
 <section><h3>Example</h3>
 <pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">A
 </span><span class="pun">{
-    </span><span class="typ">bool </span><span class="pln">isDisposed</span><span class="pun">() </span><span class="kwd">@property </span><span class="pun">{ </span><span class="kwd">return true</span><span class="pun">; }
-    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">() { }
+    </span><span class="typ">bool </span><span class="pln">isDisposed</span><span class="pun">() </span><span class="kwd">@property
+    </span><span class="pun">{
+        </span><span class="kwd">return true</span><span class="pun">;
+    }
+
+    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">()
+    {
+    }
 }
+
 </span><span class="kwd">class </span><span class="pln">B
 </span><span class="pun">{
-    </span><span class="typ">bool </span><span class="pln">isDisposed</span><span class="pun">() </span><span class="kwd">@property </span><span class="pun">{ </span><span class="kwd">return true</span><span class="pun">; }
-    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">() { }
+    </span><span class="typ">bool </span><span class="pln">isDisposed</span><span class="pun">() </span><span class="kwd">@property
+    </span><span class="pun">{
+        </span><span class="kwd">return true</span><span class="pun">;
+    }
+
+    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">()
+    {
+    }
 }
+
 </span><span class="kwd">interface </span><span class="pln">C
 </span><span class="pun">{
     </span><span class="typ">bool </span><span class="pln">isDisposed</span><span class="pun">() </span><span class="kwd">@property</span><span class="pun">;

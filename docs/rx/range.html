@@ -90,9 +90,7 @@ $('#symbolSearchPane').show();
 </span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">conv </span><span class="pun">: </span><span class="pln">to</span><span class="pun">;
 
 </span><span class="kwd">auto </span><span class="pln">subject </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SubjectObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
-</span><span class="kwd">auto </span><span class="pln">pub </span><span class="pun">= </span><span class="pln">subject
-    <wbr/></span><span class="pun">.</span><span class="pln">drop</span><span class="pun">(</span><span class="lit">2</span><span class="pun">)
-    <a href="../rx/range/take.html"></span><wbr/><span class="pun">.</span><span class="pln">take</span></a><span class="pun">(</span><span class="lit">3</span><span class="pun">);
+</span><span class="kwd">auto </span><span class="pln">pub </span><span class="pun">= </span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">drop</span><span class="pun">(</span><span class="lit">2</span><span class="pun">)<a href="../rx/range/take.html"></span><wbr/><span class="pun">.</span><span class="pln">take</span></a><span class="pun">(</span><span class="lit">3</span><span class="pun">);
 
 </span><span class="kwd">auto </span><span class="pln">buf </span><span class="pun">= </span><span class="pln">appender</span><span class="pun">!(</span><span class="typ">int</span><span class="pun">[]);
 </span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">pub<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">observerObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">(</span><span class="pln">buf</span><span class="pun">));

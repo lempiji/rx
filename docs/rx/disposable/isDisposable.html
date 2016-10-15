@@ -96,9 +96,24 @@ $('#symbolSearchPane').show();
 						</div>
 					</section>
 <section><h3>Example</h3>
-<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">A </span><span class="pun">{ </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">(){} }
-</span><span class="kwd">class </span><span class="pln">B </span><span class="pun">{ </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">(){} }
-</span><span class="kwd">interface </span><span class="pln">C </span><span class="pun">{ </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">(); }
+<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">A
+</span><span class="pun">{
+    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">()
+    {
+    }
+}
+
+</span><span class="kwd">class </span><span class="pln">B
+</span><span class="pun">{
+    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">()
+    {
+    }
+}
+
+</span><span class="kwd">interface </span><span class="pln">C
+</span><span class="pun">{
+    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">();
+}
 
 </span><span class="kwd">static assert</span><span class="pun">(</span><span class="pln">isDisposable</span><span class="pun">!</span><span class="pln">A</span><span class="pun">);
 </span><span class="kwd">static assert</span><span class="pun">(</span><span class="pln">isDisposable</span><span class="pun">!</span><span class="pln">B</span><span class="pun">);

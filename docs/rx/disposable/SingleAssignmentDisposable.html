@@ -142,8 +142,12 @@ $('#symbolSearchPane').show();
 <pre class="code"><code class="lang-d"><span class="typ">int </span><span class="pln">count </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
 </span><span class="kwd">class </span><span class="typ">TestDisposable </span><span class="pun">: <a href="../../rx/disposable/Disposable.html"></span><span class="typ">Disposable</span></a><span class="pln">
 </span><span class="pun">{
-    </span><span class="typ">void <a href="../../rx/disposable/SingleAssignmentDisposable.dispose.html"></span><span class="pln">dispose</span></a><span class="pun">() { </span><span class="pln">count</span><span class="pun">++; }
+    </span><span class="typ">void <a href="../../rx/disposable/SingleAssignmentDisposable.dispose.html"></span><span class="pln">dispose</span></a><span class="pun">()
+    {
+        </span><span class="pln">count</span><span class="pun">++;
+    }
 }
+
 </span><span class="kwd">auto </span><span class="pln">temp </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SingleAssignmentDisposable</span><span class="pun">;
 </span><span class="pln">temp<wbr/></span><span class="pun">.</span><span class="pln">setDisposable</span><span class="pun">(</span><span class="kwd">new </span><span class="typ">TestDisposable</span><span class="pun">);
 </span><span class="kwd">assert</span><span class="pun">(!</span><span class="pln">temp<wbr/></span><span class="pun">.</span><span class="pln">isDisposed</span><span class="pun">);

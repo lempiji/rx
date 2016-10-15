@@ -100,12 +100,13 @@ $('#symbolSearchPane').show();
 </span><span class="pun">{
     </span><span class="typ">void </span><span class="pln">completed</span><span class="pun">();
 }
+
 </span><span class="kwd">struct </span><span class="pln">B
 </span><span class="pun">{
     </span><span class="typ">void </span><span class="pln">_completed</span><span class="pun">();
 }
 
-</span><span class="kwd">static assert</span><span class="pun">( </span><span class="pln">hasCompleted</span><span class="pun">!</span><span class="pln">A</span><span class="pun">);
+</span><span class="kwd">static assert</span><span class="pun">(</span><span class="pln">hasCompleted</span><span class="pun">!</span><span class="pln">A</span><span class="pun">);
 </span><span class="kwd">static assert</span><span class="pun">(!</span><span class="pln">hasCompleted</span><span class="pun">!</span><span class="pln">B</span><span class="pun">);
 </span></code></pre>
 </section>

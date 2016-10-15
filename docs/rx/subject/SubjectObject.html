@@ -158,6 +158,7 @@ $('#symbolSearchPane').show();
 					</section>
 <section><h3>Example</h3>
 <pre class="code"><code class="lang-d"><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">array </span><span class="pun">: </span><span class="pln">appender</span><span class="pun">;
+
 </span><span class="kwd">auto </span><span class="pln">data </span><span class="pun">= </span><span class="pln">appender</span><span class="pun">!(</span><span class="typ">int</span><span class="pun">[])();
 </span><span class="kwd">auto </span><span class="pln">subject </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SubjectObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
 </span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">observerObject</span><span class="pun">!(</span><span class="typ">int</span><span class="pun">)(</span><span class="pln">data</span><span class="pun">));
@@ -166,6 +167,7 @@ $('#symbolSearchPane').show();
 </span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">1</span><span class="pun">);
 
 </span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">algorithm </span><span class="pun">: </span><span class="pln">equal</span><span class="pun">;
+
 </span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">equal</span><span class="pun">(</span><span class="pln">data<wbr/></span><span class="pun">.</span><span class="pln">data</span><span class="pun">, [</span><span class="lit">0</span><span class="pun">, </span><span class="lit">1</span><span class="pun">]));
 
 </span><span class="pln">disposable<wbr/></span><span class="pun">.</span><span class="pln">dispose</span><span class="pun">();

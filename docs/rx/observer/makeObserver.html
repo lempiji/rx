@@ -121,7 +121,9 @@ $('#symbolSearchPane').show();
 </span><span class="typ">int </span><span class="pln">countCompleted </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
 </span><span class="typ">int </span><span class="pln">countFailure </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
 
-</span><span class="kwd">auto </span><span class="pln">observer </span><span class="pun">= </span><span class="pln">makeObserver</span><span class="pun">((</span><span class="typ">int</span><span class="pun">){ </span><span class="pln">countPut</span><span class="pun">++; }, (){ </span><span class="pln">countCompleted</span><span class="pun">++; }, (</span><span class="typ">Exception</span><span class="pun">){ </span><span class="pln">countFailure</span><span class="pun">++; });
+</span><span class="kwd">auto </span><span class="pln">observer </span><span class="pun">= </span><span class="pln">makeObserver</span><span class="pun">((</span><span class="typ">int</span><span class="pun">) { </span><span class="pln">countPut</span><span class="pun">++; }, () { </span><span class="pln">countCompleted</span><span class="pun">++; }, (</span><span class="typ">Exception</span><span class="pun">) {
+    </span><span class="pln">countFailure</span><span class="pun">++;
+});
 
 <wbr/>.</span><span class="pln">put</span><span class="pun">(</span><span class="pln">observer</span><span class="pun">, </span><span class="lit">0</span><span class="pun">);
 </span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">countPut </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);

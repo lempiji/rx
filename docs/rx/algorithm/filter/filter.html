@@ -114,7 +114,8 @@ $('#symbolSearchPane').show();
 </span><span class="kwd">auto </span><span class="pln">filtered </span><span class="pun">= </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">filter</span><span class="pun">!(</span><span class="pln">n </span><span class="pun">=&gt; </span><span class="pln">n </span><span class="pun">% </span><span class="lit">2 </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
 </span><span class="kwd">auto </span><span class="pln">buffer </span><span class="pun">= </span><span class="pln">appender</span><span class="pun">!(</span><span class="typ">int</span><span class="pun">[])();
 </span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">filtered<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">buffer</span><span class="pun">);
-</span><span class="kwd">scope</span><span class="pun">(</span><span class="pln">exit</span><span class="pun">) </span><span class="pln">disposable<wbr/></span><span class="pun">.</span><span class="pln">dispose</span><span class="pun">();
+</span><span class="kwd">scope </span><span class="pun">(</span><span class="pln">exit</span><span class="pun">)
+    </span><span class="pln">disposable<wbr/></span><span class="pun">.</span><span class="pln">dispose</span><span class="pun">();
 
 </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);
 </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">1</span><span class="pun">);
@@ -122,6 +123,7 @@ $('#symbolSearchPane').show();
 </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">3</span><span class="pun">);
 
 </span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">algorithm </span><span class="pun">: </span><span class="pln">equal</span><span class="pun">;
+
 </span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">equal</span><span class="pun">(</span><span class="pln">buffer<wbr/></span><span class="pun">.</span><span class="pln">data</span><span class="pun">, [</span><span class="lit">0</span><span class="pun">, </span><span class="lit">2</span><span class="pun">][]));
 </span></code></pre>
 </section>
