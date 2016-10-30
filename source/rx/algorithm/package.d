@@ -20,6 +20,7 @@ unittest
     import std.algorithm : equal;
     import std.array : appender;
     import std.conv : to;
+    import std.range : iota, put;
 
     auto subject = new SubjectObject!int;
     auto pub = subject.filter!(n => n % 2 == 0).map!(o => to!string(o));
@@ -29,10 +30,7 @@ unittest
     scope (exit)
         disposable.dispose();
 
-    foreach (i; 0 .. 10)
-    {
-        subject.put(i);
-    }
+    put(subject, iota(10));
 
     auto result = buf.data;
     assert(equal(result, ["0", "2", "4", "6", "8"]));

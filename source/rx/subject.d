@@ -30,7 +30,7 @@ public:
     void put(E obj)
     {
         auto temp = atomicLoad(_observer);
-        temp.put(obj);
+        .put(temp, obj);
     }
     ///
     void completed()

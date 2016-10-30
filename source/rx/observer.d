@@ -429,7 +429,7 @@ public:
     void put(E obj)
     {
         foreach (observer; _observers)
-            observer.put(obj);
+            .put(observer, obj);
     }
     ///
     void completed()
@@ -504,6 +504,23 @@ unittest
     auto c4 = c3.remove(o1);
     c4.put(0);
     assert(count == 4);
+}
+unittest
+{
+    int count = 0;
+    struct TestObserver
+    {
+        void put(int n)
+        {
+            count++;
+        }
+    }
+    auto c1 = new CompositeObserver!(int[]);
+    auto c2 = c1.add(observerObject!(int[])(TestObserver()));
+
+    assert(count == 0);
+    c2.put([1, 2]);
+    assert(count == 2);
 }
 
 ///The helper for the own observer.

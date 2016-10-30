@@ -83,7 +83,7 @@ auto drop(TObservable)(auto ref TObservable observable, size_t n)
                 {
                     if (_counter.tryUpdateCount())
                     {
-                        _observer.put(obj);
+                        .put(_observer, obj);
                     }
                 }
 
@@ -141,6 +141,23 @@ unittest
     assert(buf.data.length == 3);
 }
 
+unittest
+{
+    import rx.subject : SubjectObject;
+
+    auto sub = new SubjectObject!(int[]);
+    int count = 0;
+    auto d = sub.drop(1).subscribe((int) { count++; });
+    scope (exit)
+        d.dispose();
+
+    assert(count == 0);
+    sub.put([1, 2]);
+    assert(count == 0);
+    sub.put([2, 3]);
+    assert(count == 2);
+}
+
 //####################
 // Take
 //####################
@@ -187,7 +204,7 @@ auto take(TObservable)(auto ref TObservable observable, size_t n)
                     }
                     while (!cas(&_count, oldValue, newValue));
 
-                    _observer.put(obj);
+                    .put(_observer, obj);
                     if (newValue == 0)
                     {
                         static if (hasCompleted!TObserver)
@@ -355,7 +372,7 @@ auto takeLast(TObservable)(auto ref TObservable observable)
                 void completed()
                 {
                     if (_hasValue)
-                        _observer.put(_current);
+                        .put(_observer, _current);
 
                     static if (hasCompleted!TObserver)
                     {
@@ -427,4 +444,23 @@ unittest
     sub.put(100);
     assert(putCount == 1);
     assert(completedCount == 1);
+}
+
+unittest
+{
+    import rx.subject : SubjectObject;
+
+    auto sub = new SubjectObject!(int[]);
+
+    int count = 0;
+    auto d = sub.takeLast.subscribe((int) { count++; });
+    scope(exit) d.dispose();
+
+    assert(count == 0);
+    sub.put([0]);
+    assert(count == 0);
+    sub.put([1, 2]);
+    assert(count == 0);
+    sub.completed();
+    assert(count == 2);
 }

@@ -37,7 +37,7 @@ private:
     void putImpl(E obj)
     {
         unaryFun!f(obj);
-        _observer.put(obj);
+        .put(_observer, obj);
     }
 }
 

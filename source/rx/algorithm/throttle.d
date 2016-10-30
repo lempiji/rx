@@ -43,7 +43,7 @@ public:
                 _disposable.disposable = _scheduler.schedule({
                     try
                     {
-                        _observer.put(obj);
+                        .put(_observer, obj);
                     }
                     catch (Exception e)
                     {
@@ -60,7 +60,7 @@ public:
         }
         else
         {
-            _disposable.disposable = _scheduler.schedule({ _observer.put(obj); }, _dueTime);
+            _disposable.disposable = _scheduler.schedule({ .put(_observer, obj); }, _dueTime);
         }
     }
 

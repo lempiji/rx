@@ -36,7 +36,7 @@ private:
     void putImpl(E obj)
     {
         alias fun = unaryFun!f;
-        _observer.put(fun(obj));
+        .put(_observer, fun(obj));
     }
 }
 

@@ -40,7 +40,7 @@ public:
     {
         alias fun = binaryFun!f;
         _current = fun(_current, obj);
-        _observer.put(_current);
+        .put(_observer, _current);
     }
 
 private:
@@ -56,7 +56,7 @@ unittest
     auto observer = TObserver(buf, 0);
     foreach (i; 1 .. 6)
     {
-        observer.put(i);
+        .put(observer, i);
     }
     auto result = buf.data;
     assert(result.length == 5);

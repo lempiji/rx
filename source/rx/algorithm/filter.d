@@ -56,7 +56,7 @@ template filter(alias pred)
                     {
                         alias fun = unaryFun!pred;
                         if (fun(obj))
-                            _observer.put(obj);
+                            .put(_observer, obj);
                     }
                 }
 
@@ -125,4 +125,25 @@ unittest
     import std.algorithm : equal;
 
     assert(equal(buffer.data, [0, 2][]));
+}
+
+unittest
+{
+    import rx.subject : SubjectObject;
+
+    auto sub = new SubjectObject!(int[]);
+
+    auto sum = 0;
+    auto observer = (int n) { sum += n; };
+
+    auto d = sub.filter!(a => a.length > 0).subscribe(observer);
+    scope (exit)
+        d.dispose();
+
+    assert(sum == 0);
+
+    sub.put([]);
+    sub.put([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+    assert(sum == 55);
 }

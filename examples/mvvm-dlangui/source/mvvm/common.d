@@ -183,7 +183,7 @@ auto asObservable(T)(ref T signal) if (is(T == Signal!U, U) && is(U == interface
         {
             _subscribe = (Observer!ElementType o) {
                 auto dg = (ElementType w) {
-                    o.put(w);
+                    .put(o, w);
                     static if (is(return_t == bool))
                     {
                         return true;

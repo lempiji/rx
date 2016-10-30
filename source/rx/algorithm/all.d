@@ -54,7 +54,7 @@ public:
                 if (!_ticket.stamp())
                     return;
 
-                _observer.put(false);
+                .put(_observer, false);
                 static if (hasCompleted!TObserver)
                 {
                     _observer.completed();
@@ -70,7 +70,7 @@ public:
                 if (!_ticket.stamp())
                     return;
 
-                _observer.put(false);
+                .put(_observer, false);
                 static if (hasCompleted!TObserver)
                 {
                     _observer.completed();
@@ -99,7 +99,7 @@ public:
         if (!_ticket.stamp())
             return;
 
-        _observer.put(_hasValue.isStamped);
+        .put(_observer, _hasValue.isStamped);
         static if (hasCompleted!TObserver)
         {
             _observer.completed();
@@ -183,7 +183,7 @@ unittest
         auto counterDisposable = new CounterDisposable;
         auto observer = TObserver(counterObserver, counterDisposable);
 
-        observer.put(0);
+        .put(observer, 0);
         observer.completed();
         assert(counterObserver.putCount == 1);
         assert(counterObserver.lastValue == true);
@@ -262,7 +262,7 @@ unittest
         auto counterDisposable = new CounterDisposable;
         auto observer = TObserver(counterObserver, counterDisposable);
 
-        observer.put(0);
+        .put(observer, 0);
         observer.completed();
         assert(counterObserver.putCount == 1);
         assert(counterObserver.lastValue == true);
@@ -275,7 +275,7 @@ unittest
         auto counterDisposable = new CounterDisposable;
         auto observer = TObserver(counterObserver, counterDisposable);
 
-        observer.put(1);
+        .put(observer, 1);
         observer.completed();
         assert(counterObserver.putCount == 1);
         assert(counterObserver.lastValue == false);
@@ -334,7 +334,7 @@ unittest
         auto counterDisposable = new CounterDisposable;
         auto observer = TObserver(counterObserver, counterDisposable);
 
-        observer.put(0);
+        .put(observer, 0);
         observer.completed();
         assert(counterObserver.putCount == 0);
         assert(counterObserver.failureCount == 1);
@@ -353,7 +353,7 @@ unittest
     auto buf = appender!(bool[]);
     auto observer = TObserver(buf, NopDisposable.instance);
 
-    observer.put(0);
+    .put(observer, 0);
     observer.completed();
 
     assert(buf.data.length == 1);
