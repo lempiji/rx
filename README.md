@@ -16,6 +16,7 @@ import rx;
 import std.algorithm : equal;
 import std.array : appender;
 import std.conv : to;
+import std.range : iota, put;
 
 void main()
 {
@@ -25,12 +26,9 @@ void main()
         .map!(o => to!string(o));
 
     auto buf = appender!(string[]);
-    auto disposable = pub.subscribe(buf);
+    auto disposable = pub.doSubscribe(buf);
 
-    foreach (i; 0 .. 10)
-    {
-        subject.put(i);
-    }
+    put(subject, iota(10));
 
     auto result = buf.data;
     assert(equal(result, ["0", "2", "4", "6", "8"]));
