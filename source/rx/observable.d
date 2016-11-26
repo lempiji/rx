@@ -420,3 +420,54 @@ unittest
     auto d = sub.doSubscribe(A());
     assert(countPut == 1);
 }
+
+unittest
+{
+    Disposable subscribeImpl(Observer!int observer)
+    {
+        .put(observer, 1);
+        return null;
+    }
+
+    import std.array : appender;
+    auto buf = appender!(int[]);
+
+    auto put1 = defer!int(&subscribeImpl);
+    auto d = put1.doSubscribe(buf);
+
+    assert(buf.data.length == 1);
+    assert(buf.data[0] == 1);
+    assert(d is null);
+}
+
+auto defer(E, TSubscribe)(auto ref TSubscribe subscribeImpl)
+{
+    struct DeferObservable
+    {
+        alias ElementType = E;
+
+        auto subscribe(TObserver)(auto ref TObserver observer)
+        {
+            return subscribeImpl(observer);
+        }
+    }
+
+    return DeferObservable();
+}
+
+unittest
+{
+    import std.array : appender;
+    auto buf = appender!(int[]);
+
+    auto put12 = defer!int((Observer!int observer) {
+        .put(observer, 1);
+        .put(observer, 2);
+        return NopDisposable.instance;
+    });
+    auto d = put12.doSubscribe(buf);
+
+    assert(buf.data.length == 2);
+    assert(buf.data[0] == 1);
+    assert(buf.data[1] == 2);
+}
