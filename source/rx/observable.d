@@ -430,6 +430,7 @@ unittest
     }
 
     import std.array : appender;
+
     auto buf = appender!(int[]);
 
     auto put1 = defer!int(&subscribeImpl);
@@ -458,6 +459,7 @@ auto defer(E, TSubscribe)(auto ref TSubscribe subscribeImpl)
 unittest
 {
     import std.array : appender;
+
     auto buf = appender!(int[]);
 
     auto put12 = defer!int((Observer!int observer) {
@@ -470,4 +472,84 @@ unittest
     assert(buf.data.length == 2);
     assert(buf.data[0] == 1);
     assert(buf.data[1] == 2);
+}
+
+auto empty(E)()
+{
+    static struct EmptyObservable
+    {
+        alias ElementType = E;
+
+        Disposable subscribe(TObserver)(auto ref TObserver observer)
+        {
+            static if (hasCompleted!TObserver)
+            {
+                observer.completed();
+            }
+            return NopDisposable.instance;
+        }
+    }
+
+    return EmptyObservable();
+}
+
+unittest
+{
+    auto completed = false;
+    auto o = empty!int();
+
+    assert(!completed);
+    auto d = o.doSubscribe((int n) {  }, () { completed = true; });
+    assert(completed);
+}
+
+auto never(E)()
+{
+    static struct NeverObservable
+    {
+        alias ElementType = E;
+
+        Disposable subscribe(TObserver)(auto ref TObserver observer)
+        {
+            return NopDisposable.instance;
+        }
+    }
+
+    return NeverObservable();
+}
+
+unittest
+{
+    auto o = never!int();
+    auto d = o.doSubscribe((int) {  });
+    d.dispose();
+}
+
+auto error(E)(auto ref Exception e)
+{
+    struct ErrorObservable
+    {
+        alias ElementType = E;
+
+        Disposable subscribe(TObserver)(auto ref TObserver observer)
+        {
+            static if (hasFailure!TObserver)
+            {
+                observer.failure(e);
+            }
+            return NopDisposable.instance;
+        }
+    }
+
+    return ErrorObservable();
+}
+
+unittest
+{
+    auto expected = new Exception("TEST");
+    auto o = error!int(expected);
+
+    Exception actual = null;
+    o.doSubscribe((int n) {  }, (Exception e) { actual = e; });
+    assert(actual is expected);
 }
