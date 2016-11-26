@@ -447,13 +447,20 @@ auto defer(E, TSubscribe)(auto ref TSubscribe subscribeImpl)
     {
         alias ElementType = E;
 
+        TSubscribe _subscribeImpl;
+
+        this(ref TSubscribe subscribeImpl)
+        {
+            _subscribeImpl = subscribeImpl;
+        }
+
         auto subscribe(TObserver)(auto ref TObserver observer)
         {
-            return subscribeImpl(observer);
+            return _subscribeImpl(observer);
         }
     }
 
-    return DeferObservable();
+    return DeferObservable(subscribeImpl);
 }
 
 unittest
@@ -527,21 +534,28 @@ unittest
 
 auto error(E)(auto ref Exception e)
 {
-    struct ErrorObservable
+    static struct ErrorObservable
     {
         alias ElementType = E;
+
+        Exception _e;
+
+        this(ref Exception e)
+        {
+            _e = e;
+        }
 
         Disposable subscribe(TObserver)(auto ref TObserver observer)
         {
             static if (hasFailure!TObserver)
             {
-                observer.failure(e);
+                observer.failure(_e);
             }
             return NopDisposable.instance;
         }
     }
 
-    return ErrorObservable();
+    return ErrorObservable(e);
 }
 
 unittest
