@@ -6,8 +6,9 @@
 
 ### Overview
 
-The is a library like the [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET), for the asynchronous or event-based programs on OutputRange concept.
+This is a library like the [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET), for the asynchronous or event-based programs on OutputRange concept.
 
+The operators' name is based on std.algorithm and [ReactiveX](http://reactivex.io/).
 
 #### Example
 
@@ -52,14 +53,11 @@ or dub.sdl
 dependency "rx" version="~>0.1.0"
 ```
 
-### License
-
-This library is under the MIT License.  
-Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET).
-
 ### Concepts
 
 #### Basic interfaces
+All operators are written using template and struct for optimization.
+this example is a binary interface like std.range.interfaces.
 
 ```d
 //module rx.disposable
@@ -83,6 +81,11 @@ interface Observable(E)
     Disposable subscribe(Observer!E observer);
 }
 ```
+
+### License
+
+This library is under the MIT License.  
+Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET).
 
 ### Future work
 
