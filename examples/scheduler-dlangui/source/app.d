@@ -22,7 +22,7 @@ extern (C) int UIAppMain(string[] args)
     auto label = window.mainWidget.childById!TextWidget("label");
     auto edit = window.mainWidget.childById!EditLine("edit");
 
-    edit.contentChange.asObservable().throttle(dur!"msecs"(500)).doSubscribe((EditableContent _) {
+    edit.contentChange.asObservable().debounce(dur!"msecs"(500)).doSubscribe((EditableContent _) {
         label.text = edit.text;
     });
 

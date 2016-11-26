@@ -1,4 +1,4 @@
-module rx.algorithm.throttle;
+module rx.algorithm.debounce;
 
 import core.time;
 import core.thread;
@@ -9,20 +9,20 @@ import rx.observable;
 import rx.scheduler;
 
 //#########################
-// Throttle
+// Debounce
 //#########################
-ThrottleObservable!(T, TScheduler, T.ElementType) throttle(T, TScheduler : AsyncScheduler)(
+DebounceObservable!(T, TScheduler, T.ElementType) debounce(T, TScheduler : AsyncScheduler)(
         T observable, Duration val, TScheduler scheduler)
 {
     return typeof(return)(observable, scheduler, val);
 }
 
-ThrottleObservable!(T, TaskPoolScheduler, T.ElementType) throttle(T)(T observable, Duration val)
+DebounceObservable!(T, TaskPoolScheduler, T.ElementType) debounce(T)(T observable, Duration val)
 {
     return typeof(return)(observable, new TaskPoolScheduler, val);
 }
 
-struct ThrottleObserver(TObserver, TScheduler, E)
+struct DebounceObserver(TObserver, TScheduler, E)
 {
 public:
     this(TObserver observer, TScheduler scheduler, Duration val, SerialDisposable disposable)
@@ -89,7 +89,7 @@ private:
     SerialDisposable _disposable;
 }
 
-struct ThrottleObservable(TObservable, TScheduler, E)
+struct DebounceObservable(TObservable, TScheduler, E)
 {
     alias ElementType = E;
 public:
@@ -103,7 +103,7 @@ public:
 public:
     auto subscribe(T)(T observer)
     {
-        alias ObserverType = ThrottleObserver!(T, TScheduler, ElementType);
+        alias ObserverType = DebounceObserver!(T, TScheduler, ElementType);
         auto inner = new SerialDisposable;
         auto outer = _observable.doSubscribe(ObserverType(observer, _scheduler, _dueTime, inner));
         return new CompositeDisposable(disposableObject(outer), inner);
@@ -124,7 +124,7 @@ unittest
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub.throttle(dur!"msecs"(50), s).doSubscribe(buf);
+    auto d = sub.debounce(dur!"msecs"(50), s).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -145,7 +145,7 @@ unittest
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub.throttle(dur!"msecs"(50)).doSubscribe(buf);
+    auto d = sub.debounce(dur!"msecs"(50)).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -166,7 +166,7 @@ unittest
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub.throttle(dur!"msecs"(50)).doSubscribe(buf);
+    auto d = sub.debounce(dur!"msecs"(50)).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -188,7 +188,7 @@ unittest
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub.throttle(dur!"msecs"(50)).doSubscribe(buf);
+    auto d = sub.debounce(dur!"msecs"(50)).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {
@@ -210,7 +210,7 @@ unittest
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub.throttle(dur!"msecs"(50)).doSubscribe(buf);
+    auto d = sub.debounce(dur!"msecs"(50)).doSubscribe(buf);
 
     foreach (i; 0 .. 10)
     {

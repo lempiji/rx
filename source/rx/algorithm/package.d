@@ -8,7 +8,7 @@ public import rx.algorithm.map;
 public import rx.algorithm.merge;
 public import rx.algorithm.scan;
 public import rx.algorithm.tee;
-public import rx.algorithm.throttle;
+public import rx.algorithm.debounce;
 
 //####################
 // Overview
