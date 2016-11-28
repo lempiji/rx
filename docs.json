@@ -1873,7 +1873,7 @@
 					{
 						"endchar": 1,
 						"name": "makeObserver",
-						"line": 510,
+						"line": 527,
 						"type": "(void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)",
 						"storageClass": [
 							"auto"
@@ -1892,13 +1892,13 @@
 								"type": "void delegate(Exception)"
 							}
 						],
-						"endline": 549,
+						"endline": 566,
 						"char": 6,
 						"kind": "function"
 					}
 				],
 				"name": "makeObserver",
-				"line": 510,
+				"line": 527,
 				"comment": "The helper for the own observer.\nExample:\n\n---\nint countPut = 0;\nint countCompleted = 0;\nint countFailure = 0;\n\nauto observer = makeObserver((int) { countPut++; }, () { countCompleted++; }, (Exception) {\n    countFailure++;\n});\n\n.put(observer, 0);\nassert(countPut == 1);\n\nobserver.completed();\nassert(countCompleted == 1);\n\nobserver.failure(null);\nassert(countFailure == 1);\n\n---\n",
 				"parameters": [
 					{
@@ -1914,7 +1914,7 @@
 					{
 						"endchar": 1,
 						"name": "makeObserver",
-						"line": 551,
+						"line": 568,
 						"type": "(void delegate(E) doPut, void delegate() doCompleted)",
 						"storageClass": [
 							"auto"
@@ -1929,13 +1929,13 @@
 								"type": "void delegate()"
 							}
 						],
-						"endline": 581,
+						"endline": 598,
 						"char": 6,
 						"kind": "function"
 					}
 				],
 				"name": "makeObserver",
-				"line": 551,
+				"line": 568,
 				"comment": "ditto\n",
 				"parameters": [
 					{
@@ -1951,7 +1951,7 @@
 					{
 						"endchar": 1,
 						"name": "makeObserver",
-						"line": 583,
+						"line": 600,
 						"type": "(void delegate(E) doPut, void delegate(Exception) doFailure)",
 						"storageClass": [
 							"auto"
@@ -1966,13 +1966,13 @@
 								"type": "void delegate(Exception)"
 							}
 						],
-						"endline": 613,
+						"endline": 630,
 						"char": 6,
 						"kind": "function"
 					}
 				],
 				"name": "makeObserver",
-				"line": 583,
+				"line": 600,
 				"comment": "ditto\n",
 				"parameters": [
 					{
@@ -2037,7 +2037,7 @@
 					{
 						"endchar": 1,
 						"name": "take",
-						"line": 148,
+						"line": 165,
 						"type": "(auto ref TObservable observable, size_t n)",
 						"storageClass": [
 							"auto"
@@ -2056,13 +2056,13 @@
 								"type": "size_t"
 							}
 						],
-						"endline": 237,
+						"endline": 254,
 						"char": 6,
 						"kind": "function"
 					}
 				],
 				"name": "take",
-				"line": 148,
+				"line": 165,
 				"comment": "Creates a sub-observable consisting of only up to the first n elements of the given source.\nExample:\n\n---\nimport std.array;\nimport rx.subject;\n\nauto pub = new SubjectObject!int;\nauto sub = appender!(int[]);\n\nauto d = pub.take(2).subscribe(sub);\nforeach (i; 0 .. 10)\n{\n    pub.put(i);\n}\n\nimport std.algorithm;\n\nassert(equal(sub.data, [0, 1]));\n\n---\n",
 				"parameters": [
 					{
@@ -2078,7 +2078,7 @@
 					{
 						"endchar": 1,
 						"name": "takeLast",
-						"line": 323,
+						"line": 340,
 						"type": "(auto ref TObservable observable)",
 						"storageClass": [
 							"auto"
@@ -2093,13 +2093,13 @@
 								]
 							}
 						],
-						"endline": 393,
+						"endline": 410,
 						"char": 6,
 						"kind": "function"
 					}
 				],
 				"name": "takeLast",
-				"line": 323,
+				"line": 340,
 				"comment": "Creates a observable that take only a last element of the given source.\nExample:\n\n---\nimport rx.subject;\n\nauto sub = new SubjectObject!int;\n\nint putCount = 0;\nint completedCount = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        putCount++;\n    }\n\n    void completed()\n    {\n        completedCount++;\n    }\n}\n\nauto d = sub.takeLast.subscribe(TestObserver());\n\nassert(putCount == 0);\nsub.put(1);\nassert(putCount == 0);\nsub.put(10);\nassert(putCount == 0);\nsub.completed();\nassert(putCount == 1);\nassert(completedCount == 1);\n\nsub.put(100);\nassert(putCount == 1);\nassert(completedCount == 1);\n\n---\n",
 				"parameters": [
 					{
