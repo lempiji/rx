@@ -89,6 +89,8 @@ Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NE
 
 ### Future work
 
+- more subjects
+  - async, behavior, publish, replay
 - more algorithms
 - more test
 - more documents
