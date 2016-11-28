@@ -11,15 +11,42 @@ import rx.scheduler;
 //#########################
 // Debounce
 //#########################
+///
 DebounceObservable!(T, TScheduler, T.ElementType) debounce(T, TScheduler : AsyncScheduler)(
         T observable, Duration val, TScheduler scheduler)
 {
     return typeof(return)(observable, scheduler, val);
 }
-
+///
 DebounceObservable!(T, TaskPoolScheduler, T.ElementType) debounce(T)(T observable, Duration val)
 {
     return typeof(return)(observable, new TaskPoolScheduler, val);
+}
+///
+unittest
+{
+    import rx.subject : SubjectObject;
+    import core.thread : Thread;
+    import core.time : dur;
+
+    auto obs = new SubjectObject!int;
+
+    import std.array : appender;
+
+    auto buf = appender!(int[]);
+    auto d = obs.debounce(dur!"msecs"(100), new TaskPoolScheduler).doSubscribe(buf);
+    scope (exit)
+        d.dispose();
+
+    .put(obs, 1);
+    Thread.sleep(dur!"msecs"(200));
+    .put(obs, 2);
+    .put(obs, 3);
+    Thread.sleep(dur!"msecs"(200));
+
+    assert(buf.data.length == 2);
+    assert(buf.data[0] == 1);
+    assert(buf.data[1] == 3);
 }
 
 struct DebounceObserver(TObserver, TScheduler, E)
