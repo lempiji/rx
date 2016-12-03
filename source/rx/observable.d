@@ -4,7 +4,7 @@
 module rx.observable;
 
 import std.functional : unaryFun;
-import std.range : put;
+import std.range : put, isInputRange, isOutputRange, ElementType;
 
 import rx.disposable;
 import rx.observer;
@@ -566,4 +566,65 @@ unittest
     Exception actual = null;
     o.doSubscribe((int n) {  }, (Exception e) { actual = e; });
     assert(actual is expected);
+}
+
+///
+auto from(R)(auto ref R input) if (isInputRange!R)
+{
+    alias E = ElementType!R;
+
+    static struct FromObservable
+    {
+        alias ElementType = E;
+
+        this(ref R input)
+        {
+            this.input = input;
+        }
+
+        Disposable subscribe(TObserver)(auto ref TObserver observer)
+                if (isOutputRange!(TObserver, ElementType))
+        {
+            .put(observer, input);
+            return NopDisposable.instance;
+        }
+
+        R input;
+    }
+
+    return FromObservable(input);
+}
+///
+alias asObservable = from;
+
+///
+unittest
+{
+    import std.range : iota;
+
+    auto obs = from(iota(10));
+    auto res = new int[10];
+    auto d = obs.subscribe(res[]);
+    scope (exit)
+        d.dispose();
+
+    assert(res.length == 10);
+    assert(res[0] == 0);
+    assert(res[9] == 9);
+}
+
+///
+unittest
+{
+    import std.range : iota;
+
+    auto obs = iota(10).asObservable();
+    auto res = new int[10];
+    auto d = obs.subscribe(res[]);
+    scope (exit)
+        d.dispose();
+
+    assert(res.length == 10);
+    assert(res[0] == 0);
+    assert(res[9] == 9);
 }
