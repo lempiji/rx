@@ -6,7 +6,7 @@
 
 ### Overview
 
-This is a library like the [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET), for the asynchronous or event-based programs on OutputRange concept.
+This is a library like [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET) for asynchronous or event based programs, based on the concept of OutputRange.
 
 The operators' name is based on std.algorithm and [ReactiveX](http://reactivex.io/).
 
