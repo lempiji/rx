@@ -1467,6 +1467,51 @@
 				],
 				"char": 6,
 				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "from",
+						"line": 572,
+						"type": "(auto ref R input)",
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"name": "input",
+								"type": "R",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 596,
+						"char": 6,
+						"kind": "function"
+					}
+				],
+				"name": "from",
+				"line": 572,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "R",
+						"kind": "type"
+					}
+				],
+				"constraint": "isInputRange!R",
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"name": "asObservable",
+				"line": 598,
+				"comment": "\nExample:\n\n---\nimport std.range : iota;\n\nauto obs = from(iota(10));\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\nExample:\n\n---\nimport std.range : iota;\n\nauto obs = iota(10).asObservable();\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n",
+				"char": 1,
+				"kind": "alias"
 			}
 		],
 		"comment": " This module defines the concept of Observable.\n",

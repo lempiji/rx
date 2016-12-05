@@ -67,11 +67,13 @@
 <url><loc>http://127.0.0.1/rx/disposable/SingleAssignmentDisposable.isDisposed.html</loc></url>
 <url><loc>http://127.0.0.1/rx/disposable/SingleAssignmentDisposable.setDisposable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable.html</loc></url>
+<url><loc>http://127.0.0.1/rx/observable/asObservable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/defer.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/doSubscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/doSubscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/doSubscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/doSubscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/observable/from.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/isObservable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/isSubscribable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/Observable.html</loc></url>
