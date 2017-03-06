@@ -110,6 +110,13 @@
 <url><loc>http://127.0.0.1/rx/range/take.html</loc></url>
 <url><loc>http://127.0.0.1/rx/range/takeLast.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/AsyncSubject.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/AsyncSubject.completed.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/AsyncSubject.failure.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/AsyncSubject.put.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/AsyncSubject.subscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/AsyncSubject.subscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/AsyncSubject.unsubscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/Subject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.completed.html</loc></url>

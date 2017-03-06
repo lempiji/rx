@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Enum member hasFailure</title>
+		<title>AsyncSubject.subscribe - multiple declarations</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script>
@@ -50,13 +50,13 @@
 								<a href="../../rx/observable.html" class=" module">observable</a>
 							</li>
 							<li>
-								<a href="../../rx/observer.html" class="selected module">observer</a>
+								<a href="../../rx/observer.html" class=" module">observer</a>
 							</li>
 							<li>
 								<a href="../../rx/range.html" class=" module">range</a>
 							</li>
 							<li>
-								<a href="../../rx/subject.html" class=" module">subject</a>
+								<a href="../../rx/subject.html" class="selected module">subject</a>
 							</li>
 						</ul>
 							</li>
@@ -77,47 +77,45 @@ $('#symbolSearchPane').show();
 				</div>
 		</nav>
 		<div id="main-contents">
-			<h1>Enum member hasFailure</h1>
+			<h1>AsyncSubject.subscribe - multiple declarations</h1>
+			<ul>
+				<li>Function AsyncSubject.subscribe</li>
+				<li>Function AsyncSubject.subscribe</li>
+			</ul>
 			<section>
-				<p>Tests if something has failure method.
-</p>
+				<h2>Function AsyncSubject.subscribe</h2>
+				<p></p>
 
 					<section>
-						<h3>Declaration</h3>
+						<h3>Prototype</h3>
 						<div class="prototype">
 							<code class="lang-d">
-<span class="kwd">enum</span> <span class="pln">hasFailure</span><span class="pun">(</span><span class="pln">T</span><span class="pun">)</span> <span class="pun">=</span> <span class="kwd">is</span><span class="pun">(</span><span class="kwd">typeof</span><span class="pun">(()
-{
-</span><span class="pln">T observer </span><span class="pun">= </span><span class="typ">void</span><span class="pun">;
-</span><span class="typ">Exception </span><span class="pln">e </span><span class="pun">= </span><span class="typ">void</span><span class="pun">;
-</span><span class="pln">observer<wbr/></span><span class="pun">.</span><span class="pln">failure</span><span class="pun">(</span><span class="pln">e</span><span class="pun">);
-}
-()))</span><span class="pun">;</span>
+<a href="../../rx/disposable/Disposable.html"><span class="typ">Disposable</span></a> <span class="pln">subscribe</span><span class="pun">(</span>
+								<br/>
+&nbsp;&nbsp;<a href="../../rx/observer/Observer.html"><span class="typ">Observer</span></a>!E <span class="pln">observer</span>
+								<br/>
+<span class="pun">)</span><span class="pun">;</span>
 							</code>
 						</div>
 					</section>
-<section><h3>Example</h3>
 
-<pre class="code"><code class="lang-d"><span class="kwd">struct </span><span class="pln">A
-</span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">failure</span><span class="pun">(</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">);
-}
+			</section>
+			<section>
+				<h2>Function AsyncSubject.subscribe</h2>
+				<p></p>
 
-</span><span class="kwd">struct </span><span class="pln">B
-</span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">_failure</span><span class="pun">(</span><span class="typ">Exception </span><span class="pln">e</span><span class="pun">);
-}
-
-</span><span class="kwd">struct </span><span class="pln">C
-</span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">failure</span><span class="pun">();
-}
-
-</span><span class="kwd">static assert</span><span class="pun">(</span><span class="pln">hasFailure</span><span class="pun">!</span><span class="pln">A</span><span class="pun">);
-</span><span class="kwd">static assert</span><span class="pun">(!</span><span class="pln">hasFailure</span><span class="pun">!</span><span class="pln">B</span><span class="pun">);
-</span><span class="kwd">static assert</span><span class="pun">(!</span><span class="pln">hasFailure</span><span class="pun">!</span><span class="pln">C</span><span class="pun">);
-</span></code></pre>
-</section>
+					<section>
+						<h3>Prototype</h3>
+						<div class="prototype">
+							<code class="lang-d">
+<span class="kwd">auto</span> <span class="pln">subscribe</span><span class="pun">(</span><span class="pln">T</span><span class="pun">)</span><span class="pun">(</span>
+								<br/>
+&nbsp;&nbsp;<span class="pln">T</span> <span class="pln">observer</span>
+								<br/>
+<span class="pun">)</span><span class="pun">;</span>
+							</code>
+						</div>
+					</section>
 
 			</section>
 			<section>

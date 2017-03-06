@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Class DisposableObject</title>
+		<title>Function disposableObject</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script>
@@ -77,63 +77,41 @@ $('#symbolSearchPane').show();
 				</div>
 		</nav>
 		<div id="main-contents">
-			<h1>Class DisposableObject</h1>
+			<h1>Function disposableObject</h1>
 			<section>
-				<p>Class that implements the Disposable interface and wraps the dispose methods in virtual functions.
+				<p>Wraps dispose method in virtual functions.
 </p>
 
 					<section>
-						<h3>Template arguments</h3>
+						<h3>Prototype</h3>
 						<div class="prototype">
-							<code class="lang-d"><span class="kwd">class</span> <span class="typ">DisposableObject</span><span class="pun">(</span><span class="pln">T</span><span class="pun">)</span>;
+							<code class="lang-d">
+<span class="kwd">auto</span> <span class="pln">disposableObject</span><span class="pun">(</span><span class="pln">T</span><span class="pun">)</span><span class="pun">(</span>
+								<br/>
+&nbsp;&nbsp;<span class="pln">T</span> <span class="pln">disposable</span>
+								<br/>
+<span class="pun">)</span><span class="pun">;</span>
 							</code>
 						</div>
 					</section>
-					<section>
-						<h3>Inherits from</h3>
-						<ul>
-							<li>
-								<code class="prettyprint lang-d"><span class="typ">Object</span></code>
- (base class)
-							</li>
-						</ul>
-					</section>
-					<section>
-						<h3>Constructors</h3>
-						<table>
-							<col class="caption"/>
-							<tr>
-								<th>Name</th>
-								<th>Description</th>
-							</tr>
-							<tr>
-								<td>
-									<a href="../../rx/disposable/DisposableObject.this.html" class="public">
-										<code>this</code>
-									</a>
-								</td>
-								<td></td>
-							</tr>
-						</table>
-					</section>
-					<section>
-						<h3>Methods</h3>
-						<table>
-							<col class="caption"/>
-							<tr>
-								<th>Name</th>
-								<th>Description</th>
-							</tr>
-							<tr>
-								<td>
-									<a href="../../rx/disposable/DisposableObject.dispose.html" class="public">
-										<code>dispose</code>
-									</a>
-								</td>
-								<td></td>
-							</tr>
-						</table>
-					</section>
+<section><h3>Example</h3>
+
+<pre class="code"><code class="lang-d"><span class="typ">int </span><span class="pln">count </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
+</span><span class="kwd">struct </span><span class="typ">TestDisposable
+</span><span class="pun">{
+    </span><span class="typ">void </span><span class="pln">dispose</span><span class="pun">()
+    {
+        </span><span class="pln">count</span><span class="pun">++;
+    }
+}
+
+</span><span class="typ">TestDisposable </span><span class="pln">test</span><span class="pun">;
+<a href="../../rx/disposable/Disposable.html"></span><span class="typ">Disposable</span></a><span class="pln"> disposable </span><span class="pun">= </span><span class="pln">disposableObject</span><span class="pun">(</span><span class="pln">test</span><span class="pun">);
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">count </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
+</span><span class="pln">disposable<wbr/></span><span class="pun">.</span><span class="pln">dispose</span><span class="pun">();
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">count </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);
+</span></code></pre>
+</section>
 
 			</section>
 			<section>
