@@ -1,0 +1,17 @@
+{
+	"name": "http-client",
+	"authors": [
+		"lempiji"
+	],
+	"description": "The example for an async http utilities",
+	"copyright": "Copyright © 2017, lempiji",
+	"license": "MIT",
+	"dependencies": {
+		"rx": {
+			"path": "../../"
+		}
+	},
+	"libs": [
+		"curl"
+	]
+}
