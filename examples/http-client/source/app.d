@@ -6,8 +6,10 @@ import rx;
 void main()
 {
 	auto signal = new EventSignal;
-	getAsync("http://dlang.org").map!(content => content.splitter('\n')
-			.take(10)).doSubscribe((char[] line) => writeln(line), () => signal.setSignal());
+	auto client = getAsync("http://dlang.org");
+
+	client.map!(content => content.length)
+		.doSubscribe((size_t len) => writeln("Content-Length: ", len), &signal.setSignal);
 
 	signal.wait();
 }
@@ -27,8 +29,28 @@ Observable!(char[]) getAsync(const(char)[] url)
 				sub.completed();
 			}
 			catch (Exception e)
+			{
 				sub.failure(e);
+			}
 		}));
-
 	return sub;
+}
+
+auto getDefer(const(char)[] url)
+{
+	return defer!(char[])((Observer!(char[]) observer) {
+		import std.net.curl : get;
+
+		try
+		{
+			.put(observer, get(url));
+			observer.completed();
+		}
+		catch (Exception e)
+		{
+			observer.failure(e);
+		}
+
+		return NopDisposable.instance;
+	}).subscribeOn(new TaskPoolScheduler);
 }
