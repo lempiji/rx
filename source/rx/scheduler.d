@@ -372,6 +372,104 @@ unittest
     subject.completed();
 }
 
+///
+struct SubscribeOnObservable(TObservable, TScheduler : Scheduler)
+{
+    alias ElementType = TObservable.ElementType;
+
+public:
+    this(ref TObservable observable, ref TScheduler scheduler)
+    {
+        _observable = observable;
+        _scheduler = scheduler;
+    }
+
+public:
+    auto subscribe(TObserver)(auto ref TObserver observer)
+    {
+        auto disposable = new SingleAssignmentDisposable;
+        _scheduler.start({
+            auto temp = doSubscribe(_observable, observer);
+            disposable.setDisposable(disposableObject(temp));
+        });
+        return disposable;
+    }
+
+private:
+    TObservable _observable;
+    TScheduler _scheduler;
+}
+
+unittest
+{
+    alias TestObservable = ObserveOnObservable!(Observable!int, Scheduler);
+    static assert(isObservable!(TestObservable, int));
+
+    import rx.subject : SubjectObject;
+
+    auto sub = new SubjectObject!int;
+    auto scheduler = new LocalScheduler;
+
+    auto scheduled = TestObservable(sub, scheduler);
+
+    auto d = scheduled.subscribe((int n) {  });
+    scope (exit)
+        d.dispose();
+
+    auto d2 = doSubscribe(sub, (int n) {  });
+    scope (exit)
+        d2.dispose();
+}
+
+///
+ObserveOnObservable!(TObservable, TScheduler) subscribeOn(TObservable, TScheduler : Scheduler)(
+        auto ref TObservable observable, auto ref TScheduler scheduler)
+{
+    return typeof(return)(observable, scheduler);
+}
+///
+unittest
+{
+    import rx.observable : defer;
+
+    auto sub = defer!int((Observer!int observer) {
+        .put(observer, 100);
+        return NopDisposable.instance;
+    });
+    auto scheduler = new LocalScheduler;
+
+    auto scheduled = sub.subscribeOn(scheduler);
+
+    int value = 0;
+    auto d = scheduled.doSubscribe((int n) { value = n; });
+    scope (exit)
+        d.dispose();
+
+    assert(value == 100);
+}
+///
+unittest
+{
+    import rx.observable : defer;
+    import rx.util : EventSignal;
+
+    auto sub = defer!int((Observer!int observer) {
+        .put(observer, 100);
+        return NopDisposable.instance;
+    });
+    auto scheduler = new TaskPoolScheduler;
+    auto scheduled = sub.subscribeOn(scheduler);
+
+    int value = 0;
+    auto signal = new EventSignal;
+    auto d = scheduled.doSubscribe((int n) { value = n; signal.setSignal(); });
+    scope (exit)
+        d.dispose();
+
+    signal.wait();
+    assert(value == 100);
+}
+
 unittest
 {
     import core.atomic;
