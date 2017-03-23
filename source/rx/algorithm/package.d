@@ -2,13 +2,14 @@ module rx.algorithm;
 
 public import rx.algorithm.all;
 public import rx.algorithm.any;
+public import rx.algorithm.debounce;
 public import rx.algorithm.filter;
 public import rx.algorithm.fold;
 public import rx.algorithm.map;
 public import rx.algorithm.merge;
 public import rx.algorithm.scan;
 public import rx.algorithm.tee;
-public import rx.algorithm.debounce;
+public import rx.algorithm.uniq;
 
 //####################
 // Overview
