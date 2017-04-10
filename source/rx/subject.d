@@ -170,74 +170,40 @@ unittest
 
 unittest
 {
-    int putCount = 0;
-    int completedCount = 0;
-    int failureCount = 0;
-    struct TestObserver
-    {
-        void put(int n)
-        {
-            putCount++;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-
-        void failure(Exception)
-        {
-            failureCount++;
-        }
-    }
-
     auto subject = new SubjectObject!int;
-    auto disposable = subject.subscribe(observerObject!(int)(TestObserver()));
+    auto observer = new CounterObserver!int;
+    auto disposable = subject.subscribe(observer);
+    scope (exit)
+        disposable.dispose();
 
     subject.put(0);
     subject.put(1);
 
-    assert(putCount == 2);
+    assert(observer.putCount == 2);
     subject.completed();
     subject.put(2);
-    assert(putCount == 2);
-    assert(completedCount == 1);
+    assert(observer.putCount == 2);
+    assert(observer.completedCount == 1);
 }
 
 unittest
 {
-    int putCount = 0;
-    int completedCount = 0;
-    int failureCount = 0;
-    struct TestObserver
-    {
-        void put(int n)
-        {
-            putCount++;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-
-        void failure(Exception)
-        {
-            failureCount++;
-        }
-    }
-
     auto subject = new SubjectObject!int;
-    auto disposable = subject.subscribe(observerObject!(int)(TestObserver()));
+    auto observer = new CounterObserver!int;
+    auto disposable = subject.subscribe(observer);
+    scope (exit)
+        disposable.dispose();
 
     subject.put(0);
     subject.put(1);
 
-    assert(putCount == 2);
-    subject.failure(null);
+    assert(observer.putCount == 2);
+    auto ex = new Exception("Exception");
+    subject.failure(ex);
     subject.put(2);
-    assert(putCount == 2);
-    assert(failureCount == 1);
+    assert(observer.putCount == 2);
+    assert(observer.failureCount == 1);
+    assert(observer.lastException is ex);
 }
 
 unittest
@@ -260,39 +226,34 @@ unittest
 
 unittest
 {
-    static class CountObserver(T) : Observer!T
-    {
-    public:
-        size_t putCount;
-        size_t failureCount;
-        size_t completedCount;
-
-        void put(T)
-        {
-            putCount++;
-        }
-
-        void failure(Exception)
-        {
-            failureCount++;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-    }
-
     auto sub = new SubjectObject!int;
     sub.completed();
-    auto observer = new CountObserver!int;
+
+    auto observer = new CounterObserver!int;
     assert(observer.putCount == 0);
-    assert(observer.failureCount == 0);
     assert(observer.completedCount == 0);
+    assert(observer.failureCount == 0);
     sub.subscribe(observer);
     assert(observer.putCount == 0);
-    assert(observer.failureCount == 0);
     assert(observer.completedCount == 1);
+    assert(observer.failureCount == 0);
+}
+
+unittest
+{
+    auto sub = new SubjectObject!int;
+    auto ex = new Exception("Exception");
+    sub.failure(ex);
+
+    auto observer = new CounterObserver!int;
+    assert(observer.putCount == 0);
+    assert(observer.completedCount == 0);
+    assert(observer.failureCount == 0);
+    sub.subscribe(observer);
+    assert(observer.putCount == 0);
+    assert(observer.completedCount == 0);
+    assert(observer.failureCount == 1);
+    assert(observer.lastException is ex);
 }
 
 private class Subscription(TSubject, TObserver) : Disposable
@@ -485,268 +446,214 @@ unittest
     .put(sub, 1);
     sub.completed();
 
-    size_t putCount = 0;
-    size_t completedCount = 0;
-    int lastValue = 0;
+    auto observer = new CounterObserver!int;
 
-    struct TestObserver
-    {
-        void put(int value)
-        {
-            putCount++;
-            lastValue = value;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-    }
-
-    TestObserver observer;
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(lastValue == 0);
+    assert(observer.hasNotBeenCalled);
 
     sub.subscribe(observer);
 
-    assert(putCount == 1);
-    assert(completedCount == 1);
-    assert(lastValue == 1);
+    assert(observer.putCount == 1);
+    assert(observer.completedCount == 1);
+    assert(observer.failureCount == 0);
+    assert(observer.lastValue == 1);
 }
 
 unittest
 {
-    size_t putCount = 0;
-    size_t completedCount = 0;
-    int lastValue = 0;
-
-    struct TestObserver
-    {
-        void put(int value)
-        {
-            assert(value == 100);
-            putCount++;
-            lastValue = value;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-    }
-
     auto sub = new AsyncSubject!int;
+    auto observer = new CounterObserver!int;
 
-    auto d = sub.subscribe(TestObserver());
+    auto d = sub.subscribe(observer);
     scope (exit)
         d.dispose();
 
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(lastValue == 0);
+    assert(observer.hasNotBeenCalled);
 
     sub.put(100);
 
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(lastValue == 0);
+    assert(observer.hasNotBeenCalled);
 
     assert(sub._hasValue);
     assert(sub._value == 100);
 
     sub.completed();
 
-    assert(putCount == 1);
-    assert(completedCount == 1);
-    assert(lastValue == 100);
+    assert(observer.putCount == 1);
+    assert(observer.completedCount == 1);
+    assert(observer.failureCount == 0);
+    assert(observer.lastValue == 100);
 }
 
 unittest
 {
-    size_t putCount = 0;
-    size_t completedCount = 0;
-    int lastValue = 0;
-
-    struct TestObserver
-    {
-        void put(int value)
-        {
-            assert(value == 100);
-            putCount++;
-            lastValue = value;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-    }
-
     auto sub = new AsyncSubject!int;
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(lastValue == 0);
+    auto observer = new CounterObserver!int;
 
     sub.put(100);
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(lastValue == 0);
 
     assert(sub._hasValue);
     assert(sub._value == 100);
 
-    auto d = sub.subscribe(TestObserver());
+    auto d = sub.subscribe(observer);
     scope (exit)
         d.dispose();
 
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(lastValue == 0);
+    assert(observer.hasNotBeenCalled);
 
     sub.completed();
 
-    assert(putCount == 1);
-    assert(completedCount == 1);
-    assert(lastValue == 100);
+    assert(observer.putCount == 1);
+    assert(observer.completedCount == 1);
+    assert(observer.failureCount == 0);
+    assert(observer.lastValue == 100);
 }
 
 unittest
 {
-    size_t putCount = 0;
-    size_t completedCount = 0;
-
-    struct TestObserver
-    {
-        void put(int value)
-        {
-            putCount++;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-    }
-
     auto sub = new AsyncSubject!int;
+    auto observer = new CounterObserver!int;
 
-    auto d = sub.subscribe(TestObserver());
-    d.dispose();
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-
-    sub.put(100);
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-
-    sub.completed();
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-}
-
-unittest
-{
-    size_t putCount = 0;
-    size_t completedCount = 0;
-
-    struct TestObserver
-    {
-        void put(int value)
-        {
-            putCount++;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-    }
-
-    auto sub = new AsyncSubject!int;
-
-    auto d = sub.subscribe(TestObserver());
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-
-    sub.put(100);
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
+    auto d = sub.subscribe(observer);
 
     d.dispose();
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-
-    sub.completed();
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-}
-
-unittest
-{
-    size_t putCount = 0;
-    size_t completedCount = 0;
-
-    struct TestObserver
-    {
-        void put(int value)
-        {
-            putCount++;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-    }
-
-    auto sub = new AsyncSubject!int;
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
+    assert(observer.hasNotBeenCalled);
 
     sub.put(100);
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-
-    auto d = sub.subscribe(TestObserver());
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-
-    d.dispose();
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
+    assert(observer.hasNotBeenCalled);
 
     sub.completed();
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
+    assert(observer.hasNotBeenCalled);
 }
 
 unittest
 {
-    size_t putCount = 0;
-    size_t completedCount = 0;
-    size_t failureCount = 0;
+    auto sub = new AsyncSubject!int;
+    auto observer = new CounterObserver!int;
 
-    struct TestObserver
+    auto d = sub.subscribe(observer);
+    assert(observer.hasNotBeenCalled);
+
+    sub.put(100);
+    assert(observer.hasNotBeenCalled);
+
+    d.dispose();
+    assert(observer.hasNotBeenCalled);
+
+    sub.completed();
+    assert(observer.hasNotBeenCalled);
+}
+
+unittest
+{
+
+    auto sub = new AsyncSubject!int;
+    auto observer = new CounterObserver!int;
+
+    sub.put(100);
+    assert(observer.hasNotBeenCalled);
+
+    auto d = sub.subscribe(observer);
+    assert(observer.hasNotBeenCalled);
+
+    d.dispose();
+    assert(observer.hasNotBeenCalled);
+
+    sub.completed();
+    assert(observer.hasNotBeenCalled);
+}
+
+unittest
+{
+    auto sub = new AsyncSubject!int;
+    auto observer = new CounterObserver!int;
+
+    auto d = sub.subscribe(observer);
+    scope (exit)
+        d.dispose();
+
+    assert(observer.hasNotBeenCalled);
+
+    sub.completed();
+
+    assert(observer.putCount == 0);
+    assert(observer.completedCount == 1);
+    assert(observer.failureCount == 0);
+}
+
+unittest
+{
+    auto sub = new AsyncSubject!int;
+    auto observer = new CounterObserver!int;
+
+    auto d = sub.subscribe(observer);
+    scope (exit)
+        d.dispose();
+
+    assert(observer.hasNotBeenCalled);
+
+    auto ex = new Exception("TEST");
+    sub.failure(ex);
+
+    assert(observer.putCount == 0);
+    assert(observer.completedCount == 0);
+    assert(observer.failureCount == 1);
+    assert(observer.lastException is ex);
+}
+
+unittest
+{
+    auto sub = new AsyncSubject!int;
+    auto ex = new Exception("TEST");
+    sub.failure(ex);
+
+    auto observer = new CounterObserver!int;
+
+    auto d = sub.subscribe(observer);
+    scope (exit)
+        d.dispose();
+
+    assert(observer.putCount == 0);
+    assert(observer.completedCount == 0);
+    assert(observer.failureCount == 1);
+    assert(observer.lastException is ex);
+}
+
+unittest
+{
+    auto sub = new AsyncSubject!int;
+    auto observer = new CounterObserver!int;
+
+    sub.completed();
+    assert(observer.hasNotBeenCalled);
+
+    sub.subscribe(observer);
+    assert(observer.putCount == 0);
+    assert(observer.completedCount == 1);
+    assert(observer.failureCount == 0);
+}
+
+version (unittest)
+{
+    class CounterObserver(T) : Observer!T
     {
-        void put(int value)
+    public:
+        size_t putCount;
+        size_t completedCount;
+        size_t failureCount;
+        T lastValue;
+        Exception lastException;
+
+    public:
+        bool hasNotBeenCalled() const pure nothrow @nogc @safe @property
+        {
+            return putCount == 0 && completedCount == 0 && failureCount == 0;
+        }
+
+    public:
+        void put(T obj)
         {
             putCount++;
+            lastValue = obj;
         }
 
         void completed()
@@ -757,67 +664,7 @@ unittest
         void failure(Exception e)
         {
             failureCount++;
+            lastException = e;
         }
     }
-
-    auto sub = new AsyncSubject!int;
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(failureCount == 0);
-
-    auto d = sub.subscribe(TestObserver());
-    scope (exit)
-        d.dispose();
-
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(failureCount == 0);
-
-    sub.failure(new Exception("TEST"));
-    
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(failureCount == 1);
-}
-
-unittest
-{
-    size_t putCount = 0;
-    size_t completedCount = 0;
-    size_t failureCount = 0;
-
-    struct TestObserver
-    {
-        void put(int value)
-        {
-            putCount++;
-        }
-
-        void completed()
-        {
-            completedCount++;
-        }
-
-        void failure(Exception e)
-        {
-            failureCount++;
-        }
-    }
-
-    auto sub = new AsyncSubject!int;
-
-    sub.failure(new Exception("TEST"));
-    
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(failureCount == 0);
-
-    auto d = sub.subscribe(TestObserver());
-    scope (exit)
-        d.dispose();
-    
-    assert(putCount == 0);
-    assert(completedCount == 0);
-    assert(failureCount == 1);
 }
