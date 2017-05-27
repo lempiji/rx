@@ -78,8 +78,11 @@ unittest
 class TaskPoolScheduler : AsyncScheduler
 {
 public:
-    this(TaskPool pool = taskPool)
+    this(TaskPool pool = null)
     {
+        if (pool is null)
+            pool = taskPool;
+
         _pool = pool;
     }
 
@@ -171,9 +174,9 @@ unittest
 {
     import std.stdio : writeln;
 
-    writeln("Testing TaskPoolScheduler...");
+    writeln("Testing HistoricalScheduler...");
     scope (exit)
-        writeln("TaskPoolScheduler test is completed.");
+        writeln("HistoricalScheduler test is completed.");
 
     void test(AsyncScheduler scheduler)
     {
