@@ -115,11 +115,18 @@ private:
 unittest
 {
     import std.stdio : writeln;
+    import std.parallelism : totalCPUs, defaultPoolThreads;
 
     writeln("Testing TaskPoolScheduler...");
     scope (exit)
         writeln("TaskPoolScheduler test is completed.");
 
+    version (OSX)
+    {
+        writeln("totalCPUs: ", totalCPUs);
+        writeln("defaultPoolThreads: ", defaultPoolThreads);
+    }
+    
     import rx.util : EventSignal;
 
     auto scheduler = new TaskPoolScheduler;
