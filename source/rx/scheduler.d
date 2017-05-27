@@ -9,6 +9,23 @@ import core.thread : Thread;
 import std.range : put;
 import std.parallelism : TaskPool, taskPool, task;
 
+//Note:
+// In single core, taskPool's worker are not initialized.
+// Some asynchronous algorithm does not work as expected, so at least 1 thread is reserved.
+version (Disable_ReservePoolThreadsOnSingleCore)
+{
+}
+else
+{
+    shared static this()
+    {
+        import std.parallelism : defaultPoolThreads;
+
+        if (defaultPoolThreads == 0)
+            defaultPoolThreads = 1;
+    }
+}
+
 ///
 interface Scheduler
 {
@@ -126,7 +143,7 @@ unittest
         writeln("totalCPUs: ", totalCPUs);
         writeln("defaultPoolThreads: ", defaultPoolThreads);
     }
-    
+
     import rx.util : EventSignal;
 
     auto scheduler = new TaskPoolScheduler;
