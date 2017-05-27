@@ -57,6 +57,12 @@ class ThreadScheduler : AsyncScheduler
 
 unittest
 {
+    import std.stdio : writeln;
+
+    writeln("Testing ThreadScheduler...");
+    scope (exit)
+        writeln("ThreadScheduler test is completed.");
+
     import rx.util : EventSignal;
 
     auto scheduler = new ThreadScheduler;
@@ -105,6 +111,12 @@ private:
 
 unittest
 {
+    import std.stdio : writeln;
+
+    writeln("Testing TaskPoolScheduler...");
+    scope (exit)
+        writeln("TaskPoolScheduler test is completed.");
+
     import rx.util : EventSignal;
 
     auto scheduler = new TaskPoolScheduler;
@@ -157,6 +169,12 @@ HistoricalScheduler!TScheduler historicalScheduler(TScheduler)(auto ref TSchedul
 
 unittest
 {
+    import std.stdio : writeln;
+
+    writeln("Testing TaskPoolScheduler...");
+    scope (exit)
+        writeln("TaskPoolScheduler test is completed.");
+
     void test(AsyncScheduler scheduler)
     {
         import rx.util : EventSignal;
