@@ -54,6 +54,19 @@ class ThreadScheduler : AsyncScheduler
         return c;
     }
 }
+
+unittest
+{
+    import rx.util : EventSignal;
+
+    auto scheduler = new ThreadScheduler;
+    auto signal = new EventSignal;
+    auto done = false;
+    scheduler.schedule({ done = true; signal.setSignal(); }, 10.msecs);
+
+    signal.wait();
+    assert(done);
+}
 ///
 class TaskPoolScheduler : AsyncScheduler
 {
