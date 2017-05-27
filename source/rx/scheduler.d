@@ -62,10 +62,11 @@ unittest
     auto scheduler = new ThreadScheduler;
     auto signal = new EventSignal;
     auto done = false;
-    scheduler.schedule({ done = true; signal.setSignal(); }, 10.msecs);
+    auto c = scheduler.schedule({ done = true; signal.setSignal(); }, 10.msecs);
 
     signal.wait();
     assert(done);
+    assert(!c.isCanceled);
 }
 ///
 class TaskPoolScheduler : AsyncScheduler
@@ -101,6 +102,21 @@ public:
 private:
     TaskPool _pool;
 }
+
+unittest
+{
+    import rx.util : EventSignal;
+
+    auto scheduler = new TaskPoolScheduler;
+    auto signal = new EventSignal;
+    auto done = false;
+    auto c = scheduler.schedule({ done = true; signal.setSignal(); }, 10.msecs);
+
+    signal.wait();
+    assert(done);
+    assert(!c.isCanceled);
+}
+
 ///
 class HistoricalScheduler(T) : AsyncScheduler
 {
@@ -156,8 +172,8 @@ unittest
         assert(!c.isCanceled);
     }
 
-    test(new ThreadScheduler);
-    test(new TaskPoolScheduler);
+    //test(new ThreadScheduler);
+    //test(new TaskPoolScheduler);
     test(new HistoricalScheduler!ThreadScheduler(new ThreadScheduler));
     test(new HistoricalScheduler!TaskPoolScheduler(new TaskPoolScheduler));
 }
