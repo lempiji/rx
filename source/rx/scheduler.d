@@ -143,11 +143,17 @@ unittest
 {
     void test(AsyncScheduler scheduler)
     {
+        import rx.util : EventSignal;
+
         bool done = false;
-        auto c = scheduler.schedule(() { done = true; }, dur!"msecs"(50));
+        auto signal = new EventSignal;
+
+        auto c = scheduler.schedule(() { done = true; signal.setSignal(); }, dur!"msecs"(100));
         assert(!done);
-        Thread.sleep(dur!"msecs"(500));
+
+        signal.wait();
         assert(done);
+        assert(!c.isCanceled);
     }
 
     test(new ThreadScheduler);
@@ -163,7 +169,7 @@ unittest
         bool done = false;
         auto c = scheduler.schedule(() { done = true; }, dur!"msecs"(50));
         c.cancel();
-        Thread.sleep(dur!"msecs"(500));
+        Thread.sleep(dur!"msecs"(100));
         assert(!done);
     }
 
