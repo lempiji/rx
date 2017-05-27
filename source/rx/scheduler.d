@@ -133,7 +133,7 @@ unittest
         bool done = false;
         auto c = scheduler.schedule(() { done = true; }, dur!"msecs"(50));
         assert(!done);
-        Thread.sleep(dur!"msecs"(100));
+        Thread.sleep(dur!"msecs"(500));
         assert(done);
     }
 
@@ -150,7 +150,7 @@ unittest
         bool done = false;
         auto c = scheduler.schedule(() { done = true; }, dur!"msecs"(50));
         c.cancel();
-        Thread.sleep(dur!"msecs"(100));
+        Thread.sleep(dur!"msecs"(500));
         assert(!done);
     }
 
