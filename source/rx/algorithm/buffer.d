@@ -9,64 +9,45 @@ import rx.observer;
 
 import std.range : put;
 
-private class Buffer(E, size_t Size)
+class BufferedObserver(E, TObserver)
 {
-    this()
+    this(TObserver observer, Disposable disposable, size_t size)
     {
-        buffer = new E[Size];
-        buffer.length = 0;
-    }
+        assert(size > 0);
 
-    bool isFull() const pure nothrow @safe @nogc @property
-    {
-        return buffer.length == Size;
-    }
-
-    bool hasElements() const pure nothrow @safe @nogc @property
-    {
-        return buffer.length > 0;
-    }
-
-    void append(ref E obj)
-    {
-        buffer ~= obj;
-    }
-
-    void clear()
-    {
-        buffer.length = 0;
-    }
-
-    E[] buffer;
-}
-
-struct BufferedObserver(E, TObserver, size_t Size)
-{
-    this(TObserver observer, Disposable disposable)
-    {
         _observer = observer;
         _disposable = disposable;
 
-        _buffer = new Buffer!(E, Size);
+        _gate = new Object;
+        _bufferSize = size;
+        _buffer = new E[](size);
+        _buffer.length = 0;
     }
 
     void put(E obj)
     {
-        _buffer.append(obj);
-        if (_buffer.isFull)
+        synchronized (_gate)
         {
-            .put(_observer, _buffer.buffer);
-            _buffer.clear();
+            _buffer ~= obj;
+            if (_buffer.length == _bufferSize)
+            {
+                .put(_observer, _buffer);
+                _buffer.length = 0;
+            }
         }
     }
 
     void completed()
     {
-        if (_buffer.hasElements)
+        synchronized (_gate)
         {
-            .put(_observer, _buffer.buffer);
-            _buffer.clear();
+            if (_buffer.length > 0)
+            {
+                .put(_observer, _buffer);
+                _buffer.length = 0;
+            }
         }
+
         static if (hasCompleted!TObserver)
         {
             _observer.completed();
@@ -85,19 +66,21 @@ struct BufferedObserver(E, TObserver, size_t Size)
 
 private:
     TObserver _observer;
-    Buffer!(E, Size) _buffer;
+    Object _gate;
+    size_t _bufferSize;
+    E[] _buffer;
     Disposable _disposable;
 }
 
 unittest
 {
-    alias Bufd = BufferedObserver!(int, Observer!int, 2);
+    alias Bufd = BufferedObserver!(int, Observer!int);
 
     size_t putCount, completedCount;
     auto observer = observerObject!int(makeObserver((int n) { putCount++; }, {
             completedCount++;
         }));
-    auto bufd = Bufd(observer, NopDisposable.instance);
+    auto bufd = new Bufd(observer, NopDisposable.instance, 2);
 
     bufd.put(1);
     assert(putCount == 0);
@@ -111,32 +94,34 @@ unittest
     assert(completedCount == 1);
 }
 
-struct BufferedObservable(TObservable, size_t Size)
+struct BufferedObservable(TObservable)
 {
     alias ElementType = TObservable.ElementType[];
 
-    this(TObservable observable)
+    this(TObservable observable, size_t bufferSize)
     {
         _observable = observable;
+        _bufferSize = bufferSize;
     }
 
     auto subscribe(TObserver)(auto ref TObserver observer)
     {
-        alias ObserverType = BufferedObserver!(TObservable.ElementType, TObserver, Size);
+        alias ObserverType = BufferedObserver!(TObservable.ElementType, TObserver);
 
         auto subscription = new SingleAssignmentDisposable;
-        subscription.setDisposable(disposableObject(_observable.doSubscribe(ObserverType(observer,
-                subscription))));
+        subscription.setDisposable(disposableObject(_observable.doSubscribe(new ObserverType(observer,
+                subscription, _bufferSize))));
         return subscription;
     }
 
 private:
     TObservable _observable;
+    size_t _bufferSize;
 }
 
 unittest
 {
-    alias TObservable = BufferedObservable!(Observable!int, 2);
+    alias TObservable = BufferedObservable!(Observable!int);
     static assert(isObservable!(TObservable, int[]));
 
     import rx.subject : SubjectObject;
@@ -145,7 +130,7 @@ unittest
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto observable = TObservable(sub);
+    auto observable = TObservable(sub, 2);
     auto d = observable.subscribe(buf);
 
     sub.put(0);
@@ -160,14 +145,14 @@ unittest
     assert(buf.data[2] == 2);
 }
 
-template buffered(size_t Size)
+///
+BufferedObservable!(TObservable) buffered(TObservable)(
+        auto ref TObservable observable, size_t bufferSize)
 {
-    BufferedObservable!(TObservable, Size) buffered(TObservable)(auto ref TObservable observable)
-    {
-        return typeof(return)(observable);
-    }
+    return typeof(return)(observable, bufferSize);
 }
 
+///
 unittest
 {
     import rx.subject : SubjectObject;
@@ -176,7 +161,7 @@ unittest
     auto sub = new SubjectObject!int;
     auto buf = appender!(int[]);
 
-    auto d = sub.buffered!2.doSubscribe(buf);
+    auto d = sub.buffered(2).doSubscribe(buf);
 
     sub.put(0);
     sub.put(1);
@@ -188,4 +173,36 @@ unittest
     sub.completed();
     assert(buf.data.length == 3);
     assert(buf.data[2] == 2);
+}
+
+///
+unittest
+{
+    import rx.subject : SubjectObject;
+    import std.array : appender;
+    import std.parallelism : taskPool, task;
+
+    auto sub = new SubjectObject!int;
+    auto buf = appender!(int[]);
+    auto d = sub.buffered(100).doSubscribe(buf);
+
+    import std.range : iota;
+
+    auto t1 = task({ .put(sub, iota(100)); });
+    auto t2 = task({ .put(sub, iota(100)); });
+    auto t3 = task({ .put(sub, iota(100)); });
+    taskPool.put(t1);
+    taskPool.put(t2);
+    taskPool.put(t3);
+
+    t1.workForce;
+    t2.workForce;
+    t3.workForce;
+
+    sub.completed();
+
+    import std.stdio : writeln;
+
+    writeln(buf.data.length);
+    assert(buf.data.length == 300);
 }
