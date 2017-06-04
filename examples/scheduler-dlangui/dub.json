@@ -7,7 +7,7 @@
 		"rx": {
 			"path": "../../"
 		},
-		"dlangui": "~>0.9.27"
+		"dlangui": "~>0.9.60"
 	},
 	"description": "A minimal D application.",
 	"copyright": "Copyright © 2016, lempiji",

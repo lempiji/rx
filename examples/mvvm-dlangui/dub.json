@@ -7,7 +7,7 @@
 		"rx": {
 			"path": "../../"
 		},
-		"dlangui": "~>0.9.27"
+		"dlangui": "~>0.9.60"
 	},
 	"description": "The example for MVVM on Dlang UI",
 	"copyright": "Copyright © 2016, lempiji",
