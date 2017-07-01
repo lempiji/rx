@@ -111,7 +111,12 @@ auto doSubscribe(TObservable, TObserver)(auto ref TObservable observable, auto r
     else static if (isSubscribable!(TObservable, Observer!ElementType))
         return observable.subscribe(observerObject!ElementType(observer));
     else
-        static assert(false);
+    {
+        import std.format : format;
+
+        static assert(false, format!"%s can not subscribe '%s', it published by %s"(
+                TObserver.stringof, ElementType.stringof, TObservable.stringof));
+    }
 }
 ///
 unittest
@@ -166,6 +171,19 @@ interface Observable(E)
 unittest
 {
     static assert(isObservable!(Observable!int, int));
+}
+
+unittest
+{
+    static struct TestNoObservable
+    {
+        Disposable subscribe(Observer!int observer)
+        {
+            return null;
+        }
+    }
+
+    static assert(!isObservable!(TestNoObservable, int));
 }
 
 ///Class that implements Observable interface and wraps the subscribe method in virtual function.
