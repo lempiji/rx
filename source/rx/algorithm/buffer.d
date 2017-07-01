@@ -201,8 +201,5 @@ unittest
 
     sub.completed();
 
-    import std.stdio : writeln;
-
-    writeln(buf.data.length);
     assert(buf.data.length == 300);
 }
