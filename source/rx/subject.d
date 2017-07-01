@@ -19,7 +19,9 @@ interface Subject(E) : Observer!E, Observable!E
 class SubjectObject(E) : Subject!E
 {
     alias ElementType = E;
+
 public:
+    ///
     this()
     {
         _observer = cast(shared) NopObserver!E.instance;
@@ -667,4 +669,98 @@ version (unittest)
             lastException = e;
         }
     }
+}
+
+///
+class BehaviorSubject(E) : Subject!E
+{
+public:
+    ///
+    this()
+    {
+        this(E.init);
+    }
+
+    ///
+    this(E value)
+    {
+        _subject = new SubjectObject!E;
+        _value = value;
+    }
+
+public:
+    ///
+    inout(E) value() inout @property
+    {
+        return _value;
+    }
+
+    ///
+    void value(E value) @property
+    {
+        if (_value != value)
+        {
+            _value = value;
+            .put(_subject, value);
+        }
+    }
+
+public:
+    ///
+    auto subscribe(TObserver)(auto ref TObserver observer)
+    {
+        .put(observer, value);
+        return _subject.doSubscribe(observer);
+    }
+
+    ///
+    Disposable subscribe(Observer!E observer)
+    {
+        .put(observer, value);
+        return disposableObject(_subject.doSubscribe(observer));
+    }
+
+    ///
+    void put(E obj)
+    {
+        value = obj;
+    }
+
+    ///
+    void completed()
+    {
+        _subject.completed();
+    }
+
+    ///
+    void failure(Exception e)
+    {
+        _subject.failure(e);
+    }
+
+private:
+    SubjectObject!E _subject;
+    E _value;
+}
+
+unittest
+{
+    static assert(isObservable!(BehaviorSubject!int, int));
+    static assert(is(BehaviorSubject!int.ElementType == int));
+}
+
+unittest
+{
+    int num = 0;
+    auto subject = new BehaviorSubject!int(100);
+
+    auto d = subject.doSubscribe((int n) { num = n; });
+    assert(num == 100);
+
+    .put(subject, 1);
+    assert(num == 1);
+
+    d.dispose();
+    .put(subject, 10);
+    assert(num == 1);
 }
