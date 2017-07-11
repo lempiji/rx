@@ -328,7 +328,7 @@ private:
     }
 }
 
-struct ObserveOnObservable(TObservable, TScheduler)
+struct ObserveOnObservable(TObservable, TScheduler : Scheduler)
 {
     alias ElementType = TObservable.ElementType;
 public:
