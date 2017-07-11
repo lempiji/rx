@@ -360,6 +360,33 @@ private:
     TScheduler _scheduler;
 }
 
+unittest
+{
+    alias TestObservable = ObserveOnObservable!(Observable!int, Scheduler);
+    static assert(isObservable!(TestObservable, int));
+
+    import rx.subject : SubjectObject;
+
+    auto sub = new SubjectObject!int;
+    auto scheduler = new LocalScheduler;
+
+    auto scheduled = TestObservable(sub, scheduler);
+
+    auto flag1 = false;
+    auto d = scheduled.subscribe((int n) { flag1 = true; });
+    scope (exit)
+        d.dispose();
+    .put(sub, 1);
+    assert(flag1);
+
+    auto flag2 = false;
+    auto d2 = scheduled.doSubscribe((int n) { flag2 = true; });
+    scope (exit)
+        d2.dispose();
+    .put(sub, 2);
+    assert(flag2);
+}
+
 ObserveOnObservable!(TObservable, TScheduler) observeOn(TObservable, TScheduler : Scheduler)(
         auto ref TObservable observable, TScheduler scheduler)
 {
@@ -458,7 +485,7 @@ struct SubscribeOnObservable(TObservable, TScheduler : Scheduler)
     alias ElementType = TObservable.ElementType;
 
 public:
-    this(ref TObservable observable, ref TScheduler scheduler)
+    this(TObservable observable, TScheduler scheduler)
     {
         _observable = observable;
         _scheduler = scheduler;
@@ -482,7 +509,7 @@ private:
 
 unittest
 {
-    alias TestObservable = ObserveOnObservable!(Observable!int, Scheduler);
+    alias TestObservable = SubscribeOnObservable!(Observable!int, Scheduler);
     static assert(isObservable!(TestObservable, int));
 
     import rx.subject : SubjectObject;
@@ -492,13 +519,19 @@ unittest
 
     auto scheduled = TestObservable(sub, scheduler);
 
-    auto d = scheduled.subscribe((int n) {  });
+    auto flag1 = false;
+    auto d = scheduled.subscribe((int n) { flag1 = true; });
     scope (exit)
         d.dispose();
+    .put(sub, 1);
+    assert(flag1);
 
-    auto d2 = doSubscribe(sub, (int n) {  });
+    auto flag2 = false;
+    auto d2 = scheduled.doSubscribe((int n) { flag2 = true; });
     scope (exit)
         d2.dispose();
+    .put(sub, 2);
+    assert(flag2);
 }
 
 ///
@@ -542,7 +575,7 @@ unittest
 
     int value = 0;
     auto signal = new EventSignal;
-    auto d = scheduled.doSubscribe((int n) { value = n; signal.setSignal(); });
+    auto d = scheduled.subscribe((int n) { value = n; signal.setSignal(); });
     scope (exit)
         d.dispose();
 
