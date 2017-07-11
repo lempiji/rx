@@ -502,7 +502,7 @@ unittest
 }
 
 ///
-ObserveOnObservable!(TObservable, TScheduler) subscribeOn(TObservable, TScheduler : Scheduler)(
+SubscribeOnObservable!(TObservable, TScheduler) subscribeOn(TObservable, TScheduler : Scheduler)(
         auto ref TObservable observable, auto ref TScheduler scheduler)
 {
     return typeof(return)(observable, scheduler);
