@@ -480,7 +480,7 @@ unittest
 }
 
 ///
-struct SubscribeOnObservable(TObservable, TScheduler : Scheduler)
+class SubscribeOnObservable(TObservable, TScheduler : Scheduler)
 {
     alias ElementType = TObservable.ElementType;
 
@@ -517,7 +517,7 @@ unittest
     auto sub = new SubjectObject!int;
     auto scheduler = new LocalScheduler;
 
-    auto scheduled = TestObservable(sub, scheduler);
+    auto scheduled = new TestObservable(sub, scheduler);
 
     auto flag1 = false;
     auto d = scheduled.subscribe((int n) { flag1 = true; });
@@ -538,7 +538,7 @@ unittest
 SubscribeOnObservable!(TObservable, TScheduler) subscribeOn(TObservable, TScheduler : Scheduler)(
         auto ref TObservable observable, auto ref TScheduler scheduler)
 {
-    return typeof(return)(observable, scheduler);
+    return new typeof(return)(observable, scheduler);
 }
 ///
 unittest
@@ -581,6 +581,50 @@ unittest
 
     signal.wait();
     assert(value == 100);
+}
+
+unittest
+{
+    import std.algorithm : equal;
+    import std.array : Appender;
+    import rx.util : EventSignal;
+
+    auto buf = Appender!(int[])();
+    auto data = [1, 2, 3, 4];
+
+    auto event = new EventSignal;
+    auto observer = (int n) {
+        buf.put(n);
+        if (n == 4)
+            event.setSignal();
+    };
+    data.asObservable().subscribeOn(new ThreadScheduler).subscribe(observer);
+
+    event.wait();
+
+    assert(equal(buf.data, data));
+}
+
+unittest
+{
+    import std.algorithm : equal;
+    import std.array : Appender;
+    import rx.util : EventSignal;
+
+    auto buf = Appender!(int[])();
+    auto data = [1, 2, 3, 4];
+
+    auto event = new EventSignal;
+    auto observer = (int n) {
+        buf.put(n);
+        if (n == 4)
+            event.setSignal();
+    };
+    data.asObservable().subscribeOn(new ThreadScheduler).doSubscribe(observer);
+
+    event.wait();
+
+    assert(equal(buf.data, data));
 }
 
 unittest
