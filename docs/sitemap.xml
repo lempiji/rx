@@ -9,6 +9,8 @@
 <url><loc>http://127.0.0.1/rx/algorithm/any/any.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/any/any.any.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/any/any.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/buffer.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/buffer/buffered.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/filter.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/filter/filter.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/filter/filter.filter.html</loc></url>
@@ -73,6 +75,7 @@
 <url><loc>http://127.0.0.1/rx/observable/doSubscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/doSubscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/doSubscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/observable/doSubscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/from.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/isObservable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/observable/isSubscribable.html</loc></url>
@@ -117,6 +120,16 @@
 <url><loc>http://127.0.0.1/rx/subject/AsyncSubject.subscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/AsyncSubject.subscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/AsyncSubject.unsubscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.completed.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.failure.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.put.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.subscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.subscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.this.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.this.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.value.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.value.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/Subject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.completed.html</loc></url>
@@ -124,5 +137,6 @@
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.put.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.subscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.subscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/SubjectObject.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.unsubscribe.html</loc></url>
 </urlset>

@@ -1,243 +1,27 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8"/>
-		<title>Module rx.observer</title>
-		<link rel="stylesheet" type="text/css" href="../styles/ddox.css"/>
-		<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
-		<script type="text/javascript" src="../scripts/jquery.js">/**/</script>
-		<script type="text/javascript" src="../scripts/ddox.js">/**/</script>
-	</head>
-	<body onload="setupDdox();">
-		<nav id="main-nav">
-						<ul class="tree-view">
-							<li class="tree-view">
-								<a href="#" class="package">rx</a>
-						<ul class="tree-view">
-							<li class="collapsed tree-view">
-								<a href="#" class="package">algorithm</a>
-						<ul class="tree-view">
-							<li>
-								<a href="../rx/algorithm/all.html" class=" module">all</a>
-							</li>
-							<li>
-								<a href="../rx/algorithm/any.html" class=" module">any</a>
-							</li>
-							<li>
-								<a href="../rx/algorithm/filter.html" class=" module">filter</a>
-							</li>
-							<li>
-								<a href="../rx/algorithm/fold.html" class=" module">fold</a>
-							</li>
-							<li>
-								<a href="../rx/algorithm/map.html" class=" module">map</a>
-							</li>
-							<li>
-								<a href="../rx/algorithm/merge.html" class=" module">merge</a>
-							</li>
-							<li>
-								<a href="../rx/algorithm/scan.html" class=" module">scan</a>
-							</li>
-							<li>
-								<a href="../rx/algorithm/tee.html" class=" module">tee</a>
-							</li>
-						</ul>
-							</li>
-							<li>
-								<a href="../rx/disposable.html" class=" module">disposable</a>
-							</li>
-							<li>
-								<a href="../rx/observable.html" class=" module">observable</a>
-							</li>
-							<li>
-								<a href="../rx/observer.html" class="selected module">observer</a>
-							</li>
-							<li>
-								<a href="../rx/range.html" class=" module">range</a>
-							</li>
-							<li>
-								<a href="../rx/subject.html" class=" module">subject</a>
-							</li>
-						</ul>
-							</li>
-						</ul>
-				<noscript>
-					<p style="color: red">The search functionality needs JavaScript enabled</p>
-				</noscript>
-				<div id="symbolSearchPane" style="display: none">
-					<p>
-						<input id="symbolSearch" type="text" placeholder="Search for symbols" onchange="performSymbolSearch(24);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
-					</p>
-	<ul id="symbolSearchResults" style="display: none"></ul>
-	<script type="application/javascript" src="../symbols.js"></script>
-	<script type="application/javascript">
-var symbolSearchRootDir = "../";
-$('#symbolSearchPane').show();
-	</script>
-				</div>
-		</nav>
-		<div id="main-contents">
-			<h1>Module rx.observer</h1>
-			<p>This module defines the concept of Observer.
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8"/>
+<title>Module rx.observer</title>
+<link rel="stylesheet" type="text/css" href="../styles/ddox.css"/>
+<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
+<script type="text/javascript" src="../scripts/jquery.js">/**/</script><script type="text/javascript" src="../scripts/ddox.js">/**/</script></head><body onload="setupDdox();"><nav id="main-nav"><noscript><p style="color: red">The search functionality needs JavaScript enabled</p></noscript><div id="symbolSearchPane" style="display: none"><form action="#" method="GET">
+<input id="symbolSearch" type="text" name="q" placeholder="Search for symbols" autocomplete="off" onchange="performSymbolSearch(40);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/></form><ul id="symbolSearchResults" class="symbolList" style="display: none"></ul><script type="application/javascript" src="../symbols.js"></script><script type="application/javascript">var symbolSearchRootDir = "../";
+$('#symbolSearchPane').show();</script></div><ul class="tree-view"><li class="tree-view "><div class="package ">rx</div><ul class="tree-view"><li class="tree-view collapsed"><div class="package ">algorithm</div><ul class="tree-view"><li><div class="module "><a href="../rx/algorithm/all.html">all</a></div></li><li><div class="module "><a href="../rx/algorithm/any.html">any</a></div></li><li><div class="module "><a href="../rx/algorithm/buffer.html">buffer</a></div></li><li><div class="module "><a href="../rx/algorithm/filter.html">filter</a></div></li><li><div class="module "><a href="../rx/algorithm/fold.html">fold</a></div></li><li><div class="module "><a href="../rx/algorithm/map.html">map</a></div></li><li><div class="module "><a href="../rx/algorithm/merge.html">merge</a></div></li><li><div class="module "><a href="../rx/algorithm/scan.html">scan</a></div></li><li><div class="module "><a href="../rx/algorithm/tee.html">tee</a></div></li></ul></li><li><div class="module "><a href="../rx/disposable.html">disposable</a></div></li><li><div class="module "><a href="../rx/observable.html">observable</a></div></li><li><div class="module selected"><a href="../rx/observer.html">observer</a></div></li><li><div class="module "><a href="../rx/range.html">range</a></div></li><li><div class="module "><a href="../rx/subject.html">subject</a></div></li></ul></li></ul></nav><div id="main-contents"><h1>Module rx.observer</h1><p>This module defines the concept of Observer.
 </p>
-
-			<section></section>
-			<section>
-				<h2>Functions</h2>
-				<table>
-					<col class="caption"/>
-					<tr>
-						<th>Name</th>
-						<th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<a id="makeObserver" class="public" href="../rx/observer/makeObserver.html">
-								<code>makeObserver</code>
-							</a>
-						</td>
-						<td>The helper for the own observer.
-</td>
-					</tr>
-				</table>
-			</section>
-			<section>
-				<h2>Interfaces</h2>
-				<table>
-					<col class="caption"/>
-					<tr>
-						<th>Name</th>
-						<th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<a id="Observer" class="public" href="../rx/observer/Observer.html">
-								<code>Observer</code>
-							</a>
-						</td>
-						<td>Wraps completed and failure method in virtual function.
-</td>
-					</tr>
-				</table>
-			</section>
-			<section>
-				<h2>Classes</h2>
-				<table>
-					<col class="caption"/>
-					<tr>
-						<th>Name</th>
-						<th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<a id="CompositeObserver" class="public" href="../rx/observer/CompositeObserver.html">
-								<code>CompositeObserver</code>
-							</a>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>
-							<a id="DoneObserver" class="public" href="../rx/observer/DoneObserver.html">
-								<code>DoneObserver</code>
-							</a>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>
-							<a id="NopObserver" class="public" href="../rx/observer/NopObserver.html">
-								<code>NopObserver</code>
-							</a>
-						</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>
-							<a id="ObserverObject" class="public" href="../rx/observer/ObserverObject.html">
-								<code>ObserverObject</code>
-							</a>
-						</td>
-						<td>Class that implements Observer interface and wraps the completed and failure method in virtual functions. This class extends the OutputRangeObject.
-</td>
-					</tr>
-				</table>
-			</section>
-			<section>
-				<h2>Templates</h2>
-				<table>
-					<col class="caption"/>
-					<tr>
-						<th>Name</th>
-						<th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<a id="observerObject" class="public" href="../rx/observer/observerObject.html">
-								<code>observerObject</code>
-							</a>
-						</td>
-						<td>Wraps subscribe method in virtual function.
-</td>
-					</tr>
-				</table>
-			</section>
-			<section>
-				<h2>Enum values</h2>
-				<table>
-					<col class="caption"/>
-					<tr>
-						<th>Name</th>
-						<th>Type</th>
-						<th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<a id="hasCompleted" class="public" href="../rx/observer/hasCompleted.html">
-								<code>hasCompleted</code>
-							</a>
-						</td>
-						<td>
-						</td>
-						<td>Tests if something has completed method.
-</td>
-					</tr>
-					<tr>
-						<td>
-							<a id="hasFailure" class="public" href="../rx/observer/hasFailure.html">
-								<code>hasFailure</code>
-							</a>
-						</td>
-						<td>
-						</td>
-						<td>Tests if something has failure method.
-</td>
-					</tr>
-					<tr>
-						<td>
-							<a id="isObserver" class="public" href="../rx/observer/isObserver.html">
-								<code>isObserver</code>
-							</a>
-						</td>
-						<td>
-						</td>
-						<td>Tests if something is Observer.
-</td>
-					</tr>
-				</table>
-			</section>
-			<section>
-				<h2>Authors</h2>
-
-			</section>
-			<section>
-				<h2>Copyright</h2>
-
-			</section>
-			<section>
-				<h2>License</h2>
-
-			</section>
-		</div>
-	</body>
-</html>
+<section></section><section><h2>Functions</h2><table>
+<col class="caption"/>
+<tr><th>Name</th><th>Description</th></tr><tr><td><code><a id="makeObserver" class="["public"]" href="../rx/observer/makeObserver.html">makeObserver</a><span class="decoration">(doPut, doCompleted, doFailure)</span></code></td><td>The helper for the own observer.
+</td></tr></table></section><section><h2>Interfaces</h2><table>
+<col class="caption"/>
+<tr><th>Name</th><th>Description</th></tr><tr><td><code><a id="Observer" class="["public"]" href="../rx/observer/Observer.html">Observer</a></code></td><td>Wraps completed and failure method in virtual function.
+</td></tr></table></section><section><h2>Classes</h2><table>
+<col class="caption"/>
+<tr><th>Name</th><th>Description</th></tr><tr><td><code><a id="CompositeObserver" class="["public"]" href="../rx/observer/CompositeObserver.html">CompositeObserver</a></code></td><td></td></tr><tr><td><code><a id="DoneObserver" class="["public"]" href="../rx/observer/DoneObserver.html">DoneObserver</a></code></td><td></td></tr><tr><td><code><a id="NopObserver" class="["public"]" href="../rx/observer/NopObserver.html">NopObserver</a></code></td><td></td></tr><tr><td><code><a id="ObserverObject" class="["public"]" href="../rx/observer/ObserverObject.html">ObserverObject</a></code></td><td>Class that implements Observer interface and wraps the completed and failure method in virtual functions. This class extends the OutputRangeObject.
+</td></tr></table></section><section><h2>Templates</h2><table>
+<col class="caption"/>
+<tr><th>Name</th><th>Description</th></tr><tr><td><code><a id="observerObject" class="["public"]" href="../rx/observer/observerObject.html">observerObject</a></code></td><td>Wraps subscribe method in virtual function.
+</td></tr></table></section><section><h2>Manifest constants</h2><table>
+<col class="caption"/>
+<tr><th>Name</th><th>Type</th><th>Description</th></tr><tr><td><a id="hasCompleted" class="["public"]" href="../rx/observer/hasCompleted.html"><code>hasCompleted</code></a></td><td></td><td>Tests if something has completed method.
+</td></tr><tr><td><a id="hasFailure" class="["public"]" href="../rx/observer/hasFailure.html"><code>hasFailure</code></a></td><td></td><td>Tests if something has failure method.
+</td></tr><tr><td><a id="isObserver" class="["public"]" href="../rx/observer/isObserver.html"><code>isObserver</code></a></td><td></td><td>Tests if something is Observer.
+</td></tr></table></section><footer><table class="license-info"><tr><th>Authors</th><td></td></tr><tr><th>Copyright</th><td></td></tr><tr><th>License</th><td></td></tr></table><p class="faint">Generated using the DDOX documentation generator</p></footer></div></body></html>
