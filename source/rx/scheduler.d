@@ -492,7 +492,7 @@ public:
     }
 
 public:
-    auto subscribe(TObserver)(auto ref TObserver observer)
+    auto subscribe(TObserver)(TObserver observer)
     {
         auto disposable = new SingleAssignmentDisposable;
         _scheduler.start({
@@ -625,6 +625,36 @@ unittest
     event.wait();
 
     assert(equal(buf.data, data));
+}
+
+unittest
+{
+    import rx.util : EventSignal;
+
+    auto data = [1, 2, 3, 4];
+    auto event = new EventSignal();
+
+    data.asObservable().subscribeOn(new ThreadScheduler).subscribe((int a) {
+        if (a == 4)
+            event.setSignal();
+    });
+
+    event.wait();
+}
+
+unittest
+{
+    import rx.util : EventSignal;
+
+    auto data = [1, 2, 3, 4];
+    auto event = new EventSignal();
+
+    data.asObservable().subscribeOn(new ThreadScheduler).doSubscribe((int a) {
+        if (a == 4)
+            event.setSignal();
+    });
+
+    event.wait();
 }
 
 unittest
