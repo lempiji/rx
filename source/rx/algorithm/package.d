@@ -19,23 +19,21 @@ public import rx.algorithm.uniq;
 unittest
 {
     import rx;
-    import std.algorithm : equal;
-    import std.array : appender;
     import std.conv : to;
     import std.range : iota, put;
 
     auto subject = new SubjectObject!int;
-    auto pub = subject.filter!(n => n % 2 == 0).map!(o => to!string(o));
 
-    auto buf = appender!(string[]);
-    auto disposable = pub.doSubscribe(buf);
+    string[] result;
+    auto disposable = subject.filter!(n => n % 2 == 0).map!(o => to!string(o))
+        .doSubscribe!(text => result ~= text);
+
     scope (exit)
         disposable.dispose();
 
     put(subject, iota(10));
 
-    auto result = buf.data;
-    assert(equal(result, ["0", "2", "4", "6", "8"]));
+    assert(result == ["0", "2", "4", "6", "8"]);
 }
 
 ///

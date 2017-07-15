@@ -183,3 +183,14 @@ unittest
 
     assert(equal(buffer.data, [0, 2, 4][]));
 }
+
+unittest
+{
+    import rx.observable : asObservable;
+
+    auto data = [1, 2, 3, 4];
+    int[] result;
+    data.asObservable().map!"a + 2"().doSubscribe!(n => result ~= n);
+
+    assert(result == [3, 4, 5, 6]);
+}

@@ -482,3 +482,18 @@ unittest
     assert(buf.data.length == 1);
     assert(buf.data[0] == false);
 }
+
+unittest
+{
+    import rx.subject : SubjectObject;
+
+    auto sub = new SubjectObject!int;
+
+    bool[] result;
+    auto d = sub.all!(a => a % 2 == 0).doSubscribe!(b => result ~= b);
+
+    assert(result.length == 0);
+    sub.put(1);
+    assert(result.length == 1);
+    assert(result[0] == false);
+}

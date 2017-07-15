@@ -374,3 +374,18 @@ unittest
     sub.completed();
     assert(result == false);
 }
+
+unittest
+{
+    import rx.algorithm : filter;
+    import rx.subject : SubjectObject;
+
+    auto sub = new SubjectObject!int;
+
+    bool result = true;
+    sub.filter!"a % 2 == 0"().any().doSubscribe!(t => result = t);
+
+    assert(result == true);
+    sub.completed();
+    assert(result == false);
+}

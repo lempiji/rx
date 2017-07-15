@@ -147,3 +147,33 @@ unittest
 
     assert(sum == 55);
 }
+
+unittest
+{
+    static assert(!__traits(compiles, {
+            import rx.subject : SubjectObject;
+
+            auto sub = new SubjectObject!int;
+            auto sum = 0;
+            auto d = sub.filter!(a => a.length > 0).doSubscribe!(n => sum += n); //a.length can not compile
+        }));
+}
+
+unittest
+{
+    import rx.subject : SubjectObject;
+
+    auto sub = new SubjectObject!int;
+
+    auto sum = 0;
+    auto d = sub.filter!(a => a > 0).doSubscribe!(n => sum += n);
+    scope (exit)
+        d.dispose();
+
+    assert(sum == 0);
+
+    .put(sub, [-1, -2, -3]);
+    .put(sub, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+    assert(sum == 55);
+}

@@ -103,8 +103,19 @@ auto doSubscribe(TObservable, E)(auto ref TObservable observable,
     return doSubscribe(observable, makeObserver(doPut, doFailure));
 }
 ///ditto
+auto doSubscribe(alias f, TObservable)(auto ref TObservable observable)
+{
+    alias fun = unaryFun!f;
+    return doSubscribe(observable, (TObservable.ElementType obj) { fun(obj); });
+}
+///ditto
 auto doSubscribe(TObservable, TObserver)(auto ref TObservable observable, auto ref TObserver observer)
 {
+    import std.format : format;
+
+    static assert(isObservable!(TObservable, TObservable.ElementType),
+            format!"%s is invalid as an Observable"(TObservable.stringof));
+
     alias ElementType = TObservable.ElementType;
     static if (isSubscribable!(TObservable, TObserver))
         return observable.subscribe(observer);
@@ -112,12 +123,30 @@ auto doSubscribe(TObservable, TObserver)(auto ref TObservable observable, auto r
         return observable.subscribe(observerObject!ElementType(observer));
     else
     {
-        import std.format : format;
-
         static assert(false, format!"%s can not subscribe '%s', it published by %s"(
                 TObserver.stringof, ElementType.stringof, TObservable.stringof));
     }
 }
+///
+unittest
+{
+    struct TestObservable
+    {
+        alias ElementType = int;
+
+        auto subscribe(TObserver)(TObserver observer)
+        {
+            .put(observer, [0, 1, 2]);
+            return NopDisposable.instance;
+        }
+    }
+
+    TestObservable observable;
+    int[] result;
+    observable.doSubscribe!(n => result ~= n);
+    assert(result.length == 3);
+}
+
 ///
 unittest
 {
