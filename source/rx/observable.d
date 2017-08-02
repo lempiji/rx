@@ -106,7 +106,25 @@ auto doSubscribe(TObservable, E)(auto ref TObservable observable,
 auto doSubscribe(alias f, TObservable)(auto ref TObservable observable)
 {
     alias fun = unaryFun!f;
-    return doSubscribe(observable, (TObservable.ElementType obj) { fun(obj); });
+    return doSubscribe(observable, (TObservable.ElementType obj) {
+        static if (__traits(compiles, { fun(obj); }))
+        {
+            fun(obj);
+        }
+        else
+        {
+            struct DoSubscribeObserver
+            {
+                void put(T)(T obj)
+                {
+                    fun(obj);
+                }
+            }
+
+            DoSubscribeObserver observer;
+            .put(observer, obj);
+        }
+    });
 }
 ///ditto
 auto doSubscribe(TObservable, TObserver)(auto ref TObservable observable, auto ref TObserver observer)
@@ -187,6 +205,40 @@ unittest
     auto d7 = o2.doSubscribe((int n) {  }, (Exception e) {  });
     auto d8 = o2.doSubscribe((int n) {  });
     auto d9 = o2.doSubscribe(TestObserver());
+}
+
+unittest
+{
+    static struct TestObservable
+    {
+        alias ElementType = int[];
+
+        Disposable subscribe(TObserver)(TObserver observer)
+        {
+            .put(observer, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+            return null;
+        }
+    }
+
+    TestObservable observable;
+
+    int sum1 = 0;
+
+    void add(int n)
+    {
+        sum1 += n;
+    }
+
+    observable.doSubscribe!(add); // by value
+    assert(sum1 == 55);
+
+    int sum2 = 0;
+    observable.doSubscribe!(n => sum2 += n); // by value
+    assert(sum2 == 55);
+
+    int size = 0;
+    observable.doSubscribe!(arr => size += arr.length); // by array
+    assert(size == 10);
 }
 
 ///Wrapper for Observable objects.
