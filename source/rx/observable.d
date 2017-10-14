@@ -42,6 +42,8 @@ unittest
 template isSubscribable(TObservable, TObserver)
 {
     enum bool isSubscribable = is(typeof({
+                static assert(isOutputRange!(TObserver, TObservable.ElementType));
+
                 TObservable observable = void;
                 TObserver observer = void;
                 auto d = observable.subscribe(observer);
@@ -75,6 +77,8 @@ unittest
 
     struct TestObservable
     {
+        alias ElementType = int;
+
         TestDisposable subscribe(TestObserver observer)
         {
             return TestDisposable();

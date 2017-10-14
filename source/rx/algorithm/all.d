@@ -131,16 +131,16 @@ unittest
 
 unittest
 {
-    alias TObserver = AllObserver!(Observer!bool, int);
+    alias TObserver = AllObserver!(Observer!bool, string);
 
-    static assert(isOutputRange!(TObserver, bool));
+    static assert(isOutputRange!(TObserver, string));
     static assert(hasFailure!(TObserver));
     static assert(hasCompleted!(TObserver));
 }
 
 unittest
 {
-    alias TObserver = AllObserver!(Observer!bool, int);
+    alias TObserver = AllObserver!(Observer!bool, string);
 
     static class CounterObserver : Observer!bool
     {
@@ -183,7 +183,7 @@ unittest
         auto counterDisposable = new CounterDisposable;
         auto observer = TObserver(counterObserver, counterDisposable);
 
-        .put(observer, 0);
+        .put(observer, "TEST");
         observer.completed();
         assert(counterObserver.putCount == 1);
         assert(counterObserver.lastValue == true);
