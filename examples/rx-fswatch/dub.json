@@ -1,0 +1,14 @@
+{
+	"name": "rx-fswatch",
+	"authors": [
+		"lempiji"
+	],
+	"description": "A minimal D application.",
+	"dependencies": {
+		"fswatch": "*",
+		"rx": {
+			"path": "../../"
+		}
+	},
+	"license": "MIT"
+}

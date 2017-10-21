@@ -1,0 +1,7 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"fswatch": "0.2.1",
+		"rx": {"path":"../../"}
+	}
+}
