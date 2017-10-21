@@ -68,3 +68,57 @@ unittest
     s2.put(100);
     assert(count == 2);
 }
+
+///[WIP] Observable!(Observable!int).merge() => Observable!int
+auto merge(TObservable)(auto ref TObservable observable)
+        if (isObservable!TObservable && isObservable!(TObservable.ElementType))
+{
+    import rx.subject : SubjectObject;
+
+    static struct MergeObservable_Flat
+    {
+        alias ElementType = TObservable.ElementType.ElementType;
+
+        this(TObservable observable)
+        {
+            _observable = observable;
+        }
+
+        auto subscribe(TObserver)(TObserver observer)
+        {
+            auto subject = new SubjectObject!ElementType;
+            auto innerSubscription = subject.doSubscribe(observer);
+            auto outerSubscription = _observable.doSubscribe((TObservable.ElementType obj) {
+                obj.doSubscribe(subject);
+            }, { subject.completed(); }, (Exception e) { subject.failure(e); });
+            return new CompositeDisposable(innerSubscription, outerSubscription);
+        }
+
+        TObservable _observable;
+    }
+
+    return MergeObservable_Flat(observable);
+}
+
+///
+unittest
+{
+    import rx.algorithm.groupby : groupBy;
+    import rx.algorithm.map : map;
+    import rx.algorithm.fold : fold;
+    import rx.subject : SubjectObject, CounterObserver;
+
+    auto subject = new SubjectObject!int;
+    auto counted = subject.groupBy!(n => n % 10).map!(o => o.fold!((a, b) => a + 1)(0)).merge();
+
+    auto counter = new CounterObserver!int;
+
+    auto disposable = counted.subscribe(counter);
+
+    subject.put(0);
+    subject.put(0);
+    assert(counter.putCount == 0);
+    subject.completed();
+    assert(counter.putCount == 1);
+    assert(counter.lastValue == 2);
+}
