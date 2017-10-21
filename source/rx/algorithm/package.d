@@ -6,6 +6,7 @@ public import rx.algorithm.buffer;
 public import rx.algorithm.debounce;
 public import rx.algorithm.filter;
 public import rx.algorithm.fold;
+public import rx.algorithm.groupby;
 public import rx.algorithm.map;
 public import rx.algorithm.merge;
 public import rx.algorithm.scan;
