@@ -622,3 +622,187 @@ unittest
     d.dispose();
     assert(count == 1);
 }
+
+///
+class RefCountDisposable : Disposable
+{
+public:
+    ///
+    this(Disposable disposable, bool throwWhenDisposed = false)
+    {
+        assert(disposable !is null);
+
+        _throwWhenDisposed = throwWhenDisposed;
+        _gate = new Object();
+        _disposable = disposable;
+        _isPrimaryDisposed = false;
+        _count = 0;
+    }
+
+public:
+    ///
+    Disposable getDisposable()
+    {
+        synchronized (_gate)
+        {
+            if (_disposable is null)
+            {
+                if (_throwWhenDisposed)
+                {
+                    throw new Exception("RefCountDisposable is already disposed.");
+                }
+                return NopDisposable.instance;
+            }
+            else
+            {
+                _count++;
+                return new AnonymouseDisposable(&this.release);
+            }
+        }
+    }
+
+    ///
+    void dispose()
+    {
+        Disposable disposable = null;
+        synchronized (_gate)
+        {
+            if (_disposable is null)
+                return;
+
+            if (!_isPrimaryDisposed)
+            {
+                _isPrimaryDisposed = true;
+
+                if (_count == 0)
+                {
+                    disposable = _disposable;
+                    _disposable = null;
+                }
+            }
+        }
+        if (disposable !is null)
+        {
+            disposable.dispose();
+        }
+    }
+
+private:
+    void release()
+    {
+        Disposable disposable = null;
+        synchronized (_gate)
+        {
+            if (_disposable is null)
+                return;
+
+            assert(_count > 0);
+            _count--;
+
+            if (_isPrimaryDisposed)
+            {
+                if (_count == 0)
+                {
+                    disposable = _disposable;
+                    _disposable = null;
+                }
+            }
+        }
+        if (disposable !is null)
+        {
+            disposable.dispose();
+        }
+    }
+
+private:
+    size_t _count;
+    Disposable _disposable;
+    bool _isPrimaryDisposed;
+    Object _gate;
+    bool _throwWhenDisposed;
+}
+
+///
+unittest
+{
+    bool disposed = false;
+    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+            disposed = true;
+        }));
+
+    auto subscription = disposable.getDisposable();
+
+    assert(!disposed);
+    disposable.dispose();
+    assert(!disposed);
+
+    subscription.dispose();
+    assert(disposed);
+}
+
+unittest
+{
+    bool disposed = false;
+    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+            disposed = true;
+        }));
+
+    assert(!disposed);
+    disposable.dispose();
+    assert(disposed);
+}
+
+unittest
+{
+    bool disposed = false;
+    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+            disposed = true;
+        }));
+
+    auto subscription = disposable.getDisposable();
+    assert(!disposed);
+    subscription.dispose();
+    assert(!disposed);
+    disposable.dispose();
+    assert(disposed);
+}
+
+unittest
+{
+    bool disposed = false;
+    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+            disposed = true;
+        }));
+
+    auto subscription1 = disposable.getDisposable();
+    auto subscription2 = disposable.getDisposable();
+    assert(!disposed);
+    subscription1.dispose();
+    assert(!disposed);
+    subscription2.dispose();
+    assert(!disposed);
+    disposable.dispose();
+    assert(disposed);
+}
+
+unittest
+{
+    bool disposed = false;
+    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+            disposed = true;
+        }));
+
+    auto subscription1 = disposable.getDisposable();
+    auto subscription2 = disposable.getDisposable();
+
+    disposable.dispose();
+    assert(!disposed);
+
+    subscription1.dispose();
+    assert(!disposed);
+    subscription1.dispose();
+    assert(!disposed);
+
+    subscription2.dispose();
+    assert(disposed);
+}
