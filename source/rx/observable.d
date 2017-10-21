@@ -20,6 +20,15 @@ template isObservable(T, E)
                 static assert(isDisposable!(typeof(d)));
             }()));
 }
+///ditto
+template isObservable(TObservable)
+{
+    enum bool isObservable = __traits(compiles, {
+            static assert(isObservable!(TObservable, TObservable.ElementType));
+        });
+
+}
+
 ///
 unittest
 {
@@ -34,8 +43,18 @@ unittest
         }
     }
 
+    static assert(isObservable!(TestObservable));
     static assert(isObservable!(TestObservable, int));
     static assert(!isObservable!(TestObservable, Object));
+}
+
+///
+unittest
+{
+    static assert(isObservable!(Observable!int));
+    static assert(!isObservable!(Observer!int));
+    static assert(!isObservable!(string));
+    static assert(!isObservable!(Object));
 }
 
 ///Test if the observer can subscribe to the observable.
