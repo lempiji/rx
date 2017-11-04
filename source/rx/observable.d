@@ -379,6 +379,67 @@ unittest
 //#########################
 // Defer
 //#########################
+private struct DeferObserver(TObserver, E)
+{
+public:
+    this(TObserver observer, EventSignal signal)
+    {
+        _observer = observer;
+        _signal = signal;
+    }
+
+public:
+    void put(E obj)
+    {
+        if (_signal.signal)
+            return;
+
+        static if (hasFailure!TObserver)
+        {
+            try
+            {
+                .put(_observer, obj);
+            }
+            catch (Exception e)
+            {
+                _observer.failure(e);
+            }
+        }
+        else
+        {
+            .put(_observer, obj);
+        }
+    }
+
+    void completed()
+    {
+        if (_signal.signal)
+            return;
+        _signal.setSignal();
+
+        static if (hasCompleted!TObserver)
+        {
+            _observer.completed();
+        }
+    }
+
+    void failure(Exception e)
+    {
+        if (_signal.signal)
+            return;
+        _signal.setSignal();
+
+        static if (hasFailure!TObserver)
+        {
+            _observer.failure(e);
+        }
+    }
+
+private:
+    TObserver _observer;
+    EventSignal _signal;
+}
+
 ///Create observable by function that template parameter.
 auto defer(E, alias f)()
 {
@@ -389,71 +450,22 @@ auto defer(E, alias f)()
     public:
         auto subscribe(TObserver)(TObserver observer)
         {
-            static struct DeferObserver
-            {
-            public:
-                this(TObserver observer, EventSignal signal)
-                {
-                    _observer = observer;
-                    _signal = signal;
-                }
-
-            public:
-                void put(E obj)
-                {
-                    if (_signal.signal)
-                        return;
-
-                    static if (hasFailure!TObserver)
-                    {
-                        try
-                        {
-                            .put(_observer, obj);
-                        }
-                        catch (Exception e)
-                        {
-                            _observer.failure(e);
-                        }
-                    }
-                    else
-                    {
-                        .put(_observer, obj);
-                    }
-                }
-
-                void completed()
-                {
-                    if (_signal.signal)
-                        return;
-                    _signal.setSignal();
-
-                    static if (hasCompleted!TObserver)
-                    {
-                        _observer.completed();
-                    }
-                }
-
-                void failure(Exception e)
-                {
-                    if (_signal.signal)
-                        return;
-                    _signal.setSignal();
-
-                    static if (hasFailure!TObserver)
-                    {
-                        _observer.failure(e);
-                    }
-                }
-
-            private:
-                TObserver _observer;
-                EventSignal _signal;
-            }
-
+            alias ObserverType = DeferObserver!(TObserver, E);
             alias fun = unaryFun!f;
             auto d = new SignalDisposable;
-            fun(DeferObserver(observer, d.signal));
-            return d;
+            static if (__traits(compiles, {
+                    auto disposable = fun(ObserverType(observer, d.signal));
+                    static assert(isDisposable!(typeof(disposable)));
+                }))
+            {
+                auto subscription = fun(ObserverType(observer, d.signal));
+                return new CompositeDisposable(subscription, d);
+            }
+            else
+            {
+                fun(ObserverType(observer, d.signal));
+                return d;
+            }
         }
     }
 
@@ -556,11 +568,23 @@ unittest
     auto buf = appender!(int[]);
 
     auto put1 = defer!int(&subscribeImpl);
-    auto d = put1.doSubscribe(buf);
+    auto d = put1.subscribe(buf);
 
     assert(buf.data.length == 1);
     assert(buf.data[0] == 1);
-    assert(d is null);
+    assert(d !is null);
+}
+
+unittest
+{
+    auto sub = defer!(int, (observer) {
+        observer.put(1);
+        return NopDisposable.instance;
+    });
+
+    auto called = false;
+    sub.doSubscribe((int _) { called = true; });
+    assert(called);
 }
 
 auto defer(E, TSubscribe)(auto ref TSubscribe subscribeImpl)
@@ -578,7 +602,45 @@ auto defer(E, TSubscribe)(auto ref TSubscribe subscribeImpl)
 
         auto subscribe(TObserver)(auto ref TObserver observer)
         {
-            return _subscribeImpl(observer);
+            alias ObserverType = DeferObserver!(TObserver, E);
+
+            auto cancel = new SignalDisposable;
+            static if (__traits(compiles, {
+                    auto d = _subscribeImpl(ObserverType.init);
+                    static assert(isDisposable!(typeof(d)));
+                }))
+            {
+                auto subscription = disposableObject(_subscribeImpl(ObserverType(observer,
+                        cancel.signal)));
+                return new CompositeDisposable(cancel, subscription);
+            }
+            else static if (__traits(compiles, {
+                    _subscribeImpl(ObserverType.init);
+                }))
+            {
+                _subscribeImpl(ObserverType(observer, cancel.signal));
+                return cancel;
+            }
+            else static if (__traits(compiles, {
+                    auto d = _subscribeImpl(Observer!E.init);
+                    static assert(isDisposable!(typeof(d)));
+                }))
+            {
+                auto subscription = _subscribeImpl(observerObject!E(ObserverType(observer,
+                        cancel.signal)));
+                return new CompositeDisposable(cancel, subscription);
+            }
+            else static if (__traits(compiles, {
+                    _subscribeImpl(Observer!E.init);
+                }))
+            {
+                _subscribeImpl(observerObject!E(ObserverType(observer, cancel.signal)));
+                return cancel;
+            }
+            else
+            {
+                static assert(false);
+            }
         }
     }
 
@@ -596,13 +658,47 @@ unittest
         .put(observer, 2);
         return NopDisposable.instance;
     });
-    auto d = put12.doSubscribe(buf);
+    auto d = put12.subscribe(buf);
 
     assert(buf.data.length == 2);
     assert(buf.data[0] == 1);
     assert(buf.data[1] == 2);
 }
 
+unittest
+{
+    int last = 0;
+    struct TestObserver
+    {
+        void put(int n)
+        {
+            last = n;
+        }
+    }
+
+    auto disposed1 = false;
+    auto sub1 = defer!int((Observer!int observer) {
+        observer.put(1);
+        return new AnonymouseDisposable({ disposed1 = true; });
+    });
+
+    auto sub2 = defer!int((Observer!int observer) { observer.put(100); });
+
+    TestObserver observer;
+    last = 0;
+    auto disposable1 = sub1.subscribe(observer);
+    assert(last == 1);
+    assert(!disposed1);
+    disposable1.dispose();
+    assert(disposed1);
+
+    last = 0;
+    auto disposable2 = sub2.subscribe(observer);
+    assert(last == 100);
+    disposable2.dispose();
+}
+
+///
 auto empty(E)()
 {
     static struct EmptyObservable
@@ -632,6 +728,7 @@ unittest
     assert(completed);
 }
 
+///
 auto never(E)()
 {
     static struct NeverObservable
@@ -654,6 +751,7 @@ unittest
     d.dispose();
 }
 
+///
 auto error(E)(auto ref Exception e)
 {
     static struct ErrorObservable

@@ -69,7 +69,7 @@ unittest
     assert(count == 2);
 }
 
-///[WIP] Observable!(Observable!int).merge() => Observable!int
+///
 auto merge(TObservable)(auto ref TObservable observable)
         if (isObservable!TObservable && isObservable!(TObservable.ElementType))
 {
@@ -91,7 +91,7 @@ auto merge(TObservable)(auto ref TObservable observable)
             auto innerSubscription = subject.doSubscribe(observer);
             auto outerSubscription = _observable.doSubscribe((TObservable.ElementType obj) {
                 auto subscription = obj.doSubscribe(subject);
-                groupSubscription.insert(subscription.disposableObject());
+                groupSubscription.insert(disposableObject(subscription));
             }, { subject.completed(); }, (Exception e) { subject.failure(e); });
             return new CompositeDisposable(groupSubscription, innerSubscription, outerSubscription);
         }
