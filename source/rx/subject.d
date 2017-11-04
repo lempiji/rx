@@ -6,6 +6,7 @@ module rx.subject;
 import rx.disposable;
 import rx.observer;
 import rx.observable;
+import rx.util : assumeUnshared;
 
 import core.atomic : atomicLoad, cas;
 import std.range : put;
@@ -31,7 +32,7 @@ public:
     ///
     void put(E obj)
     {
-        auto temp = cast() atomicLoad(_observer);
+        auto temp = assumeUnshared(atomicLoad(_observer));
         .put(temp, obj);
     }
     ///
@@ -43,7 +44,7 @@ public:
         do
         {
             oldObserver = _observer;
-            temp = cast() atomicLoad(oldObserver);
+            temp = assumeUnshared(atomicLoad(oldObserver));
             if (cast(DoneObserver!E) temp)
                 break;
         }
@@ -59,7 +60,7 @@ public:
         do
         {
             oldObserver = _observer;
-            temp = cast() atomicLoad(oldObserver);
+            temp = assumeUnshared(atomicLoad(oldObserver));
             if (cast(DoneObserver!E) temp)
                 break;
         }
@@ -80,7 +81,7 @@ public:
         do
         {
             oldObserver = _observer;
-            auto temp = cast() atomicLoad(oldObserver);
+            auto temp = assumeUnshared(atomicLoad(oldObserver));
 
             if (temp is DoneObserver!E.instance)
             {
@@ -121,7 +122,9 @@ public:
         {
             oldObserver = _observer;
 
-            auto temp = cast() atomicLoad(oldObserver);
+            import rx.util : assumeUnshared;
+
+            auto temp = assumeUnshared(atomicLoad(oldObserver));
             if (auto composite = cast(CompositeObserver!E) temp)
             {
                 newObserver = cast(shared) composite.remove(observer);
