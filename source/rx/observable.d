@@ -698,6 +698,96 @@ unittest
     disposable2.dispose();
 }
 
+unittest
+{
+    size_t hasBeenCalled1 = 0;
+    struct SubscribeImpl1
+    {
+        Disposable opCall(TObserver)(TObserver observer)
+        {
+            hasBeenCalled1++;
+            return NopDisposable.instance;
+        }
+    }
+
+    size_t hasBeenCalled2 = 0;
+    struct SubscribeImpl2
+    {
+        void opCall(TObserver)(TObserver observer)
+        {
+            hasBeenCalled2++;
+        }
+    }
+
+    struct TestObserver
+    {
+        void put(int _)
+        {
+        }
+    }
+
+    SubscribeImpl1 impl1;
+    auto sub1 = defer!int(impl1);
+
+    assert(hasBeenCalled1 == 0);
+    auto disposable1 = sub1.subscribe(TestObserver());
+    assert(hasBeenCalled1 == 1);
+    disposable1.dispose();
+
+    SubscribeImpl2 impl2;
+    auto sub2 = defer!int(impl2);
+
+    assert(hasBeenCalled2 == 0);
+    auto disposable2 = sub2.subscribe(TestObserver());
+    assert(hasBeenCalled2 == 1);
+    disposable2.dispose();
+}
+
+unittest
+{
+    class SubscribeImpl1
+    {
+    public:
+        void publish()
+        {
+            .put(_observer, 1);
+        }
+
+    public:
+        Disposable opCall(TObserver)(TObserver observer)
+        {
+            _observer = observerObject!int(observer);
+            return NopDisposable.instance;
+        }
+
+    private:
+        Observer!int _observer;
+    }
+
+    import rx.subject : CounterObserver;
+
+    auto observer1 = new CounterObserver!int;
+    auto impl1 = new SubscribeImpl1;
+    auto sub1 = defer!int(impl1);
+    auto disposable1 = sub1.subscribe(observer1);
+    disposable1.dispose();
+
+    assert(observer1.putCount == 0);
+    impl1.publish();
+    assert(observer1.putCount == 0);
+
+    auto observer2 = new CounterObserver!int;
+    auto impl2 = new SubscribeImpl1;
+    auto sub2 = defer!int(impl2);
+    auto disposable2 = sub2.subscribe(observer2);
+    assert(observer2.putCount == 0);
+    impl2.publish();
+    assert(observer2.putCount == 1);
+    disposable2.dispose();
+    impl2.publish();
+    assert(observer2.putCount == 1);
+}
+
 ///
 auto empty(E)()
 {
