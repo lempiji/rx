@@ -12,7 +12,7 @@ T exchange(T, U)(ref shared(T) store, U val)
         temp = store;
     }
     while (!cas(&store, temp, val));
-    return atomicLoad(temp);
+    return cast() atomicLoad(temp);
 }
 
 unittest
