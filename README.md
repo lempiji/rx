@@ -43,7 +43,7 @@ Setting dependencies in dub.json
 {
     ...
     "dependencies": {
-        "rx": "~>0.1.0"
+        "rx": "~>0.7.0"
     }
 }
 ```
@@ -88,8 +88,11 @@ Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NE
 
 ### Future work
 
+- generic observable factory
+  - create, start, timer, interval
 - more subjects
   - publish, replay
 - more algorithms
+  - window, combineLatest, zip
 - more test
 - more documents

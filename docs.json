@@ -6,6 +6,231 @@
 			{
 				"members": [
 					{
+						"name": "AllObserver",
+						"line": 14,
+						"members": [
+							{
+								"name": "this",
+								"line": 19,
+								"type": "()",
+								"char": 5,
+								"kind": "constructor",
+								"storageClass": [
+									"@disable"
+								]
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 21,
+								"type": "(TObserver observer, Disposable cancel)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "cancel",
+										"type": "Disposable"
+									}
+								],
+								"endline": 27,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 30,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 82,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "failure",
+								"line": 84,
+								"type": "void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 95,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 97,
+								"type": "void()",
+								"endline": 109,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "dispose",
+								"line": 111,
+								"type": "void()",
+								"endline": 116,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_observer",
+								"line": 119,
+								"type": "TObserver",
+								"char": 15,
+								"kind": "variable"
+							},
+							{
+								"name": "_cancel",
+								"line": 120,
+								"type": "shared(Disposable)",
+								"char": 24,
+								"kind": "variable"
+							},
+							{
+								"name": "_ticket",
+								"line": 121,
+								"type": "Ticket",
+								"char": 12,
+								"kind": "variable"
+							},
+							{
+								"name": "_hasValue",
+								"line": 122,
+								"type": "Ticket",
+								"char": 12,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "AllObserver",
+				"line": 14,
+				"parameters": [
+					{
+						"name": "TObserver",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					},
+					{
+						"name": "pred",
+						"defaultAlias": "\"true\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "AllObservable",
+						"line": 363,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 365,
+								"deco": "b",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 368,
+								"type": "(TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									}
+								],
+								"endline": 371,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 374,
+										"type": "Disposable(auto ref TObserver observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "TObserver",
+												"storageClass": [
+													"auto",
+													"ref"
+												]
+											}
+										],
+										"endline": 382,
+										"char": 16,
+										"kind": "function"
+									}
+								],
+								"name": "subscribe",
+								"line": 374,
+								"parameters": [
+									{
+										"name": "TObserver",
+										"kind": "type"
+									}
+								],
+								"char": 16,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 385,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "AllObservable",
+				"line": 363,
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "pred",
+						"defaultAlias": "\"true\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
 						"members": [
 							{
 								"endchar": 5,
@@ -41,7 +266,7 @@
 				],
 				"name": "all",
 				"line": 412,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL420_8)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all!\"a % 2 == 0\"().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL420_8)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_all_d_420_7)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all!\"a % 2 == 0\"().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_all_d_420_7)\n",
 				"parameters": [
 					{
 						"name": "pred",
@@ -76,7 +301,7 @@
 				],
 				"name": "all",
 				"line": 449,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL454_10)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL454_10)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_all_d_454_9)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_all_d_454_9)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -94,6 +319,214 @@
 		"file": "source\\rx\\algorithm\\any.d",
 		"name": "rx.algorithm.any",
 		"members": [
+			{
+				"members": [
+					{
+						"name": "AnyObserver",
+						"line": 14,
+						"members": [
+							{
+								"name": "this",
+								"line": 16,
+								"type": "()",
+								"char": 5,
+								"kind": "constructor",
+								"storageClass": [
+									"@disable"
+								]
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 17,
+								"type": "(TObserver observer, Disposable cancel)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "cancel",
+										"type": "Disposable"
+									}
+								],
+								"endline": 22,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 24,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 35,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "failure",
+								"line": 37,
+								"type": "void(Exception)",
+								"parameters": [
+									{
+										"type": "Exception"
+									}
+								],
+								"endline": 49,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 51,
+								"type": "void()",
+								"endline": 62,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_observer",
+								"line": 65,
+								"type": "TObserver",
+								"char": 15,
+								"kind": "variable"
+							},
+							{
+								"name": "_cancel",
+								"line": 66,
+								"type": "Disposable",
+								"char": 16,
+								"kind": "variable"
+							},
+							{
+								"name": "_ticket",
+								"line": 67,
+								"type": "Ticket",
+								"char": 12,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "AnyObserver",
+				"line": 14,
+				"parameters": [
+					{
+						"name": "TObserver",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					},
+					{
+						"name": "pred",
+						"defaultAlias": "\"true\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "AnyObservable",
+						"line": 140,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 142,
+								"deco": "b",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 144,
+								"type": "(TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									}
+								],
+								"endline": 147,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 149,
+										"type": "Disposable(auto ref TObserver observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "TObserver",
+												"storageClass": [
+													"auto",
+													"ref"
+												]
+											}
+										],
+										"endline": 157,
+										"char": 16,
+										"kind": "function"
+									}
+								],
+								"name": "subscribe",
+								"line": 149,
+								"parameters": [
+									{
+										"name": "TObserver",
+										"kind": "type"
+									}
+								],
+								"char": 16,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 160,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "AnyObservable",
+				"line": 140,
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "pred",
+						"defaultAlias": "\"true\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
 			{
 				"members": [
 					{
@@ -132,7 +565,7 @@
 				],
 				"name": "any",
 				"line": 305,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL313_27)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any!(\"a % 2 == 0\").doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == false);\nsub.put(0);\nassert(result == true);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL313_27)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_any_d_313_10)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any!(\"a % 2 == 0\").doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == false);\nsub.put(0);\nassert(result == true);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_any_d_313_10)\n",
 				"parameters": [
 					{
 						"name": "pred",
@@ -167,7 +600,7 @@
 				],
 				"name": "any",
 				"line": 344,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL349_29)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any().doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == true);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL349_29)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_any_d_349_12)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any().doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == true);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_any_d_349_12)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -185,6 +618,212 @@
 		"file": "source\\rx\\algorithm\\buffer.d",
 		"name": "rx.algorithm.buffer",
 		"members": [
+			{
+				"members": [
+					{
+						"name": "BufferedObserver",
+						"line": 12,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 14,
+								"type": "(TObserver observer, Disposable disposable, size_t size)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "disposable",
+										"type": "Disposable"
+									},
+									{
+										"name": "size",
+										"type": "size_t"
+									}
+								],
+								"endline": 25,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 27,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 38,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 40,
+								"type": "void()",
+								"endline": 56,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_observer",
+								"line": 68,
+								"type": "TObserver",
+								"char": 15,
+								"kind": "variable"
+							},
+							{
+								"name": "_gate",
+								"line": 69,
+								"type": "Object",
+								"char": 12,
+								"kind": "variable"
+							},
+							{
+								"name": "_bufferSize",
+								"line": 70,
+								"type": "size_t",
+								"char": 12,
+								"kind": "variable"
+							},
+							{
+								"name": "_buffer",
+								"line": 71,
+								"type": "E[]",
+								"char": 9,
+								"kind": "variable"
+							},
+							{
+								"name": "_disposable",
+								"line": 72,
+								"type": "Disposable",
+								"char": 16,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "class"
+					}
+				],
+				"name": "BufferedObserver",
+				"line": 12,
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					},
+					{
+						"name": "TObserver",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "BufferedObservable",
+						"line": 97,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 99,
+								"type": "TObservable.ElementType[]",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 101,
+								"type": "(TObservable observable, size_t bufferSize)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									},
+									{
+										"name": "bufferSize",
+										"type": "size_t"
+									}
+								],
+								"endline": 105,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 107,
+										"type": "(auto ref TObserver observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "TObserver",
+												"storageClass": [
+													"auto",
+													"ref"
+												]
+											}
+										],
+										"endline": 115,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 107,
+								"parameters": [
+									{
+										"name": "TObserver",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 118,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							},
+							{
+								"name": "_bufferSize",
+								"line": 119,
+								"type": "size_t",
+								"char": 12,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "BufferedObservable",
+				"line": 97,
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
 			{
 				"members": [
 					{
@@ -213,7 +852,7 @@
 				],
 				"name": "buffered",
 				"line": 149,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL156_35)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\n\nauto d = sub.buffered(2).doSubscribe(buf);\n\nsub.put(0);\nsub.put(1);\nassert(buf.data.length == 2);\nassert(buf.data[0] == 0);\nassert(buf.data[1] == 1);\nsub.put(2);\nassert(buf.data.length == 2);\nsub.completed();\nassert(buf.data.length == 3);\nassert(buf.data[2] == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL156_35)\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL179_36)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\nimport std.parallelism : taskPool, task;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\nauto d = sub.buffered(100).doSubscribe(buf);\n\nimport std.range : iota;\n\nauto t1 = task({ .put(sub, iota(100)); });\nauto t2 = task({ .put(sub, iota(100)); });\nauto t3 = task({ .put(sub, iota(100)); });\ntaskPool.put(t1);\ntaskPool.put(t2);\ntaskPool.put(t3);\n\nt1.workForce;\nt2.workForce;\nt3.workForce;\n\nsub.completed();\n\nassert(buf.data.length == 300);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL179_36)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_buffer_d_156_2)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\n\nauto d = sub.buffered(2).doSubscribe(buf);\n\nsub.put(0);\nsub.put(1);\nassert(buf.data.length == 2);\nassert(buf.data[0] == 0);\nassert(buf.data[1] == 1);\nsub.put(2);\nassert(buf.data.length == 2);\nsub.completed();\nassert(buf.data.length == 3);\nassert(buf.data[2] == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_buffer_d_156_2)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_buffer_d_179_3)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\nimport std.parallelism : taskPool, task;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\nauto d = sub.buffered(100).doSubscribe(buf);\n\nimport std.range : iota;\n\nauto t1 = task({ .put(sub, iota(100)); });\nauto t2 = task({ .put(sub, iota(100)); });\nauto t3 = task({ .put(sub, iota(100)); });\ntaskPool.put(t1);\ntaskPool.put(t2);\ntaskPool.put(t3);\n\nt1.workForce;\nt2.workForce;\nt3.workForce;\n\nsub.completed();\n\nassert(buf.data.length == 300);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_buffer_d_179_3)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -225,6 +864,327 @@
 			}
 		],
 		"comment": " This module defines algorithm 'buffer'\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\algorithm\\debounce.d",
+		"name": "rx.algorithm.debounce",
+		"members": [
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "debounce",
+						"line": 15,
+						"type": "DebounceObservable!(T, TScheduler, T.ElementType)(T observable, Duration val, TScheduler scheduler)",
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "T"
+							},
+							{
+								"name": "val",
+								"type": "Duration"
+							},
+							{
+								"name": "scheduler",
+								"type": "TScheduler"
+							}
+						],
+						"endline": 19,
+						"char": 51,
+						"kind": "function"
+					}
+				],
+				"name": "debounce",
+				"line": 15,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					},
+					{
+						"name": "TScheduler",
+						"deco": "C2rx9scheduler14AsyncScheduler",
+						"kind": "type"
+					}
+				],
+				"char": 51,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "debounce",
+						"line": 21,
+						"type": "DebounceObservable!(T, TaskPoolScheduler, T.ElementType)(T observable, Duration val)",
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "T"
+							},
+							{
+								"name": "val",
+								"type": "Duration"
+							}
+						],
+						"endline": 24,
+						"char": 58,
+						"kind": "function"
+					}
+				],
+				"name": "debounce",
+				"line": 21,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_debounce_d_26_0)\n---\nimport rx.subject : SubjectObject;\nimport core.thread : Thread;\nimport core.time : dur;\n\nauto obs = new SubjectObject!int;\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto d = obs.debounce(dur!\"msecs\"(100), new TaskPoolScheduler).doSubscribe(buf);\nscope (exit)\n    d.dispose();\n\n.put(obs, 1);\nThread.sleep(dur!\"msecs\"(200));\n.put(obs, 2);\n.put(obs, 3);\nThread.sleep(dur!\"msecs\"(200));\n\nassert(buf.data.length == 2);\nassert(buf.data[0] == 1);\nassert(buf.data[1] == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_debounce_d_26_0)\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 58,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "DebounceObserver",
+						"line": 52,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 55,
+								"type": "(TObserver observer, TScheduler scheduler, Duration val, SerialDisposable disposable)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "scheduler",
+										"type": "TScheduler"
+									},
+									{
+										"name": "val",
+										"type": "Duration"
+									},
+									{
+										"name": "disposable",
+										"type": "SerialDisposable"
+									}
+								],
+								"endline": 61,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 64,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 92,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 94,
+								"type": "void()",
+								"endline": 101,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "failure",
+								"line": 103,
+								"type": "void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 110,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_observer",
+								"line": 113,
+								"type": "TObserver",
+								"char": 15,
+								"kind": "variable"
+							},
+							{
+								"name": "_scheduler",
+								"line": 114,
+								"type": "TScheduler",
+								"char": 16,
+								"kind": "variable"
+							},
+							{
+								"name": "_dueTime",
+								"line": 115,
+								"type": "Duration",
+								"char": 14,
+								"kind": "variable"
+							},
+							{
+								"name": "_disposable",
+								"line": 116,
+								"type": "SerialDisposable",
+								"char": 22,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "DebounceObserver",
+				"line": 52,
+				"parameters": [
+					{
+						"name": "TObserver",
+						"kind": "type"
+					},
+					{
+						"name": "TScheduler",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "DebounceObservable",
+						"line": 119,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 121,
+								"type": "E",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 123,
+								"type": "(TObservable observable, TScheduler scheduler, Duration val)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									},
+									{
+										"name": "scheduler",
+										"type": "TScheduler"
+									},
+									{
+										"name": "val",
+										"type": "Duration"
+									}
+								],
+								"endline": 128,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 131,
+										"type": "(T observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "T"
+											}
+										],
+										"endline": 137,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 131,
+								"parameters": [
+									{
+										"name": "T",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 140,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							},
+							{
+								"name": "_scheduler",
+								"line": 141,
+								"type": "TScheduler",
+								"char": 16,
+								"kind": "variable"
+							},
+							{
+								"name": "_dueTime",
+								"line": 142,
+								"type": "Duration",
+								"char": 14,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "DebounceObservable",
+				"line": 119,
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "TScheduler",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			}
+		],
 		"kind": "module"
 	},
 	{
@@ -240,9 +1200,6 @@
 								"name": "filter",
 								"line": 20,
 								"type": "(auto ref TObservable observable)",
-								"storageClass": [
-									"auto"
-								],
 								"parameters": [
 									{
 										"name": "observable",
@@ -255,7 +1212,10 @@
 								],
 								"endline": 82,
 								"char": 10,
-								"kind": "function"
+								"kind": "function",
+								"storageClass": [
+									"auto"
+								]
 							}
 						],
 						"name": "filter",
@@ -272,7 +1232,7 @@
 				],
 				"name": "filter",
 				"line": 18,
-				"comment": "Implements the higher order filter function. The predicate is passed to std.functional.unaryFun, and can either accept a string, or any callable that can be executed via pred(element).\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL86_44)\n---\nimport rx.subject : Subject, SubjectObject;\nimport std.array : appender;\n\nSubject!int sub = new SubjectObject!int;\nauto filtered = sub.filter!(n => n % 2 == 0);\nauto buffer = appender!(int[])();\nauto disposable = filtered.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL86_44)\n",
+				"comment": "Implements the higher order filter function. The predicate is passed to std.functional.unaryFun, and can either accept a string, or any callable that can be executed via pred(element).\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_filter_d_86_0)\n---\nimport rx.subject : Subject, SubjectObject;\nimport std.array : appender;\n\nSubject!int sub = new SubjectObject!int;\nauto filtered = sub.filter!(n => n % 2 == 0);\nauto buffer = appender!(int[])();\nauto disposable = filtered.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_filter_d_86_0)\n",
 				"parameters": [
 					{
 						"name": "pred",
@@ -297,9 +1257,6 @@
 						"name": "fold",
 						"line": 14,
 						"type": "(auto ref TObservable observable, Seed seed)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -316,12 +1273,15 @@
 						],
 						"endline": 20,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "fold",
 				"line": 14,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL22_54)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\nauto sum = sub.fold!\"a+b\"(0);\n\nint result = 0;\nauto disposable = sum.doSubscribe((int n) { result = n; });\nscope (exit)\n    disposable.dispose();\n\nforeach (i; 1 .. 11)\n    sub.put(i);\n\nassert(result == 0);\nsub.completed();\nassert(result == 55);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL22_54)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_fold_d_22_0)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\nauto sum = sub.fold!\"a+b\"(0);\n\nint result = 0;\nauto disposable = sum.doSubscribe((int n) { result = n; });\nscope (exit)\n    disposable.dispose();\n\nforeach (i; 1 .. 11)\n    sub.put(i);\n\nassert(result == 0);\nsub.completed();\nassert(result == 55);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_fold_d_22_0)\n",
 				"parameters": [
 					{
 						"name": "fun",
@@ -344,9 +1304,252 @@
 		"kind": "module"
 	},
 	{
+		"file": "source\\rx\\algorithm\\groupby.d",
+		"name": "rx.algorithm.groupby",
+		"members": [
+			{
+				"members": [
+					{
+						"name": "GroupedObservable",
+						"line": 19,
+						"members": [
+							{
+								"name": "key",
+								"line": 21,
+								"type": "const pure nothrow @nogc @property @safe TKey()",
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"char": 1,
+						"kind": "interface"
+					}
+				],
+				"name": "GroupedObservable",
+				"line": 19,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "TKey",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"members": [
+							{
+								"endchar": 5,
+								"name": "groupBy",
+								"line": 346,
+								"type": "GroupByObservable!(selector, TObservable)(auto ref TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable",
+										"storageClass": [
+											"auto",
+											"ref"
+										]
+									}
+								],
+								"endline": 351,
+								"char": 47,
+								"kind": "function"
+							}
+						],
+						"name": "groupBy",
+						"line": 346,
+						"parameters": [
+							{
+								"name": "TObservable",
+								"kind": "type"
+							}
+						],
+						"char": 47,
+						"kind": "template"
+					}
+				],
+				"name": "groupBy",
+				"line": 344,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_groupby_d_355_4)\n---\nauto sub = new SubjectObject!int;\n\nauto group = sub.groupBy!(n => n % 10);\n\nauto tester = new CounterObserver!(typeof(group).ElementType);\nauto disposable = group.subscribe(tester);\n\nsub.put(0);\nassert(tester.putCount == 1);\nassert(tester.lastValue.key == 0);\n\nsub.put(10);\nassert(tester.putCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_groupby_d_355_4)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_groupby_d_373_5)\n---\nauto sub = new SubjectObject!string;\n\nauto group = sub.groupBy!(text => text);\n\nauto tester = new CounterObserver!(typeof(group).ElementType);\nauto disposable = group.subscribe(tester);\n\nsub.put(\"A\");\nassert(tester.putCount == 1);\nassert(tester.lastValue.key == \"A\");\n\nsub.put(\"B\");\nassert(tester.putCount == 2);\nassert(tester.lastValue.key == \"B\");\n\nsub.put(\"XXX\");\nassert(tester.putCount == 3);\nassert(tester.lastValue.key == \"XXX\");\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_groupby_d_373_5)\n",
+				"parameters": [
+					{
+						"name": "selector",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			}
+		],
+		"comment": " This module defines algorithm 'groupBy'\n",
+		"kind": "module"
+	},
+	{
 		"file": "source\\rx\\algorithm\\map.d",
 		"name": "rx.algorithm.map",
 		"members": [
+			{
+				"members": [
+					{
+						"name": "MapObserver",
+						"line": 17,
+						"members": [
+							{
+								"name": "SimpleObserverImpl!(TObserver, E)",
+								"line": 19,
+								"char": 5,
+								"kind": "mixin"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 22,
+								"type": "(TObserver observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									}
+								],
+								"endline": 25,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "putImpl",
+								"line": 36,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 40,
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "MapObserver",
+				"line": 17,
+				"parameters": [
+					{
+						"name": "f",
+						"kind": "alias"
+					},
+					{
+						"name": "TObserver",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "MapObservable",
+						"line": 52,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 54,
+								"type": "typeof(()\r\n{\r\nreturn unaryFun!f(TObservable.ElementType.init);\r\n}\r\n())",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 59,
+								"type": "(TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									}
+								],
+								"endline": 62,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 65,
+										"type": "(TObserver observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "TObserver"
+											}
+										],
+										"endline": 79,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 65,
+								"parameters": [
+									{
+										"name": "TObserver",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 82,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "MapObservable",
+				"line": 52,
+				"parameters": [
+					{
+						"name": "f",
+						"kind": "alias"
+					},
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
 			{
 				"members": [
 					{
@@ -385,7 +1588,7 @@
 				],
 				"name": "map",
 				"line": 129,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL137_60)\n---\nimport rx.subject;\nimport std.array : appender;\nimport std.conv : to;\n\nSubject!int sub = new SubjectObject!int;\nauto mapped = sub.map!(n => to!string(n));\nstatic assert(isObservable!(typeof(mapped), string));\nstatic assert(isSubscribable!(typeof(mapped), Observer!string));\n\nauto buffer = appender!(string[])();\nauto disposable = mapped.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [\"0\", \"1\", \"2\"][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL137_60)\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL162_61)\n---\nimport rx.subject;\nimport std.array : appender;\nimport std.conv : to;\n\nSubject!int sub = new SubjectObject!int;\nauto mapped = sub.map!\"a * 2\";\nstatic assert(isObservable!(typeof(mapped), int));\nstatic assert(isSubscribable!(typeof(mapped), Observer!int));\n\nauto buffer = appender!(int[])();\nauto disposable = mapped.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2, 4][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL162_61)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_map_d_137_2)\n---\nimport rx.subject;\nimport std.array : appender;\nimport std.conv : to;\n\nSubject!int sub = new SubjectObject!int;\nauto mapped = sub.map!(n => to!string(n));\nstatic assert(isObservable!(typeof(mapped), string));\nstatic assert(isSubscribable!(typeof(mapped), Observer!string));\n\nauto buffer = appender!(string[])();\nauto disposable = mapped.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [\"0\", \"1\", \"2\"][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_map_d_137_2)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_map_d_162_3)\n---\nimport rx.subject;\nimport std.array : appender;\nimport std.conv : to;\n\nSubject!int sub = new SubjectObject!int;\nauto mapped = sub.map!\"a * 2\";\nstatic assert(isObservable!(typeof(mapped), int));\nstatic assert(isSubscribable!(typeof(mapped), Observer!int));\n\nauto buffer = appender!(int[])();\nauto disposable = mapped.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2, 4][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_map_d_162_3)\n",
 				"parameters": [
 					{
 						"name": "f",
@@ -403,6 +1606,104 @@
 		"file": "source\\rx\\algorithm\\merge.d",
 		"name": "rx.algorithm.merge",
 		"members": [
+			{
+				"members": [
+					{
+						"name": "MergeObservable",
+						"line": 14,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 18,
+								"type": "CommonType!(TObservable1.ElementType, TObservable2.ElementType)",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 21,
+								"type": "(TObservable1 o1, TObservable2 o2)",
+								"parameters": [
+									{
+										"name": "o1",
+										"type": "TObservable1"
+									},
+									{
+										"name": "o2",
+										"type": "TObservable2"
+									}
+								],
+								"endline": 25,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 28,
+										"type": "(T observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "T"
+											}
+										],
+										"endline": 33,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 28,
+								"parameters": [
+									{
+										"name": "T",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable1",
+								"line": 36,
+								"type": "TObservable1",
+								"char": 18,
+								"kind": "variable"
+							},
+							{
+								"name": "_observable2",
+								"line": 37,
+								"type": "TObservable2",
+								"char": 18,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "MergeObservable",
+				"line": 14,
+				"parameters": [
+					{
+						"name": "TObservable1",
+						"kind": "type"
+					},
+					{
+						"name": "TObservable2",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
 			{
 				"members": [
 					{
@@ -435,7 +1736,7 @@
 				],
 				"name": "merge",
 				"line": 41,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL46_64)\n---\nimport rx.subject : SubjectObject;\n\nauto s1 = new SubjectObject!int;\nauto s2 = new SubjectObject!short;\n\nauto merged = s1.merge(s2);\n\nint count = 0;\nauto d = merged.doSubscribe((int n) { count++; });\n\nassert(count == 0);\ns1.put(1);\nassert(count == 1);\ns2.put(2);\nassert(count == 2);\n\nd.dispose();\n\ns1.put(10);\nassert(count == 2);\ns2.put(100);\nassert(count == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL46_64)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_merge_d_46_0)\n---\nimport rx.subject : SubjectObject;\n\nauto s1 = new SubjectObject!int;\nauto s2 = new SubjectObject!short;\n\nauto merged = s1.merge(s2);\n\nint count = 0;\nauto d = merged.doSubscribe((int n) { count++; });\n\nassert(count == 0);\ns1.put(1);\nassert(count == 1);\ns2.put(2);\nassert(count == 2);\n\nd.dispose();\n\ns1.put(10);\nassert(count == 2);\ns2.put(100);\nassert(count == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_merge_d_46_0)\n",
 				"parameters": [
 					{
 						"name": "T1",
@@ -448,9 +1749,126 @@
 				],
 				"char": 26,
 				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "merge",
+						"line": 73,
+						"type": "(auto ref TObservable observable)",
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 103,
+						"char": 6,
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
+					}
+				],
+				"name": "merge",
+				"line": 73,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_merge_d_106_1)\n---\nimport rx.algorithm.groupby : groupBy;\nimport rx.algorithm.map : map;\nimport rx.algorithm.fold : fold;\nimport rx.subject : SubjectObject, CounterObserver;\n\nauto subject = new SubjectObject!int;\nauto counted = subject.groupBy!(n => n % 10).map!(o => o.fold!((a, b) => a + 1)(0)).merge();\n\nauto counter = new CounterObserver!int;\n\nauto disposable = counted.subscribe(counter);\n\nsubject.put(0);\nsubject.put(0);\nassert(counter.putCount == 0);\nsubject.completed();\nassert(counter.putCount == 1);\nassert(counter.lastValue == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_merge_d_106_1)\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"constraint": "isObservable!TObservable && isObservable!(TObservable.ElementType)",
+				"char": 6,
+				"kind": "template"
 			}
 		],
 		"comment": " This module defines algorithm 'merge'\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\algorithm\\package.d",
+		"name": "rx.algorithm",
+		"members": [
+			{
+				"name": "rx.algorithm.all",
+				"line": 3,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.any",
+				"line": 4,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.buffer",
+				"line": 5,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.debounce",
+				"line": 6,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.filter",
+				"line": 7,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.fold",
+				"line": 8,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.groupby",
+				"line": 9,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.map",
+				"line": 10,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.merge",
+				"line": 11,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.scan",
+				"line": 12,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.tee",
+				"line": 13,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm.uniq",
+				"line": 14,
+				"char": 15,
+				"kind": "import"
+			}
+		],
 		"kind": "module"
 	},
 	{
@@ -460,15 +1878,195 @@
 			{
 				"members": [
 					{
+						"name": "ScanObserver",
+						"line": 17,
+						"members": [
+							{
+								"name": "SimpleObserverImpl!(TObserver, E)",
+								"line": 19,
+								"char": 5,
+								"kind": "mixin"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 22,
+								"type": "(TObserver observer, TAccumulate seed)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "seed",
+										"type": "TAccumulate"
+									}
+								],
+								"endline": 26,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "putImpl",
+								"line": 39,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 44,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_current",
+								"line": 47,
+								"type": "TAccumulate",
+								"char": 17,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "ScanObserver",
+				"line": 17,
+				"parameters": [
+					{
+						"name": "f",
+						"kind": "alias"
+					},
+					{
+						"name": "TObserver",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					},
+					{
+						"name": "TAccumulate",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "ScanObservable",
+						"line": 70,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 72,
+								"type": "TAccumulate",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 75,
+								"type": "(TObservable observable, TAccumulate seed)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									},
+									{
+										"name": "seed",
+										"type": "TAccumulate"
+									}
+								],
+								"endline": 79,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 82,
+										"type": "(TObserver observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "TObserver"
+											}
+										],
+										"endline": 96,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 82,
+								"parameters": [
+									{
+										"name": "TObserver",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 99,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							},
+							{
+								"name": "_seed",
+								"line": 100,
+								"type": "TAccumulate",
+								"char": 17,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "ScanObservable",
+				"line": 70,
+				"parameters": [
+					{
+						"name": "f",
+						"kind": "alias"
+					},
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "TAccumulate",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
 						"members": [
 							{
 								"endchar": 5,
 								"name": "scan",
 								"line": 127,
 								"type": "(auto ref TObservable observable, TAccumulate seed)",
-								"storageClass": [
-									"auto"
-								],
 								"parameters": [
 									{
 										"name": "observable",
@@ -485,7 +2083,10 @@
 								],
 								"endline": 130,
 								"char": 10,
-								"kind": "function"
+								"kind": "function",
+								"storageClass": [
+									"auto"
+								]
 							}
 						],
 						"name": "scan",
@@ -506,7 +2107,7 @@
 				],
 				"name": "scan",
 				"line": 125,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL133_81)\n---\nimport rx.subject : SubjectObject;\n\nauto subject = new SubjectObject!int;\n\nauto sum = subject.scan!((a, b) => a + b)(0);\nstatic assert(isObservable!(typeof(sum), int));\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto disposable = sum.subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\nforeach (_; 0 .. 5)\n{\n    subject.put(1);\n}\n\nauto result = buf.data;\nassert(result.length == 5);\nimport std.algorithm : equal;\n\nassert(equal(result, [1, 2, 3, 4, 5]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL133_81)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_scan_d_133_3)\n---\nimport rx.subject : SubjectObject;\n\nauto subject = new SubjectObject!int;\n\nauto sum = subject.scan!((a, b) => a + b)(0);\nstatic assert(isObservable!(typeof(sum), int));\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto disposable = sum.subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\nforeach (_; 0 .. 5)\n{\n    subject.put(1);\n}\n\nauto result = buf.data;\nassert(result.length == 5);\nimport std.algorithm : equal;\n\nassert(equal(result, [1, 2, 3, 4, 5]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_scan_d_133_3)\n",
 				"parameters": [
 					{
 						"name": "f",
@@ -524,6 +2125,167 @@
 		"file": "source\\rx\\algorithm\\tee.d",
 		"name": "rx.algorithm.tee",
 		"members": [
+			{
+				"members": [
+					{
+						"name": "TeeObserver",
+						"line": 17,
+						"members": [
+							{
+								"name": "SimpleObserverImpl!(TObserver, E)",
+								"line": 19,
+								"char": 5,
+								"kind": "mixin"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 22,
+								"type": "(TObserver observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									}
+								],
+								"endline": 25,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "putImpl",
+								"line": 37,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 41,
+								"char": 10,
+								"kind": "function"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "TeeObserver",
+				"line": 17,
+				"parameters": [
+					{
+						"name": "f",
+						"kind": "alias"
+					},
+					{
+						"name": "TObserver",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "TeeObservable",
+						"line": 44,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 46,
+								"type": "E",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 49,
+								"type": "(TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									}
+								],
+								"endline": 52,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 55,
+										"type": "(auto ref T observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "T",
+												"storageClass": [
+													"auto",
+													"ref"
+												]
+											}
+										],
+										"endline": 69,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 55,
+								"parameters": [
+									{
+										"name": "T",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 72,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "TeeObservable",
+				"line": 44,
+				"parameters": [
+					{
+						"name": "f",
+						"kind": "alias"
+					},
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
 			{
 				"members": [
 					{
@@ -562,7 +2324,7 @@
 				],
 				"name": "tee",
 				"line": 76,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL85_84)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nimport std.array : appender;\n\nauto buf1 = appender!(int[]);\nauto buf2 = appender!(int[]);\n\nimport rx.algorithm : map;\n\nauto disposable = sub.tee!(i => buf1.put(i))().map!(i => i * 2)().subscribe(buf2);\n\nsub.put(1);\nsub.put(2);\ndisposable.dispose();\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buf1.data, [1, 2]));\nassert(equal(buf2.data, [2, 4]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL85_84)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_tee_d_85_0)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nimport std.array : appender;\n\nauto buf1 = appender!(int[]);\nauto buf2 = appender!(int[]);\n\nimport rx.algorithm : map;\n\nauto disposable = sub.tee!(i => buf1.put(i))().map!(i => i * 2)().subscribe(buf2);\n\nsub.put(1);\nsub.put(2);\ndisposable.dispose();\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buf1.data, [1, 2]));\nassert(equal(buf2.data, [2, 4]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_tee_d_85_0)\n",
 				"parameters": [
 					{
 						"name": "f",
@@ -577,6 +2339,241 @@
 		"kind": "module"
 	},
 	{
+		"file": "source\\rx\\algorithm\\uniq.d",
+		"name": "rx.algorithm.uniq",
+		"members": [
+			{
+				"members": [
+					{
+						"name": "UniqObserver",
+						"line": 11,
+						"members": [
+							{
+								"name": "SimpleObserverImpl!(TObserver, E)",
+								"line": 13,
+								"char": 5,
+								"kind": "mixin"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 16,
+								"type": "(ref TObserver observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver",
+										"storageClass": [
+											"ref"
+										]
+									}
+								],
+								"endline": 20,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "putImpl",
+								"line": 32,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 50,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_hasValue",
+								"line": 53,
+								"deco": "b",
+								"char": 10,
+								"kind": "variable"
+							},
+							{
+								"name": "_current",
+								"line": 54,
+								"type": "E",
+								"char": 7,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "UniqObserver",
+				"line": 11,
+				"parameters": [
+					{
+						"name": "TObserver",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					},
+					{
+						"name": "pred",
+						"defaultAlias": "\"a == b\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "UniqObservable",
+						"line": 101,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 103,
+								"type": "TObservable.ElementType",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 106,
+								"type": "(ref TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable",
+										"storageClass": [
+											"ref"
+										]
+									}
+								],
+								"endline": 109,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 112,
+										"type": "(auto ref TObserver observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "TObserver",
+												"storageClass": [
+													"auto",
+													"ref"
+												]
+											}
+										],
+										"endline": 127,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 112,
+								"parameters": [
+									{
+										"name": "TObserver",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 130,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "UniqObservable",
+				"line": 101,
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "pred",
+						"defaultAlias": "\"a == b\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"members": [
+							{
+								"endchar": 5,
+								"name": "uniq",
+								"line": 197,
+								"type": "UniqObservable!(TObservable, pred)(auto ref TObservable observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable",
+										"storageClass": [
+											"auto",
+											"ref"
+										]
+									}
+								],
+								"endline": 200,
+								"char": 40,
+								"kind": "function"
+							}
+						],
+						"name": "uniq",
+						"line": 197,
+						"parameters": [
+							{
+								"name": "TObservable",
+								"kind": "type"
+							}
+						],
+						"char": 40,
+						"kind": "template"
+					}
+				],
+				"name": "uniq",
+				"line": 195,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_uniq_d_204_4)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\n\nauto disposable = sub.uniq.subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\n.put(sub, [11, 11, 22, 22, 33]);\n\nauto data = buf.data;\nassert(data.length == 3);\nassert(data[0] == 11);\nassert(data[1] == 22);\nassert(data[2] == 33);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_uniq_d_204_4)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_uniq_d_226_5)\n---\nimport std.datetime : Date;\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!Date;\nauto buf = appender!(Date[]);\n\nauto disposable = sub.uniq!\"a.year == b.year\".subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\n.put(sub, Date(2000, 1, 1));\n.put(sub, Date(2000, 1, 2));\n.put(sub, Date(2017, 3, 24));\n.put(sub, Date(2017, 4, 24));\n.put(sub, Date(2017, 4, 24));\n\nauto data = buf.data;\nassert(data.length == 2);\nassert(data[0] == Date(2000, 1, 1));\nassert(data[1] == Date(2017, 3, 24));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_uniq_d_226_5)\n",
+				"parameters": [
+					{
+						"name": "pred",
+						"defaultAlias": "\"a == b\"",
+						"kind": "alias"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			}
+		],
+		"kind": "module"
+	},
+	{
 		"file": "source\\rx\\disposable.d",
 		"name": "rx.disposable",
 		"members": [
@@ -585,18 +2582,18 @@
 					{
 						"name": "isDisposable",
 						"line": 13,
-						"storageClass": [
-							"enum"
-						],
 						"deco": "b",
 						"init": "is(typeof(()\r\n{\r\nT disposable = void;\r\ndisposable.dispose();\r\n}\r\n()))",
 						"char": 15,
-						"kind": "variable"
+						"kind": "variable",
+						"storageClass": [
+							"enum"
+						]
 					}
 				],
 				"name": "isDisposable",
 				"line": 11,
-				"comment": "Tests if something is a Disposable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL19_92)\n---\nstruct A\n{\n    void dispose()\n    {\n    }\n}\n\nclass B\n{\n    void dispose()\n    {\n    }\n}\n\ninterface C\n{\n    void dispose();\n}\n\nstatic assert(isDisposable!A);\nstatic assert(isDisposable!B);\nstatic assert(isDisposable!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL19_92)\n",
+				"comment": "Tests if something is a Disposable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_19_0)\n---\nstruct A\n{\n    void dispose()\n    {\n    }\n}\n\nclass B\n{\n    void dispose()\n    {\n    }\n}\n\ninterface C\n{\n    void dispose();\n}\n\nstatic assert(isDisposable!A);\nstatic assert(isDisposable!B);\nstatic assert(isDisposable!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_19_0)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -611,17 +2608,17 @@
 					{
 						"name": "isCancelable",
 						"line": 48,
-						"storageClass": [
-							"enum"
-						],
 						"init": "isDisposable!T && is(typeof((inout int n = 0)\r\n{\r\nT disposable = void;\r\nbool b = disposable.isDisposed;\r\n}\r\n))",
 						"char": 10,
-						"kind": "variable"
+						"kind": "variable",
+						"storageClass": [
+							"enum"
+						]
 					}
 				],
 				"name": "isCancelable",
 				"line": 46,
-				"comment": "Tests if something is a Cancelable\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL54_93)\n---\nstruct A\n{\n    bool isDisposed() @property\n    {\n        return true;\n    }\n\n    void dispose()\n    {\n    }\n}\n\nclass B\n{\n    bool isDisposed() @property\n    {\n        return true;\n    }\n\n    void dispose()\n    {\n    }\n}\n\ninterface C\n{\n    bool isDisposed() @property;\n    void dispose();\n}\n\nstatic assert(isCancelable!A);\nstatic assert(isCancelable!B);\nstatic assert(isCancelable!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL54_93)\n",
+				"comment": "Tests if something is a Cancelable\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_54_1)\n---\nstruct A\n{\n    bool isDisposed() @property\n    {\n        return true;\n    }\n\n    void dispose()\n    {\n    }\n}\n\nclass B\n{\n    bool isDisposed() @property\n    {\n        return true;\n    }\n\n    void dispose()\n    {\n    }\n}\n\ninterface C\n{\n    bool isDisposed() @property;\n    void dispose();\n}\n\nstatic assert(isCancelable!A);\nstatic assert(isCancelable!B);\nstatic assert(isCancelable!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_54_1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -640,41 +2637,44 @@
 						"name": "dispose",
 						"line": 95,
 						"comment": "\n",
-						"storageClass": [
-							"abstract"
-						],
 						"deco": "FZv",
 						"char": 10,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"abstract"
+						]
 					}
 				],
 				"char": 1,
 				"kind": "interface"
 			},
 			{
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
 				"members": [
 					{
 						"name": "isDisposed",
 						"line": 101,
 						"comment": "\n",
-						"storageClass": [
-							"abstract"
-						],
 						"deco": "FNdZb",
 						"char": 10,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"abstract"
+						]
 					}
 				],
 				"name": "Cancelable",
 				"line": 98,
 				"comment": "Wrapper for cancelable objects.\n",
-				"interfaces": [
-					"rx.disposable.Disposable"
-				],
 				"char": 1,
 				"kind": "interface"
 			},
 			{
+				"interfaces": [
+					"rx.disposable.Cancelable"
+				],
 				"members": [
 					{
 						"endchar": 5,
@@ -720,9 +2720,6 @@
 				"name": "CancellationToken",
 				"line": 105,
 				"comment": "Simply implements for Cancelable interface. Its propagates notification that operations should be canceled.\n",
-				"interfaces": [
-					"rx.disposable.Cancelable"
-				],
 				"char": 1,
 				"kind": "class"
 			},
@@ -757,6 +2754,13 @@
 								"endline": 164,
 								"char": 10,
 								"kind": "function"
+							},
+							{
+								"name": "_disposable",
+								"line": 167,
+								"type": "T",
+								"char": 7,
+								"kind": "variable"
 							}
 						],
 						"char": 1,
@@ -831,9 +2835,6 @@
 						"name": "disposableObject",
 						"line": 188,
 						"type": "(T disposable)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "disposable",
@@ -842,12 +2843,15 @@
 						],
 						"endline": 204,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "disposableObject",
 				"line": 188,
-				"comment": "Wraps dispose method in virtual functions.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL207_96)\n---\nint count = 0;\nstruct TestDisposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nTestDisposable test;\nDisposable disposable = disposableObject(test);\nassert(count == 0);\ndisposable.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL207_96)\n",
+				"comment": "Wraps dispose method in virtual functions.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_207_4)\n---\nint count = 0;\nstruct TestDisposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nTestDisposable test;\nDisposable disposable = disposableObject(test);\nassert(count == 0);\ndisposable.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_207_4)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -858,31 +2862,46 @@
 				"kind": "template"
 			},
 			{
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
 				"members": [
+					{
+						"endchar": 5,
+						"name": "dispose",
+						"line": 282,
+						"deco": "FZv",
+						"endline": 284,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Disposable.dispose"
+						]
+					},
 					{
 						"endchar": 5,
 						"name": "instance",
 						"line": 288,
 						"comment": "\n",
-						"storageClass": [
-							"static"
-						],
 						"deco": "FNdZC2rx10disposable10Disposable",
 						"endline": 294,
 						"char": 23,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"static"
+						]
 					}
 				],
 				"name": "NopDisposable",
 				"line": 274,
-				"comment": "Defines a instance property that return NOP Disposable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL297_99)\n---\nDisposable d1 = NopDisposable.instance;\nDisposable d2 = NopDisposable.instance;\nassert(d1 !is null);\nassert(d1 is d2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL297_99)\n",
-				"interfaces": [
-					"rx.disposable.Disposable"
-				],
+				"comment": "Defines a instance property that return NOP Disposable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_297_7)\n---\nDisposable d1 = NopDisposable.instance;\nDisposable d2 = NopDisposable.instance;\nassert(d1 !is null);\nassert(d1 is d2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_297_7)\n",
 				"char": 7,
 				"kind": "class"
 			},
 			{
+				"interfaces": [
+					"rx.disposable.Cancelable"
+				],
 				"members": [
 					{
 						"endchar": 5,
@@ -929,15 +2948,25 @@
 				],
 				"name": "SingleAssignmentDisposable",
 				"line": 334,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL368_100)\n---\nint count = 0;\nclass TestDisposable : Disposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nauto temp = new SingleAssignmentDisposable;\ntemp.setDisposable(new TestDisposable);\nassert(!temp.isDisposed);\nassert(count == 0);\ntemp.dispose();\nassert(temp.isDisposed);\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL368_100)\n",
-				"interfaces": [
-					"rx.disposable.Cancelable"
-				],
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_368_8)\n---\nint count = 0;\nclass TestDisposable : Disposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nauto temp = new SingleAssignmentDisposable;\ntemp.setDisposable(new TestDisposable);\nassert(!temp.isDisposed);\nassert(count == 0);\ntemp.dispose();\nassert(temp.isDisposed);\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_368_8)\n",
 				"char": 7,
 				"kind": "class"
 			},
 			{
+				"interfaces": [
+					"rx.disposable.Cancelable"
+				],
 				"members": [
+					{
+						"endchar": 5,
+						"name": "this",
+						"line": 421,
+						"deco": "FZC2rx10disposable16SerialDisposable",
+						"endline": 424,
+						"originalType": "()",
+						"char": 5,
+						"kind": "constructor"
+					},
 					{
 						"endchar": 5,
 						"name": "isDisposed",
@@ -994,14 +3023,24 @@
 				"name": "SerialDisposable",
 				"line": 418,
 				"comment": "\n",
-				"interfaces": [
-					"rx.disposable.Cancelable"
-				],
 				"char": 1,
 				"kind": "class"
 			},
 			{
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
 				"members": [
+					{
+						"endchar": 5,
+						"name": "this",
+						"line": 527,
+						"deco": "FZC2rx10disposable16SignalDisposable",
+						"endline": 530,
+						"originalType": "()",
+						"char": 5,
+						"kind": "constructor"
+					},
 					{
 						"endchar": 5,
 						"name": "signal",
@@ -1029,61 +3068,84 @@
 				"name": "SignalDisposable",
 				"line": 524,
 				"comment": "\n",
-				"interfaces": [
-					"rx.disposable.Disposable"
-				],
 				"char": 1,
 				"kind": "class"
 			},
 			{
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
 				"members": [
 					{
 						"endchar": 5,
-						"originalType": "(Disposable[] disposables...)",
 						"name": "this",
 						"line": 564,
 						"comment": "\n",
-						"deco": "FAC2rx10disposable10DisposableXC2rx10disposable19CompositeDisposable",
+						"deco": "FAC2rx10disposable10DisposableXCQBdQBd19CompositeDisposable",
 						"parameters": [
 							{
 								"name": "disposables",
 								"deco": "AC2rx10disposable10Disposable"
 							}
 						],
-						"endline": 567,
+						"endline": 568,
+						"originalType": "(Disposable[] disposables...)",
 						"char": 5,
 						"kind": "constructor"
 					},
 					{
 						"endchar": 5,
 						"name": "dispose",
-						"line": 571,
+						"line": 572,
 						"comment": "\n",
 						"deco": "FZv",
-						"endline": 575,
+						"endline": 592,
 						"char": 10,
 						"kind": "function",
 						"overrides": [
 							"rx.disposable.Disposable.dispose"
 						]
+					},
+					{
+						"endchar": 5,
+						"name": "clear",
+						"line": 594,
+						"deco": "FZv",
+						"endline": 607,
+						"char": 10,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "insert",
+						"line": 609,
+						"deco": "FC2rx10disposable10DisposableZv",
+						"parameters": [
+							{
+								"name": "item",
+								"deco": "C2rx10disposable10Disposable"
+							}
+						],
+						"endline": 627,
+						"char": 10,
+						"kind": "function"
 					}
 				],
 				"name": "CompositeDisposable",
 				"line": 560,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL581_106)\n---\nauto d1 = new SingleAssignmentDisposable;\nauto d2 = new SerialDisposable;\nauto d = new CompositeDisposable(d1, d2);\nd.dispose();\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL581_106)\n",
-				"interfaces": [
-					"rx.disposable.Disposable"
-				],
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_635_14)\n---\nauto d1 = new SingleAssignmentDisposable;\nauto d2 = new SerialDisposable;\nauto d = new CompositeDisposable(d1, d2);\nd.dispose();\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_635_14)\n",
 				"char": 1,
 				"kind": "class"
 			},
 			{
+				"interfaces": [
+					"rx.disposable.Disposable"
+				],
 				"members": [
 					{
 						"endchar": 5,
-						"originalType": "(void delegate() dispose)",
 						"name": "this",
-						"line": 594,
+						"line": 656,
 						"comment": "\n",
 						"deco": "FDFZvZC2rx10disposable20AnonymouseDisposable",
 						"parameters": [
@@ -1092,17 +3154,18 @@
 								"deco": "DFZv"
 							}
 						],
-						"endline": 598,
+						"endline": 660,
+						"originalType": "(void delegate() dispose)",
 						"char": 5,
 						"kind": "constructor"
 					},
 					{
 						"endchar": 5,
 						"name": "dispose",
-						"line": 602,
+						"line": 664,
 						"comment": "\n",
 						"deco": "FZv",
-						"endline": 609,
+						"endline": 671,
 						"char": 10,
 						"kind": "function",
 						"overrides": [
@@ -1111,11 +3174,65 @@
 					}
 				],
 				"name": "AnonymouseDisposable",
-				"line": 590,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL615_107)\n---\nint count = 0;\nauto d = new AnonymouseDisposable({ count++; });\nassert(count == 0);\nd.dispose();\nassert(count == 1);\nd.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL615_107)\n",
+				"line": 652,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_677_16)\n---\nint count = 0;\nauto d = new AnonymouseDisposable({ count++; });\nassert(count == 0);\nd.dispose();\nassert(count == 1);\nd.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_677_16)\n",
+				"char": 1,
+				"kind": "class"
+			},
+			{
 				"interfaces": [
 					"rx.disposable.Disposable"
 				],
+				"members": [
+					{
+						"endchar": 5,
+						"name": "this",
+						"line": 693,
+						"comment": "\n",
+						"deco": "FC2rx10disposable10DisposablebZCQBeQBe18RefCountDisposable",
+						"parameters": [
+							{
+								"name": "disposable",
+								"deco": "C2rx10disposable10Disposable"
+							},
+							{
+								"name": "throwWhenDisposed",
+								"deco": "b",
+								"default": "false"
+							}
+						],
+						"endline": 702,
+						"originalType": "(Disposable disposable, bool throwWhenDisposed = false)",
+						"char": 5,
+						"kind": "constructor"
+					},
+					{
+						"endchar": 5,
+						"name": "getDisposable",
+						"line": 706,
+						"comment": "\n",
+						"deco": "FZC2rx10disposable10Disposable",
+						"endline": 724,
+						"char": 16,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "dispose",
+						"line": 727,
+						"comment": "\n",
+						"deco": "FZv",
+						"endline": 750,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.disposable.Disposable.dispose"
+						]
+					}
+				],
+				"name": "RefCountDisposable",
+				"line": 689,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_788_17)\n---\nbool disposed = false;\nauto disposable = new RefCountDisposable(new AnonymouseDisposable({\n        disposed = true;\n    }));\n\nauto subscription = disposable.getDisposable();\n\nassert(!disposed);\ndisposable.dispose();\nassert(!disposed);\n\nsubscription.dispose();\nassert(disposed);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_788_17)\n",
 				"char": 1,
 				"kind": "class"
 			}
@@ -1132,18 +3249,18 @@
 					{
 						"name": "isObservable",
 						"line": 16,
-						"storageClass": [
-							"enum"
-						],
 						"deco": "b",
 						"init": "is(T.ElementType : E) && is(typeof(()\r\n{\r\nT observable = void;\r\nObserver!E observer = void;\r\nauto d = observable.subscribe(observer);\r\nstatic assert(isDisposable!(typeof(d)));\r\n}\r\n()))",
 						"char": 15,
-						"kind": "variable"
+						"kind": "variable",
+						"storageClass": [
+							"enum"
+						]
 					}
 				],
 				"name": "isObservable",
 				"line": 14,
-				"comment": "Tests if something is a Observable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL24_108)\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    Disposable subscribe(T)(T observer)\n    {\n        static assert(isObserver!(T, int));\n        return null;\n    }\n}\n\nstatic assert(isObservable!(TestObservable, int));\nstatic assert(!isObservable!(TestObservable, Object));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL24_108)\n",
+				"comment": "Tests if something is a Observable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_33_0)\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    Disposable subscribe(T)(T observer)\n    {\n        static assert(isObserver!(T, int));\n        return null;\n    }\n}\n\nstatic assert(isObservable!(TestObservable));\nstatic assert(isObservable!(TestObservable, int));\nstatic assert(!isObservable!(TestObservable, Object));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_33_0)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_52_1)\n---\nstatic assert(isObservable!(Observable!int));\nstatic assert(!isObservable!(Observer!int));\nstatic assert(!isObservable!(string));\nstatic assert(!isObservable!(Object));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_52_1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -1160,20 +3277,46 @@
 			{
 				"members": [
 					{
-						"name": "isSubscribable",
-						"line": 44,
+						"name": "isObservable",
+						"line": 26,
+						"deco": "b",
+						"init": "__traits(compiles, ()\r\n{\r\nstatic assert(isObservable!(TObservable, TObservable.ElementType));\r\n}\r\n)",
+						"char": 15,
+						"kind": "variable",
 						"storageClass": [
 							"enum"
-						],
+						]
+					}
+				],
+				"name": "isObservable",
+				"line": 24,
+				"comment": "ditto\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "isSubscribable",
+						"line": 63,
 						"deco": "b",
-						"init": "is(typeof(()\r\n{\r\nTObservable observable = void;\r\nTObserver observer = void;\r\nauto d = observable.subscribe(observer);\r\nstatic assert(isDisposable!(typeof(d)));\r\n}\r\n()))",
+						"init": "is(typeof(()\r\n{\r\nstatic assert(isOutputRange!(TObserver, TObservable.ElementType));\r\nTObservable observable = void;\r\nTObserver observer = void;\r\nauto d = observable.subscribe(observer);\r\nstatic assert(isDisposable!(typeof(d)));\r\n}\r\n()))",
 						"char": 15,
-						"kind": "variable"
+						"kind": "variable",
+						"storageClass": [
+							"enum"
+						]
 					}
 				],
 				"name": "isSubscribable",
-				"line": 42,
-				"comment": "Test if the observer can subscribe to the observable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL52_109)\n---\nstruct TestDisposable\n{\n    void dispose()\n    {\n    }\n}\n\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void completed()\n    {\n    }\n\n    void failure(Exception e)\n    {\n    }\n}\n\nstruct TestObservable\n{\n    TestDisposable subscribe(TestObserver observer)\n    {\n        return TestDisposable();\n    }\n}\n\nstatic assert(isSubscribable!(TestObservable, TestObserver));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL52_109)\n",
+				"line": 61,
+				"comment": "Test if the observer can subscribe to the observable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_73_2)\n---\nstruct TestDisposable\n{\n    void dispose()\n    {\n    }\n}\n\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void completed()\n    {\n    }\n\n    void failure(Exception e)\n    {\n    }\n}\n\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    TestDisposable subscribe(TestObserver observer)\n    {\n        return TestDisposable();\n    }\n}\n\nstatic assert(isSubscribable!(TestObservable, TestObserver));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_73_2)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -1192,11 +3335,8 @@
 					{
 						"endchar": 1,
 						"name": "doSubscribe",
-						"line": 88,
+						"line": 111,
 						"type": "(auto ref TObservable observable, void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -1219,14 +3359,17 @@
 								"type": "void delegate(Exception)"
 							}
 						],
-						"endline": 92,
+						"endline": 115,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "doSubscribe",
-				"line": 88,
-				"comment": "The helper for subscribe easier.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL131_111)\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    auto subscribe(TObserver)(TObserver observer)\n    {\n        .put(observer, [0, 1, 2]);\n        return NopDisposable.instance;\n    }\n}\n\nTestObservable observable;\nint[] result;\nobservable.doSubscribe!(n => result ~= n);\nassert(result.length == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL131_111)\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL151_112)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n}\n\nstruct TestObservable1\n{\n    alias ElementType = int;\n    Disposable subscribe(Observer!int observer)\n    {\n        return null;\n    }\n}\n\nstruct TestObservable2\n{\n    alias ElementType = int;\n    Disposable subscribe(T)(T observer)\n    {\n        return null;\n    }\n}\n\nTestObservable1 o1;\nauto d0 = o1.doSubscribe((int n) {  }, () {  }, (Exception e) {  });\nauto d1 = o1.doSubscribe((int n) {  }, () {  });\nauto d2 = o1.doSubscribe((int n) {  }, (Exception e) {  });\nauto d3 = o1.doSubscribe((int n) {  });\nauto d4 = o1.doSubscribe(TestObserver());\nTestObservable2 o2;\nauto d5 = o2.doSubscribe((int n) {  }, () {  }, (Exception e) {  });\nauto d6 = o2.doSubscribe((int n) {  }, () {  });\nauto d7 = o2.doSubscribe((int n) {  }, (Exception e) {  });\nauto d8 = o2.doSubscribe((int n) {  });\nauto d9 = o2.doSubscribe(TestObserver());\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL151_112)\n",
+				"line": 111,
+				"comment": "The helper for subscribe easier.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_172_3)\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    auto subscribe(TObserver)(TObserver observer)\n    {\n        .put(observer, [0, 1, 2]);\n        return NopDisposable.instance;\n    }\n}\n\nTestObservable observable;\nint[] result;\nobservable.doSubscribe!(n => result ~= n);\nassert(result.length == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_172_3)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_192_4)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n}\n\nstruct TestObservable1\n{\n    alias ElementType = int;\n    Disposable subscribe(Observer!int observer)\n    {\n        return null;\n    }\n}\n\nstruct TestObservable2\n{\n    alias ElementType = int;\n    Disposable subscribe(T)(T observer)\n    {\n        return null;\n    }\n}\n\nTestObservable1 o1;\nauto d0 = o1.doSubscribe((int n) {  }, () {  }, (Exception e) {  });\nauto d1 = o1.doSubscribe((int n) {  }, () {  });\nauto d2 = o1.doSubscribe((int n) {  }, (Exception e) {  });\nauto d3 = o1.doSubscribe((int n) {  });\nauto d4 = o1.doSubscribe(TestObserver());\nTestObservable2 o2;\nauto d5 = o2.doSubscribe((int n) {  }, () {  }, (Exception e) {  });\nauto d6 = o2.doSubscribe((int n) {  }, () {  });\nauto d7 = o2.doSubscribe((int n) {  }, (Exception e) {  });\nauto d8 = o2.doSubscribe((int n) {  });\nauto d9 = o2.doSubscribe(TestObserver());\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_192_4)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -1245,11 +3388,8 @@
 					{
 						"endchar": 1,
 						"name": "doSubscribe",
-						"line": 94,
+						"line": 117,
 						"type": "(auto ref TObservable observable, void delegate(E) doPut, void delegate() doCompleted)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -1268,13 +3408,16 @@
 								"type": "void delegate()"
 							}
 						],
-						"endline": 98,
+						"endline": 121,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "doSubscribe",
-				"line": 94,
+				"line": 117,
 				"comment": "ditto\n",
 				"parameters": [
 					{
@@ -1294,11 +3437,8 @@
 					{
 						"endchar": 1,
 						"name": "doSubscribe",
-						"line": 100,
+						"line": 123,
 						"type": "(auto ref TObservable observable, void delegate(E) doPut, void delegate(Exception) doFailure)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -1317,13 +3457,16 @@
 								"type": "void delegate(Exception)"
 							}
 						],
-						"endline": 104,
+						"endline": 127,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "doSubscribe",
-				"line": 100,
+				"line": 123,
 				"comment": "ditto\n",
 				"parameters": [
 					{
@@ -1343,11 +3486,8 @@
 					{
 						"endchar": 1,
 						"name": "doSubscribe",
-						"line": 106,
+						"line": 129,
 						"type": "(auto ref TObservable observable)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -1358,13 +3498,16 @@
 								]
 							}
 						],
-						"endline": 110,
+						"endline": 151,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "doSubscribe",
-				"line": 106,
+				"line": 129,
 				"comment": "ditto\n",
 				"parameters": [
 					{
@@ -1384,11 +3527,8 @@
 					{
 						"endchar": 1,
 						"name": "doSubscribe",
-						"line": 112,
+						"line": 153,
 						"type": "(auto ref TObservable observable, auto ref TObserver observer)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -1407,13 +3547,16 @@
 								]
 							}
 						],
-						"endline": 129,
+						"endline": 170,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "doSubscribe",
-				"line": 112,
+				"line": 153,
 				"comment": "ditto\n",
 				"parameters": [
 					{
@@ -1432,14 +3575,35 @@
 				"members": [
 					{
 						"name": "Observable",
-						"line": 193,
-						"members": [],
+						"line": 268,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 270,
+								"type": "E",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"name": "subscribe",
+								"line": 272,
+								"type": "Disposable(Observer!E observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "Observer!E"
+									}
+								],
+								"char": 16,
+								"kind": "function"
+							}
+						],
 						"char": 1,
 						"kind": "interface"
 					}
 				],
 				"name": "Observable",
-				"line": 193,
+				"line": 268,
 				"comment": "Wrapper for Observable objects.\n",
 				"parameters": [
 					{
@@ -1454,14 +3618,52 @@
 				"members": [
 					{
 						"name": "ObservableObject",
-						"line": 219,
-						"members": [],
+						"line": 294,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 297,
+								"type": "(R observable)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "R"
+									}
+								],
+								"endline": 300,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "subscribe",
+								"line": 303,
+								"type": "Disposable(Observer!E observer)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "Observer!E"
+									}
+								],
+								"endline": 306,
+								"char": 16,
+								"kind": "function"
+							},
+							{
+								"name": "_observable",
+								"line": 309,
+								"type": "R",
+								"char": 7,
+								"kind": "variable"
+							}
+						],
 						"char": 1,
 						"kind": "class"
 					}
 				],
 				"name": "ObservableObject",
-				"line": 219,
+				"line": 294,
 				"comment": "Class that implements Observable interface and wraps the subscribe method in virtual function.\n",
 				"parameters": [
 					{
@@ -1483,7 +3685,7 @@
 							{
 								"endchar": 5,
 								"name": "observableObject",
-								"line": 240,
+								"line": 315,
 								"type": "Observable!E(auto ref R observable)",
 								"parameters": [
 									{
@@ -1495,13 +3697,13 @@
 										]
 									}
 								],
-								"endline": 250,
+								"endline": 325,
 								"char": 18,
 								"kind": "function"
 							}
 						],
 						"name": "observableObject",
-						"line": 240,
+						"line": 315,
 						"parameters": [
 							{
 								"name": "R",
@@ -1513,8 +3715,8 @@
 					}
 				],
 				"name": "observableObject",
-				"line": 238,
-				"comment": "Wraps subscribe method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL253_115)\n---\nint subscribeCount = 0;\nclass TestObservable : Observable!int\n{\n    Disposable subscribe(Observer!int observer)\n    {\n        subscribeCount++;\n        return NopDisposable.instance;\n    }\n}\n\nauto test = new TestObservable;\nauto observable = observableObject!int(test);\nassert(observable is test);\nassert(subscribeCount == 0);\nauto d = observable.subscribe(null);\nassert(subscribeCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL253_115)\n",
+				"line": 313,
+				"comment": "Wraps subscribe method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_328_8)\n---\nint subscribeCount = 0;\nclass TestObservable : Observable!int\n{\n    Disposable subscribe(Observer!int observer)\n    {\n        subscribeCount++;\n        return NopDisposable.instance;\n    }\n}\n\nauto test = new TestObservable;\nauto observable = observableObject!int(test);\nassert(observable is test);\nassert(subscribeCount == 0);\nauto d = observable.subscribe(null);\nassert(subscribeCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_328_8)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -1529,19 +3731,19 @@
 					{
 						"endchar": 1,
 						"name": "defer",
-						"line": 308,
+						"line": 444,
 						"type": "()",
+						"endline": 473,
+						"char": 6,
+						"kind": "function",
 						"storageClass": [
 							"auto"
-						],
-						"endline": 386,
-						"char": 6,
-						"kind": "function"
+						]
 					}
 				],
 				"name": "defer",
-				"line": 308,
-				"comment": "Create observable by function that template parameter.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL388_118)\n---\nauto sub = defer!(int, (observer) {\n    observer.put(1);\n    observer.put(2);\n    observer.put(3);\n    observer.completed();\n});\n\nint countPut = 0;\nint countCompleted = 0;\nstruct A\n{\n    void put(int n)\n    {\n        countPut++;\n    }\n\n    void completed()\n    {\n        countCompleted++;\n    }\n}\n\nassert(countPut == 0);\nassert(countCompleted == 0);\nauto d = sub.doSubscribe(A());\nassert(countPut == 3);\nassert(countCompleted == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL388_118)\n",
+				"line": 444,
+				"comment": "Create observable by function that template parameter.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_475_10)\n---\nauto sub = defer!(int, (observer) {\n    observer.put(1);\n    observer.put(2);\n    observer.put(3);\n    observer.completed();\n});\n\nint countPut = 0;\nint countCompleted = 0;\nstruct A\n{\n    void put(int n)\n    {\n        countPut++;\n    }\n\n    void completed()\n    {\n        countCompleted++;\n    }\n}\n\nassert(countPut == 0);\nassert(countCompleted == 0);\nauto d = sub.doSubscribe(A());\nassert(countPut == 3);\nassert(countCompleted == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_475_10)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -1559,12 +3761,140 @@
 				"members": [
 					{
 						"endchar": 1,
-						"name": "from",
-						"line": 619,
-						"type": "(auto ref R input)",
+						"name": "defer",
+						"line": 590,
+						"type": "(auto ref TSubscribe subscribeImpl)",
+						"parameters": [
+							{
+								"name": "subscribeImpl",
+								"type": "TSubscribe",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 648,
+						"char": 6,
+						"kind": "function",
 						"storageClass": [
 							"auto"
+						]
+					}
+				],
+				"name": "defer",
+				"line": 590,
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					},
+					{
+						"name": "TSubscribe",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "empty",
+						"line": 792,
+						"type": "()",
+						"endline": 809,
+						"char": 6,
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
+					}
+				],
+				"name": "empty",
+				"line": 792,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "never",
+						"line": 822,
+						"type": "()",
+						"endline": 835,
+						"char": 6,
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
+					}
+				],
+				"name": "never",
+				"line": 822,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "error",
+						"line": 845,
+						"type": "(auto ref Exception e)",
+						"parameters": [
+							{
+								"name": "e",
+								"type": "Exception",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
 						],
+						"endline": 869,
+						"char": 6,
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
+					}
+				],
+				"name": "error",
+				"line": 845,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "from",
+						"line": 882,
+						"type": "(auto ref R input)",
 						"parameters": [
 							{
 								"name": "input",
@@ -1575,13 +3905,16 @@
 								]
 							}
 						],
-						"endline": 643,
+						"endline": 906,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "from",
-				"line": 619,
+				"line": 882,
 				"comment": "\n",
 				"parameters": [
 					{
@@ -1595,8 +3928,8 @@
 			},
 			{
 				"name": "asObservable",
-				"line": 645,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL648_128)\n---\nimport std.range : iota;\n\nauto obs = from(iota(10));\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL648_128)\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL664_129)\n---\nimport std.range : iota;\n\nauto obs = iota(10).asObservable();\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL664_129)\n",
+				"line": 908,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_911_22)\n---\nimport std.range : iota;\n\nauto obs = from(iota(10));\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_911_22)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_927_23)\n---\nimport std.range : iota;\n\nauto obs = iota(10).asObservable();\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_927_23)\n",
 				"char": 1,
 				"kind": "alias"
 			}
@@ -1613,18 +3946,18 @@
 					{
 						"name": "hasCompleted",
 						"line": 13,
-						"storageClass": [
-							"enum"
-						],
 						"deco": "b",
 						"init": "is(typeof(()\r\n{\r\nT observer = void;\r\nobserver.completed();\r\n}\r\n()))",
 						"char": 15,
-						"kind": "variable"
+						"kind": "variable",
+						"storageClass": [
+							"enum"
+						]
 					}
 				],
 				"name": "hasCompleted",
 				"line": 10,
-				"comment": "Tests if something has completed method.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL20_130)\n---\nstruct A\n{\n    void completed();\n}\n\nstruct B\n{\n    void _completed();\n}\n\nstatic assert(hasCompleted!A);\nstatic assert(!hasCompleted!B);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL20_130)\n",
+				"comment": "Tests if something has completed method.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_20_0)\n---\nstruct A\n{\n    void completed();\n}\n\nstruct B\n{\n    void _completed();\n}\n\nstatic assert(hasCompleted!A);\nstatic assert(!hasCompleted!B);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_20_0)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -1639,18 +3972,18 @@
 					{
 						"name": "hasFailure",
 						"line": 40,
-						"storageClass": [
-							"enum"
-						],
 						"deco": "b",
 						"init": "is(typeof(()\r\n{\r\nT observer = void;\r\nException e = void;\r\nobserver.failure(e);\r\n}\r\n()))",
 						"char": 15,
-						"kind": "variable"
+						"kind": "variable",
+						"storageClass": [
+							"enum"
+						]
 					}
 				],
 				"name": "hasFailure",
 				"line": 37,
-				"comment": "Tests if something has failure method.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL48_131)\n---\nstruct A\n{\n    void failure(Exception e);\n}\n\nstruct B\n{\n    void _failure(Exception e);\n}\n\nstruct C\n{\n    void failure();\n}\n\nstatic assert(hasFailure!A);\nstatic assert(!hasFailure!B);\nstatic assert(!hasFailure!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL48_131)\n",
+				"comment": "Tests if something has failure method.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_48_1)\n---\nstruct A\n{\n    void failure(Exception e);\n}\n\nstruct B\n{\n    void _failure(Exception e);\n}\n\nstruct C\n{\n    void failure();\n}\n\nstatic assert(hasFailure!A);\nstatic assert(!hasFailure!B);\nstatic assert(!hasFailure!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_48_1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -1665,18 +3998,18 @@
 					{
 						"name": "isObserver",
 						"line": 73,
-						"storageClass": [
-							"enum"
-						],
 						"deco": "b",
 						"init": "isOutputRange!(T, E) && hasCompleted!T && hasFailure!T",
 						"char": 15,
-						"kind": "variable"
+						"kind": "variable",
+						"storageClass": [
+							"enum"
+						]
 					}
 				],
 				"name": "isObserver",
 				"line": 71,
-				"comment": "Tests if something is Observer.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL76_132)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void completed()\n    {\n    }\n\n    void failure(Exception e)\n    {\n    }\n}\n\nstatic assert(isObserver!(TestObserver, int));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL76_132)\n",
+				"comment": "Tests if something is Observer.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_76_2)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void completed()\n    {\n    }\n\n    void failure(Exception e)\n    {\n    }\n}\n\nstatic assert(isObserver!(TestObserver, int));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_76_2)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -1725,7 +4058,7 @@
 				],
 				"name": "Observer",
 				"line": 97,
-				"comment": "Wraps completed and failure method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL105_133)\n---\nalias TObserver = Observer!byte;\nstatic assert(isObserver!(TObserver, byte));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL105_133)\n",
+				"comment": "Wraps completed and failure method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_105_3)\n---\nalias TObserver = Observer!byte;\nstatic assert(isObserver!(TObserver, byte));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_105_3)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -1741,6 +4074,21 @@
 						"name": "ObserverObject",
 						"line": 112,
 						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 115,
+								"type": "(R range)",
+								"parameters": [
+									{
+										"name": "range",
+										"type": "R"
+									}
+								],
+								"endline": 119,
+								"char": 5,
+								"kind": "constructor"
+							},
 							{
 								"endchar": 5,
 								"name": "completed",
@@ -1766,6 +4114,13 @@
 								"endline": 137,
 								"char": 10,
 								"kind": "function"
+							},
+							{
+								"name": "_range",
+								"line": 140,
+								"type": "R",
+								"char": 7,
+								"kind": "variable"
 							}
 						],
 						"char": 1,
@@ -1822,7 +4177,7 @@
 				],
 				"name": "observerObject",
 				"line": 144,
-				"comment": "Wraps subscribe method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL152_134)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void put(Object obj)\n    {\n    }\n}\n\nObserver!int observer = observerObject!int(TestObserver());\nobserver.put(0);\nobserver.completed();\nobserver.failure(null);\nstatic assert(isObserver!(typeof(observer), int));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL152_134)\n",
+				"comment": "Wraps subscribe method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_152_4)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void put(Object obj)\n    {\n    }\n}\n\nObserver!int observer = observerObject!int(TestObserver());\nobserver.put(0);\nobserver.completed();\nobserver.failure(null);\nstatic assert(isObserver!(typeof(observer), int));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_152_4)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -1840,16 +4195,62 @@
 						"members": [
 							{
 								"endchar": 5,
+								"name": "this",
+								"line": 313,
+								"type": "()",
+								"endline": 315,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 318,
+								"type": "void(E)",
+								"parameters": [
+									{
+										"type": "E"
+									}
+								],
+								"endline": 320,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 322,
+								"type": "void()",
+								"endline": 324,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "failure",
+								"line": 326,
+								"type": "void(Exception)",
+								"parameters": [
+									{
+										"type": "Exception"
+									}
+								],
+								"endline": 328,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
 								"name": "instance",
 								"line": 332,
 								"comment": "\n",
-								"storageClass": [
-									"static"
-								],
 								"type": "Observer!E()",
 								"endline": 338,
 								"char": 23,
-								"kind": "function"
+								"kind": "function",
+								"storageClass": [
+									"static"
+								]
 							}
 						],
 						"char": 7,
@@ -1858,7 +4259,7 @@
 				],
 				"name": "NopObserver",
 				"line": 310,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL341_138)\n---\nObserver!int o1 = NopObserver!int.instance;\nObserver!int o2 = NopObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL341_138)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_341_8)\n---\nObserver!int o1 = NopObserver!int.instance;\nObserver!int o2 = NopObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_341_8)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -1873,14 +4274,119 @@
 					{
 						"name": "DoneObserver",
 						"line": 350,
-						"members": [],
+						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 353,
+								"type": "()",
+								"endline": 355,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 357,
+								"type": "(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 360,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "exception",
+								"line": 363,
+								"type": "@property Exception()",
+								"endline": 366,
+								"char": 15,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "exception",
+								"line": 367,
+								"type": "@property void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 370,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 373,
+								"type": "void(E)",
+								"parameters": [
+									{
+										"type": "E"
+									}
+								],
+								"endline": 375,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "completed",
+								"line": 377,
+								"type": "void()",
+								"endline": 379,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "failure",
+								"line": 381,
+								"type": "void(Exception)",
+								"parameters": [
+									{
+										"type": "Exception"
+									}
+								],
+								"endline": 383,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_exception",
+								"line": 386,
+								"type": "Exception",
+								"char": 15,
+								"kind": "variable"
+							},
+							{
+								"endchar": 5,
+								"name": "instance",
+								"line": 389,
+								"type": "Observer!E()",
+								"endline": 395,
+								"char": 23,
+								"kind": "function",
+								"storageClass": [
+									"static"
+								]
+							}
+						],
 						"char": 7,
 						"kind": "class"
 					}
 				],
 				"name": "DoneObserver",
 				"line": 350,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL398_139)\n---\nObserver!int o1 = DoneObserver!int.instance;\nObserver!int o2 = DoneObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL398_139)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_398_9)\n---\nObserver!int o1 = DoneObserver!int.instance;\nObserver!int o2 = DoneObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_398_9)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -1896,6 +4402,30 @@
 						"name": "CompositeObserver",
 						"line": 414,
 						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 417,
+								"type": "()",
+								"endline": 419,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 422,
+								"type": "(Observer!E[] observers)",
+								"parameters": [
+									{
+										"name": "observers",
+										"type": "Observer!E[]"
+									}
+								],
+								"endline": 425,
+								"char": 5,
+								"kind": "constructor"
+							},
 							{
 								"endchar": 5,
 								"name": "put",
@@ -1975,13 +4505,20 @@
 								"name": "empty",
 								"line": 470,
 								"comment": "\n",
-								"storageClass": [
-									"static"
-								],
 								"type": "CompositeObserver!E()",
 								"endline": 476,
 								"char": 32,
-								"kind": "function"
+								"kind": "function",
+								"storageClass": [
+									"static"
+								]
+							},
+							{
+								"name": "_observers",
+								"line": 479,
+								"type": "Observer!E[]",
+								"char": 18,
+								"kind": "variable"
 							}
 						],
 						"char": 8,
@@ -1990,7 +4527,7 @@
 				],
 				"name": "CompositeObserver",
 				"line": 414,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL482_141)\n---\nint count = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        count++;\n    }\n}\n\nauto c1 = new CompositeObserver!int;\nc1.put(0);\nauto o1 = observerObject!int(TestObserver());\nauto c2 = c1.add(o1);\nc1.put(0);\nassert(count == 0);\nc2.put(0);\nassert(count == 1);\nauto c3 = c2.add(observerObject!int(TestObserver()));\nc3.put(0);\nassert(count == 3);\nauto c4 = c3.remove(o1);\nc4.put(0);\nassert(count == 4);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL482_141)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_482_11)\n---\nint count = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        count++;\n    }\n}\n\nauto c1 = new CompositeObserver!int;\nc1.put(0);\nauto o1 = observerObject!int(TestObserver());\nauto c2 = c1.add(o1);\nc1.put(0);\nassert(count == 0);\nc2.put(0);\nassert(count == 1);\nauto c3 = c2.add(observerObject!int(TestObserver()));\nc3.put(0);\nassert(count == 3);\nauto c4 = c3.remove(o1);\nc4.put(0);\nassert(count == 4);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_482_11)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -2007,9 +4544,6 @@
 						"name": "makeObserver",
 						"line": 527,
 						"type": "(void delegate(E) doPut, void delegate() doCompleted, void delegate(Exception) doFailure)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "doPut",
@@ -2026,12 +4560,15 @@
 						],
 						"endline": 566,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "makeObserver",
 				"line": 527,
-				"comment": "The helper for the own observer.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL632_144)\n---\nint countPut = 0;\nint countCompleted = 0;\nint countFailure = 0;\n\nauto observer = makeObserver((int) { countPut++; }, () { countCompleted++; }, (Exception) {\n    countFailure++;\n});\n\n.put(observer, 0);\nassert(countPut == 1);\n\nobserver.completed();\nassert(countCompleted == 1);\n\nobserver.failure(null);\nassert(countFailure == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL632_144)\n",
+				"comment": "The helper for the own observer.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_632_13)\n---\nint countPut = 0;\nint countCompleted = 0;\nint countFailure = 0;\n\nauto observer = makeObserver((int) { countPut++; }, () { countCompleted++; }, (Exception) {\n    countFailure++;\n});\n\n.put(observer, 0);\nassert(countPut == 1);\n\nobserver.completed();\nassert(countCompleted == 1);\n\nobserver.failure(null);\nassert(countFailure == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_632_13)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -2048,9 +4585,6 @@
 						"name": "makeObserver",
 						"line": 568,
 						"type": "(void delegate(E) doPut, void delegate() doCompleted)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "doPut",
@@ -2063,7 +4597,10 @@
 						],
 						"endline": 598,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "makeObserver",
@@ -2085,9 +4622,6 @@
 						"name": "makeObserver",
 						"line": 600,
 						"type": "(void delegate(E) doPut, void delegate(Exception) doFailure)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "doPut",
@@ -2100,7 +4634,10 @@
 						],
 						"endline": 630,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "makeObserver",
@@ -2120,6 +4657,61 @@
 		"kind": "module"
 	},
 	{
+		"file": "source\\rx\\package.d",
+		"name": "rx",
+		"members": [
+			{
+				"name": "rx.disposable",
+				"line": 3,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.observer",
+				"line": 4,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.observable",
+				"line": 5,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.subject",
+				"line": 6,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.scheduler",
+				"line": 7,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.range",
+				"line": 8,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.algorithm",
+				"line": 9,
+				"char": 15,
+				"kind": "import"
+			},
+			{
+				"name": "rx.util",
+				"line": 10,
+				"char": 15,
+				"kind": "import"
+			}
+		],
+		"kind": "module"
+	},
+	{
 		"file": "source\\rx\\range.d",
 		"name": "rx.range",
 		"members": [
@@ -2130,9 +4722,6 @@
 						"name": "drop",
 						"line": 43,
 						"type": "(auto ref TObservable observable, size_t n)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -2149,12 +4738,15 @@
 						],
 						"endline": 113,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "drop",
 				"line": 43,
-				"comment": "Creates the observable that results from discarding the first n elements from the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL115_149)\n---\nimport rx.subject;\n\nauto subject = new SubjectObject!int;\nauto dropped = subject.drop(1);\nstatic assert(isObservable!(typeof(dropped), int));\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto disposable = dropped.subscribe(buf);\n\nsubject.put(0);\nassert(buf.data.length == 0);\nsubject.put(1);\nassert(buf.data.length == 1);\n\nauto buf2 = appender!(int[]);\ndropped.subscribe(buf2);\nassert(buf2.data.length == 0);\nsubject.put(2);\nassert(buf2.data.length == 0);\nassert(buf.data.length == 2);\nsubject.put(3);\nassert(buf2.data.length == 1);\nassert(buf.data.length == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL115_149)\n",
+				"comment": "Creates the observable that results from discarding the first n elements from the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_range_d_115_1)\n---\nimport rx.subject;\n\nauto subject = new SubjectObject!int;\nauto dropped = subject.drop(1);\nstatic assert(isObservable!(typeof(dropped), int));\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto disposable = dropped.subscribe(buf);\n\nsubject.put(0);\nassert(buf.data.length == 0);\nsubject.put(1);\nassert(buf.data.length == 1);\n\nauto buf2 = appender!(int[]);\ndropped.subscribe(buf2);\nassert(buf2.data.length == 0);\nsubject.put(2);\nassert(buf2.data.length == 0);\nassert(buf.data.length == 2);\nsubject.put(3);\nassert(buf2.data.length == 1);\nassert(buf.data.length == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_range_d_115_1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -2171,9 +4763,6 @@
 						"name": "take",
 						"line": 165,
 						"type": "(auto ref TObservable observable, size_t n)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -2190,12 +4779,15 @@
 						],
 						"endline": 254,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "take",
 				"line": 165,
-				"comment": "Creates a sub-observable consisting of only up to the first n elements of the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL256_151)\n---\nimport std.array;\nimport rx.subject;\n\nauto pub = new SubjectObject!int;\nauto sub = appender!(int[]);\n\nauto d = pub.take(2).subscribe(sub);\nforeach (i; 0 .. 10)\n{\n    pub.put(i);\n}\n\nimport std.algorithm;\n\nassert(equal(sub.data, [0, 1]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL256_151)\n",
+				"comment": "Creates a sub-observable consisting of only up to the first n elements of the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_range_d_256_3)\n---\nimport std.array;\nimport rx.subject;\n\nauto pub = new SubjectObject!int;\nauto sub = appender!(int[]);\n\nauto d = pub.take(2).subscribe(sub);\nforeach (i; 0 .. 10)\n{\n    pub.put(i);\n}\n\nimport std.algorithm;\n\nassert(equal(sub.data, [0, 1]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_range_d_256_3)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -2212,9 +4804,6 @@
 						"name": "takeLast",
 						"line": 340,
 						"type": "(auto ref TObservable observable)",
-						"storageClass": [
-							"auto"
-						],
 						"parameters": [
 							{
 								"name": "observable",
@@ -2227,12 +4816,15 @@
 						],
 						"endline": 410,
 						"char": 6,
-						"kind": "function"
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
 					}
 				],
 				"name": "takeLast",
 				"line": 340,
-				"comment": "Creates a observable that take only a last element of the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL412_154)\n---\nimport rx.subject;\n\nauto sub = new SubjectObject!int;\n\nint putCount = 0;\nint completedCount = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        putCount++;\n    }\n\n    void completed()\n    {\n        completedCount++;\n    }\n}\n\nauto d = sub.takeLast.subscribe(TestObserver());\n\nassert(putCount == 0);\nsub.put(1);\nassert(putCount == 0);\nsub.put(10);\nassert(putCount == 0);\nsub.completed();\nassert(putCount == 1);\nassert(completedCount == 1);\n\nsub.put(100);\nassert(putCount == 1);\nassert(completedCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL412_154)\n",
+				"comment": "Creates a observable that take only a last element of the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_range_d_412_6)\n---\nimport rx.subject;\n\nauto sub = new SubjectObject!int;\n\nint putCount = 0;\nint completedCount = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        putCount++;\n    }\n\n    void completed()\n    {\n        completedCount++;\n    }\n}\n\nauto d = sub.takeLast.subscribe(TestObserver());\n\nassert(putCount == 0);\nsub.put(1);\nassert(putCount == 0);\nsub.put(10);\nassert(putCount == 0);\nsub.completed();\nassert(putCount == 1);\nassert(completedCount == 1);\n\nsub.put(100);\nassert(putCount == 1);\nassert(completedCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_range_d_412_6)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -2243,7 +4835,743 @@
 				"kind": "template"
 			}
 		],
-		"comment": " This module defines some operations like range.\nExample:\nOverview$(DDOX_UNITTEST_HEADER __unittestL17_148)\n---\nimport rx.subject;\nimport std.algorithm : equal;\nimport std.array : appender;\nimport std.conv : to;\n\nauto subject = new SubjectObject!int;\nauto pub = subject.drop(2).take(3);\n\nauto buf = appender!(int[]);\nauto disposable = pub.subscribe(observerObject!int(buf));\n\nforeach (i; 0 .. 10)\n{\n    subject.put(i);\n}\n\nauto result = buf.data;\nassert(equal(result, [2, 3, 4]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL17_148)\n",
+		"comment": " This module defines some operations like range.\nExample:\nOverview$(DDOX_UNITTEST_HEADER __unittest_source_rx_range_d_17_0)\n---\nimport rx.subject;\nimport std.algorithm : equal;\nimport std.array : appender;\nimport std.conv : to;\n\nauto subject = new SubjectObject!int;\nauto pub = subject.drop(2).take(3);\n\nauto buf = appender!(int[]);\nauto disposable = pub.subscribe(observerObject!int(buf));\n\nforeach (i; 0 .. 10)\n{\n    subject.put(i);\n}\n\nauto result = buf.data;\nassert(equal(result, [2, 3, 4]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_range_d_17_0)\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\scheduler.d",
+		"name": "rx.scheduler",
+		"members": [
+			{
+				"name": "Scheduler",
+				"line": 30,
+				"comment": "\n",
+				"members": [
+					{
+						"name": "start",
+						"line": 32,
+						"deco": "FDFZvZv",
+						"parameters": [
+							{
+								"name": "op",
+								"deco": "DFZv"
+							}
+						],
+						"char": 10,
+						"kind": "function",
+						"storageClass": [
+							"abstract"
+						]
+					}
+				],
+				"char": 1,
+				"kind": "interface"
+			},
+			{
+				"interfaces": [
+					"rx.scheduler.Scheduler"
+				],
+				"members": [
+					{
+						"name": "schedule",
+						"line": 37,
+						"deco": "FDFZvS4core4time8DurationZC2rx10disposable17CancellationToken",
+						"parameters": [
+							{
+								"name": "op",
+								"deco": "DFZv"
+							},
+							{
+								"name": "val",
+								"deco": "S4core4time8Duration"
+							}
+						],
+						"char": 23,
+						"kind": "function",
+						"storageClass": [
+							"abstract"
+						]
+					}
+				],
+				"name": "AsyncScheduler",
+				"line": 35,
+				"comment": "\n",
+				"char": 1,
+				"kind": "interface"
+			},
+			{
+				"interfaces": [
+					"rx.scheduler.Scheduler"
+				],
+				"members": [
+					{
+						"endchar": 5,
+						"name": "start",
+						"line": 44,
+						"deco": "FDFZvZv",
+						"parameters": [
+							{
+								"name": "op",
+								"deco": "DFZv"
+							}
+						],
+						"endline": 47,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.scheduler.Scheduler.start"
+						]
+					}
+				],
+				"name": "LocalScheduler",
+				"line": 41,
+				"comment": "\n",
+				"char": 1,
+				"kind": "class"
+			},
+			{
+				"interfaces": [
+					"rx.scheduler.AsyncScheduler"
+				],
+				"members": [
+					{
+						"endchar": 5,
+						"name": "start",
+						"line": 52,
+						"deco": "FDFZvZv",
+						"parameters": [
+							{
+								"name": "op",
+								"deco": "DFZv"
+							}
+						],
+						"endline": 56,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.scheduler.Scheduler.start"
+						]
+					},
+					{
+						"endchar": 5,
+						"name": "schedule",
+						"line": 58,
+						"deco": "FDFZvS4core4time8DurationZC2rx10disposable17CancellationToken",
+						"parameters": [
+							{
+								"name": "op",
+								"deco": "DFZv"
+							},
+							{
+								"name": "val",
+								"deco": "S4core4time8Duration"
+							}
+						],
+						"endline": 72,
+						"char": 23,
+						"kind": "function",
+						"overrides": [
+							"rx.scheduler.AsyncScheduler.schedule"
+						]
+					}
+				],
+				"name": "ThreadScheduler",
+				"line": 50,
+				"comment": "\n",
+				"char": 1,
+				"kind": "class"
+			},
+			{
+				"interfaces": [
+					"rx.scheduler.AsyncScheduler"
+				],
+				"members": [
+					{
+						"endchar": 5,
+						"name": "this",
+						"line": 98,
+						"deco": "FC3std11parallelism8TaskPoolZC2rx9scheduler17TaskPoolScheduler",
+						"parameters": [
+							{
+								"name": "pool",
+								"deco": "C3std11parallelism8TaskPool",
+								"default": "null"
+							}
+						],
+						"endline": 104,
+						"originalType": "(TaskPool pool = null)",
+						"char": 5,
+						"kind": "constructor"
+					},
+					{
+						"endchar": 5,
+						"name": "start",
+						"line": 107,
+						"deco": "FDFZvZv",
+						"parameters": [
+							{
+								"name": "op",
+								"deco": "DFZv"
+							}
+						],
+						"endline": 110,
+						"char": 10,
+						"kind": "function",
+						"overrides": [
+							"rx.scheduler.Scheduler.start"
+						]
+					},
+					{
+						"endchar": 5,
+						"name": "schedule",
+						"line": 112,
+						"deco": "FDFZvS4core4time8DurationZC2rx10disposable17CancellationToken",
+						"parameters": [
+							{
+								"name": "op",
+								"deco": "DFZv"
+							},
+							{
+								"name": "val",
+								"deco": "S4core4time8Duration"
+							}
+						],
+						"endline": 126,
+						"char": 23,
+						"kind": "function",
+						"overrides": [
+							"rx.scheduler.AsyncScheduler.schedule"
+						]
+					}
+				],
+				"name": "TaskPoolScheduler",
+				"line": 95,
+				"comment": "\n",
+				"char": 1,
+				"kind": "class"
+			},
+			{
+				"members": [
+					{
+						"name": "HistoricalScheduler",
+						"line": 160,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 165,
+								"type": "(T innerScheduler)",
+								"parameters": [
+									{
+										"name": "innerScheduler",
+										"type": "T"
+									}
+								],
+								"endline": 169,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 5,
+								"name": "start",
+								"line": 172,
+								"type": "void(void delegate() op)",
+								"parameters": [
+									{
+										"name": "op",
+										"type": "void delegate()"
+									}
+								],
+								"endline": 175,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "schedule",
+								"line": 177,
+								"type": "CancellationToken(void delegate() op, Duration val)",
+								"parameters": [
+									{
+										"name": "op",
+										"type": "void delegate()"
+									},
+									{
+										"name": "val",
+										"type": "Duration"
+									}
+								],
+								"endline": 180,
+								"char": 23,
+								"kind": "function"
+							},
+							{
+								"endchar": 5,
+								"name": "roll",
+								"line": 182,
+								"type": "void(Duration val)",
+								"parameters": [
+									{
+										"name": "val",
+										"type": "Duration"
+									}
+								],
+								"endline": 185,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_innerScheduler",
+								"line": 188,
+								"type": "T",
+								"char": 7,
+								"kind": "variable"
+							},
+							{
+								"name": "_offset",
+								"line": 189,
+								"type": "Duration",
+								"char": 14,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "class"
+					}
+				],
+				"name": "HistoricalScheduler",
+				"line": 160,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "historicalScheduler",
+						"line": 192,
+						"type": "HistoricalScheduler!TScheduler(auto ref TScheduler scheduler)",
+						"parameters": [
+							{
+								"name": "scheduler",
+								"type": "TScheduler",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 195,
+						"char": 32,
+						"kind": "function"
+					}
+				],
+				"name": "historicalScheduler",
+				"line": 192,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "TScheduler",
+						"kind": "type"
+					}
+				],
+				"char": 32,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "ObserveOnObserver",
+						"line": 265,
+						"members": [
+							{
+								"endchar": 5,
+								"name": "put",
+								"line": 286,
+								"type": "void(E obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "E"
+									}
+								],
+								"endline": 306,
+								"char": 10,
+								"kind": "function"
+							},
+							{
+								"name": "_observer",
+								"line": 323,
+								"type": "TObserver",
+								"char": 15,
+								"kind": "variable"
+							},
+							{
+								"name": "_scheduler",
+								"line": 324,
+								"type": "TScheduler",
+								"char": 16,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "ObserveOnObserver",
+				"line": 265,
+				"parameters": [
+					{
+						"name": "TObserver",
+						"kind": "type"
+					},
+					{
+						"name": "TScheduler",
+						"kind": "type"
+					},
+					{
+						"name": "E",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "ObserveOnObservable",
+						"line": 331,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 333,
+								"type": "TObservable.ElementType",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 335,
+								"type": "(TObservable observable, TScheduler scheduler)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									},
+									{
+										"name": "scheduler",
+										"type": "TScheduler"
+									}
+								],
+								"endline": 339,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 342,
+										"type": "(TObserver observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "TObserver"
+											}
+										],
+										"endline": 356,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 342,
+								"parameters": [
+									{
+										"name": "TObserver",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 359,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							},
+							{
+								"name": "_scheduler",
+								"line": 360,
+								"type": "TScheduler",
+								"char": 16,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "struct"
+					}
+				],
+				"name": "ObserveOnObservable",
+				"line": 331,
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "TScheduler",
+						"deco": "C2rx9scheduler9Scheduler",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "observeOn",
+						"line": 390,
+						"type": "ObserveOnObservable!(TObservable, TScheduler)(auto ref TObservable observable, TScheduler scheduler)",
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "scheduler",
+								"type": "TScheduler"
+							}
+						],
+						"endline": 394,
+						"char": 47,
+						"kind": "function"
+					}
+				],
+				"name": "observeOn",
+				"line": 390,
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "TScheduler",
+						"deco": "C2rx9scheduler9Scheduler",
+						"kind": "type"
+					}
+				],
+				"char": 47,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "SubscribeOnObservable",
+						"line": 483,
+						"members": [
+							{
+								"name": "ElementType",
+								"line": 485,
+								"type": "TObservable.ElementType",
+								"char": 5,
+								"kind": "alias"
+							},
+							{
+								"endchar": 5,
+								"name": "this",
+								"line": 488,
+								"type": "(TObservable observable, TScheduler scheduler)",
+								"parameters": [
+									{
+										"name": "observable",
+										"type": "TObservable"
+									},
+									{
+										"name": "scheduler",
+										"type": "TScheduler"
+									}
+								],
+								"endline": 492,
+								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"members": [
+									{
+										"endchar": 5,
+										"name": "subscribe",
+										"line": 495,
+										"type": "(TObserver observer)",
+										"parameters": [
+											{
+												"name": "observer",
+												"type": "TObserver"
+											}
+										],
+										"endline": 503,
+										"char": 10,
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
+									}
+								],
+								"name": "subscribe",
+								"line": 495,
+								"parameters": [
+									{
+										"name": "TObserver",
+										"kind": "type"
+									}
+								],
+								"char": 10,
+								"kind": "template"
+							},
+							{
+								"name": "_observable",
+								"line": 506,
+								"type": "TObservable",
+								"char": 17,
+								"kind": "variable"
+							},
+							{
+								"name": "_scheduler",
+								"line": 507,
+								"type": "TScheduler",
+								"char": 16,
+								"kind": "variable"
+							}
+						],
+						"char": 1,
+						"kind": "class"
+					}
+				],
+				"name": "SubscribeOnObservable",
+				"line": 483,
+				"comment": "\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "TScheduler",
+						"deco": "C2rx9scheduler9Scheduler",
+						"kind": "type"
+					}
+				],
+				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "subscribeOn",
+						"line": 538,
+						"type": "SubscribeOnObservable!(TObservable, TScheduler)(auto ref TObservable observable, auto ref TScheduler scheduler)",
+						"parameters": [
+							{
+								"name": "observable",
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							},
+							{
+								"name": "scheduler",
+								"type": "TScheduler",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 542,
+						"char": 49,
+						"kind": "function"
+					}
+				],
+				"name": "subscribeOn",
+				"line": 538,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_scheduler_d_544_10)\n---\nimport rx.observable : defer;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new LocalScheduler;\n\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto d = scheduled.doSubscribe((int n) { value = n; });\nscope (exit)\n    d.dispose();\n\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_scheduler_d_544_10)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_scheduler_d_564_11)\n---\nimport rx.observable : defer;\nimport rx.util : EventSignal;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new TaskPoolScheduler;\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto signal = new EventSignal;\nauto d = scheduled.subscribe((int n) { value = n; signal.setSignal(); });\nscope (exit)\n    d.dispose();\n\nsignal.wait();\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_scheduler_d_564_11)\n",
+				"parameters": [
+					{
+						"name": "TObservable",
+						"kind": "type"
+					},
+					{
+						"name": "TScheduler",
+						"deco": "C2rx9scheduler9Scheduler",
+						"kind": "type"
+					}
+				],
+				"char": 49,
+				"kind": "template"
+			},
+			{
+				"endchar": 1,
+				"name": "currentScheduler",
+				"line": 699,
+				"deco": "FNdZC2rx9scheduler9Scheduler",
+				"endline": 702,
+				"char": 11,
+				"kind": "function"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "currentScheduler",
+						"line": 704,
+						"type": "@property TScheduler(TScheduler scheduler)",
+						"parameters": [
+							{
+								"name": "scheduler",
+								"type": "TScheduler"
+							}
+						],
+						"endline": 708,
+						"char": 12,
+						"kind": "function"
+					}
+				],
+				"name": "currentScheduler",
+				"line": 704,
+				"parameters": [
+					{
+						"name": "TScheduler",
+						"deco": "C2rx9scheduler9Scheduler",
+						"kind": "type"
+					}
+				],
+				"char": 12,
+				"kind": "template"
+			}
+		],
 		"kind": "module"
 	},
 	{
@@ -2254,14 +5582,14 @@
 				"members": [
 					{
 						"name": "Subject",
-						"line": 14,
+						"line": 15,
 						"members": [],
 						"char": 1,
 						"kind": "interface"
 					}
 				],
 				"name": "Subject",
-				"line": 14,
+				"line": 15,
 				"comment": "Represents an object that is both an observable sequence as well as an observer.\n",
 				"parameters": [
 					{
@@ -2276,22 +5604,29 @@
 				"members": [
 					{
 						"name": "SubjectObject",
-						"line": 19,
+						"line": 20,
 						"members": [
+							{
+								"name": "ElementType",
+								"line": 22,
+								"type": "E",
+								"char": 5,
+								"kind": "alias"
+							},
 							{
 								"endchar": 5,
 								"name": "this",
-								"line": 25,
+								"line": 26,
 								"comment": "\n",
 								"type": "()",
-								"endline": 28,
+								"endline": 29,
 								"char": 5,
 								"kind": "constructor"
 							},
 							{
 								"endchar": 5,
 								"name": "put",
-								"line": 32,
+								"line": 33,
 								"comment": "\n",
 								"type": "void(E obj)",
 								"parameters": [
@@ -2300,24 +5635,24 @@
 										"type": "E"
 									}
 								],
-								"endline": 36,
+								"endline": 37,
 								"char": 10,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "completed",
-								"line": 38,
+								"line": 39,
 								"comment": "\n",
 								"type": "void()",
-								"endline": 52,
+								"endline": 53,
 								"char": 10,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "failure",
-								"line": 54,
+								"line": 55,
 								"comment": "\n",
 								"type": "void(Exception error)",
 								"parameters": [
@@ -2326,7 +5661,7 @@
 										"type": "Exception"
 									}
 								],
-								"endline": 68,
+								"endline": 69,
 								"char": 10,
 								"kind": "function"
 							},
@@ -2335,7 +5670,7 @@
 									{
 										"endchar": 5,
 										"name": "subscribe",
-										"line": 71,
+										"line": 72,
 										"type": "Disposable(T observer)",
 										"parameters": [
 											{
@@ -2343,13 +5678,13 @@
 												"type": "T"
 											}
 										],
-										"endline": 74,
+										"endline": 75,
 										"char": 16,
 										"kind": "function"
 									}
 								],
 								"name": "subscribe",
-								"line": 71,
+								"line": 72,
 								"comment": "\n",
 								"parameters": [
 									{
@@ -2363,7 +5698,7 @@
 							{
 								"endchar": 5,
 								"name": "subscribe",
-								"line": 76,
+								"line": 77,
 								"comment": "\n",
 								"type": "Disposable(Observer!E observer)",
 								"parameters": [
@@ -2372,14 +5707,14 @@
 										"type": "Observer!E"
 									}
 								],
-								"endline": 113,
+								"endline": 114,
 								"char": 16,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "unsubscribe",
-								"line": 116,
+								"line": 117,
 								"comment": "\n",
 								"type": "void(Observer!E observer)",
 								"parameters": [
@@ -2388,9 +5723,16 @@
 										"type": "Observer!E"
 									}
 								],
-								"endline": 138,
+								"endline": 141,
 								"char": 10,
 								"kind": "function"
+							},
+							{
+								"name": "_observer",
+								"line": 144,
+								"type": "shared(Observer!E)",
+								"char": 24,
+								"kind": "variable"
 							}
 						],
 						"char": 1,
@@ -2398,8 +5740,8 @@
 					}
 				],
 				"name": "SubjectObject",
-				"line": 19,
-				"comment": "Represents an object that is both an observable sequence as well as an observer. Each notification is broadcasted to all subscribed observers.\nExample:\n$(DDOX_UNITTEST_HEADER __unittestL145_176)\n---\nimport std.array : appender;\n\nauto data = appender!(int[])();\nauto subject = new SubjectObject!int;\nauto disposable = subject.subscribe(observerObject!(int)(data));\nassert(disposable !is null);\nsubject.put(0);\nsubject.put(1);\n\nimport std.algorithm : equal;\n\nassert(equal(data.data, [0, 1]));\n\ndisposable.dispose();\nsubject.put(2);\nassert(equal(data.data, [0, 1]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittestL145_176)\n",
+				"line": 20,
+				"comment": "Represents an object that is both an observable sequence as well as an observer. Each notification is broadcasted to all subscribed observers.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_subject_d_148_0)\n---\nimport std.array : appender;\n\nauto data = appender!(int[])();\nauto subject = new SubjectObject!int;\nauto disposable = subject.subscribe(observerObject!(int)(data));\nassert(disposable !is null);\nsubject.put(0);\nsubject.put(1);\n\nimport std.algorithm : equal;\n\nassert(equal(data.data, [0, 1]));\n\ndisposable.dispose();\nsubject.put(2);\nassert(equal(data.data, [0, 1]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_subject_d_148_0)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -2413,12 +5755,12 @@
 				"members": [
 					{
 						"name": "AsyncSubject",
-						"line": 292,
+						"line": 295,
 						"members": [
 							{
 								"endchar": 5,
 								"name": "subscribe",
-								"line": 296,
+								"line": 299,
 								"comment": "\n",
 								"type": "Disposable(Observer!E observer)",
 								"parameters": [
@@ -2427,7 +5769,7 @@
 										"type": "Observer!E"
 									}
 								],
-								"endline": 330,
+								"endline": 333,
 								"char": 16,
 								"kind": "function"
 							},
@@ -2436,24 +5778,24 @@
 									{
 										"endchar": 5,
 										"name": "subscribe",
-										"line": 333,
+										"line": 336,
 										"type": "(T observer)",
-										"storageClass": [
-											"auto"
-										],
 										"parameters": [
 											{
 												"name": "observer",
 												"type": "T"
 											}
 										],
-										"endline": 336,
+										"endline": 339,
 										"char": 10,
-										"kind": "function"
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
 									}
 								],
 								"name": "subscribe",
-								"line": 333,
+								"line": 336,
 								"comment": "\n",
 								"parameters": [
 									{
@@ -2467,7 +5809,7 @@
 							{
 								"endchar": 5,
 								"name": "unsubscribe",
-								"line": 339,
+								"line": 342,
 								"comment": "\n",
 								"type": "void(Observer!E observer)",
 								"parameters": [
@@ -2476,14 +5818,14 @@
 										"type": "Observer!E"
 									}
 								],
-								"endline": 354,
+								"endline": 357,
 								"char": 10,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "put",
-								"line": 358,
+								"line": 361,
 								"comment": "\n",
 								"type": "void(E value)",
 								"parameters": [
@@ -2492,24 +5834,24 @@
 										"type": "E"
 									}
 								],
-								"endline": 368,
+								"endline": 371,
 								"char": 10,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "completed",
-								"line": 371,
+								"line": 374,
 								"comment": "\n",
 								"type": "void()",
-								"endline": 408,
+								"endline": 411,
 								"char": 10,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "failure",
-								"line": 411,
+								"line": 414,
 								"comment": "\n",
 								"type": "void(Exception e)",
 								"parameters": [
@@ -2518,9 +5860,44 @@
 										"type": "Exception"
 									}
 								],
-								"endline": 434,
+								"endline": 437,
 								"char": 10,
 								"kind": "function"
+							},
+							{
+								"name": "_observers",
+								"line": 440,
+								"type": "Observer!E[]",
+								"char": 18,
+								"kind": "variable"
+							},
+							{
+								"name": "_isStopped",
+								"line": 441,
+								"deco": "b",
+								"char": 10,
+								"kind": "variable"
+							},
+							{
+								"name": "_value",
+								"line": 442,
+								"type": "E",
+								"char": 7,
+								"kind": "variable"
+							},
+							{
+								"name": "_hasValue",
+								"line": 443,
+								"deco": "b",
+								"char": 10,
+								"kind": "variable"
+							},
+							{
+								"name": "_exception",
+								"line": 444,
+								"type": "Exception",
+								"char": 15,
+								"kind": "variable"
 							}
 						],
 						"char": 1,
@@ -2528,7 +5905,7 @@
 					}
 				],
 				"name": "AsyncSubject",
-				"line": 292,
+				"line": 295,
 				"comment": "\n",
 				"parameters": [
 					{
@@ -2543,22 +5920,22 @@
 				"members": [
 					{
 						"name": "BehaviorSubject",
-						"line": 675,
+						"line": 678,
 						"members": [
 							{
 								"endchar": 5,
 								"name": "this",
-								"line": 679,
+								"line": 682,
 								"comment": "\n",
 								"type": "()",
-								"endline": 682,
+								"endline": 685,
 								"char": 5,
 								"kind": "constructor"
 							},
 							{
 								"endchar": 5,
 								"name": "this",
-								"line": 685,
+								"line": 688,
 								"comment": "\n",
 								"type": "(E value)",
 								"parameters": [
@@ -2567,24 +5944,24 @@
 										"type": "E"
 									}
 								],
-								"endline": 689,
+								"endline": 692,
 								"char": 5,
 								"kind": "constructor"
 							},
 							{
 								"endchar": 5,
 								"name": "value",
-								"line": 693,
+								"line": 696,
 								"comment": "\n",
 								"type": "inout @property inout(E)()",
-								"endline": 696,
+								"endline": 699,
 								"char": 14,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "value",
-								"line": 699,
+								"line": 702,
 								"comment": "\n",
 								"type": "@property void(E value)",
 								"parameters": [
@@ -2593,7 +5970,7 @@
 										"type": "E"
 									}
 								],
-								"endline": 706,
+								"endline": 709,
 								"char": 10,
 								"kind": "function"
 							},
@@ -2602,11 +5979,8 @@
 									{
 										"endchar": 5,
 										"name": "subscribe",
-										"line": 710,
+										"line": 713,
 										"type": "(auto ref TObserver observer)",
-										"storageClass": [
-											"auto"
-										],
 										"parameters": [
 											{
 												"name": "observer",
@@ -2617,13 +5991,16 @@
 												]
 											}
 										],
-										"endline": 714,
+										"endline": 717,
 										"char": 10,
-										"kind": "function"
+										"kind": "function",
+										"storageClass": [
+											"auto"
+										]
 									}
 								],
 								"name": "subscribe",
-								"line": 710,
+								"line": 713,
 								"comment": "\n",
 								"parameters": [
 									{
@@ -2637,7 +6014,7 @@
 							{
 								"endchar": 5,
 								"name": "subscribe",
-								"line": 717,
+								"line": 720,
 								"comment": "\n",
 								"type": "Disposable(Observer!E observer)",
 								"parameters": [
@@ -2646,14 +6023,14 @@
 										"type": "Observer!E"
 									}
 								],
-								"endline": 721,
+								"endline": 724,
 								"char": 16,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "put",
-								"line": 724,
+								"line": 727,
 								"comment": "\n",
 								"type": "void(E obj)",
 								"parameters": [
@@ -2662,24 +6039,24 @@
 										"type": "E"
 									}
 								],
-								"endline": 727,
+								"endline": 730,
 								"char": 10,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "completed",
-								"line": 730,
+								"line": 733,
 								"comment": "\n",
 								"type": "void()",
-								"endline": 733,
+								"endline": 736,
 								"char": 10,
 								"kind": "function"
 							},
 							{
 								"endchar": 5,
 								"name": "failure",
-								"line": 736,
+								"line": 739,
 								"comment": "\n",
 								"type": "void(Exception e)",
 								"parameters": [
@@ -2688,9 +6065,23 @@
 										"type": "Exception"
 									}
 								],
-								"endline": 739,
+								"endline": 742,
 								"char": 10,
 								"kind": "function"
+							},
+							{
+								"name": "_subject",
+								"line": 745,
+								"type": "SubjectObject!E",
+								"char": 21,
+								"kind": "variable"
+							},
+							{
+								"name": "_value",
+								"line": 746,
+								"type": "E",
+								"char": 7,
+								"kind": "variable"
 							}
 						],
 						"char": 1,
@@ -2698,7 +6089,7 @@
 					}
 				],
 				"name": "BehaviorSubject",
-				"line": 675,
+				"line": 678,
 				"comment": "\n",
 				"parameters": [
 					{
@@ -2711,6 +6102,207 @@
 			}
 		],
 		"comment": " This module defines the Subject and some implements.\n",
+		"kind": "module"
+	},
+	{
+		"file": "source\\rx\\util.d",
+		"name": "rx.util",
+		"members": [
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "assumeUnshared",
+						"line": 8,
+						"type": "ref T(auto ref T obj)",
+						"parameters": [
+							{
+								"name": "obj",
+								"type": "T",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 11,
+						"char": 12,
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
+					}
+				],
+				"name": "assumeUnshared",
+				"line": 8,
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"constraint": "!is(T == shared)",
+				"char": 12,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "assumeUnshared",
+						"line": 13,
+						"type": "ref T(auto ref shared(T) obj)",
+						"parameters": [
+							{
+								"name": "obj",
+								"type": "shared(T)",
+								"storageClass": [
+									"auto",
+									"ref"
+								]
+							}
+						],
+						"endline": 16,
+						"char": 12,
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
+					}
+				],
+				"name": "assumeUnshared",
+				"line": 13,
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 12,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"endchar": 1,
+						"name": "exchange",
+						"line": 33,
+						"type": "(ref shared(T) store, U val)",
+						"parameters": [
+							{
+								"name": "store",
+								"type": "shared(T)",
+								"storageClass": [
+									"ref"
+								]
+							},
+							{
+								"name": "val",
+								"type": "U"
+							}
+						],
+						"endline": 42,
+						"char": 6,
+						"kind": "function",
+						"storageClass": [
+							"auto"
+						]
+					}
+				],
+				"name": "exchange",
+				"line": 33,
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					},
+					{
+						"name": "U",
+						"kind": "type"
+					}
+				],
+				"char": 6,
+				"kind": "template"
+			},
+			{
+				"name": "EventSignal",
+				"line": 52,
+				"members": [
+					{
+						"endchar": 5,
+						"name": "this",
+						"line": 55,
+						"deco": "FZC2rx4util11EventSignal",
+						"endline": 59,
+						"originalType": "()",
+						"char": 5,
+						"kind": "constructor"
+					},
+					{
+						"endchar": 5,
+						"name": "signal",
+						"line": 62,
+						"deco": "FNdZb",
+						"endline": 68,
+						"char": 10,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "setSignal",
+						"line": 71,
+						"deco": "FZv",
+						"endline": 78,
+						"char": 10,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "wait",
+						"line": 80,
+						"deco": "FZv",
+						"endline": 88,
+						"char": 10,
+						"kind": "function"
+					}
+				],
+				"char": 1,
+				"kind": "class"
+			},
+			{
+				"name": "TicketBase",
+				"line": 134,
+				"members": [
+					{
+						"endchar": 5,
+						"name": "stamp",
+						"line": 137,
+						"deco": "OFZb",
+						"endline": 140,
+						"char": 10,
+						"kind": "function"
+					},
+					{
+						"endchar": 5,
+						"name": "isStamped",
+						"line": 143,
+						"deco": "OFNdZb",
+						"endline": 146,
+						"char": 10,
+						"kind": "function"
+					}
+				],
+				"char": 8,
+				"kind": "class"
+			},
+			{
+				"name": "Ticket",
+				"line": 152,
+				"deco": "OC2rx4util10TicketBase",
+				"char": 1,
+				"kind": "alias"
+			}
+		],
 		"kind": "module"
 	}
 ]
