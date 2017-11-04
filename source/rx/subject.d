@@ -31,7 +31,7 @@ public:
     ///
     void put(E obj)
     {
-        auto temp = atomicLoad(_observer);
+        auto temp = cast() atomicLoad(_observer);
         .put(temp, obj);
     }
     ///
@@ -43,7 +43,7 @@ public:
         do
         {
             oldObserver = _observer;
-            temp = atomicLoad(oldObserver);
+            temp = cast() atomicLoad(oldObserver);
             if (cast(DoneObserver!E) temp)
                 break;
         }
@@ -59,7 +59,7 @@ public:
         do
         {
             oldObserver = _observer;
-            temp = atomicLoad(oldObserver);
+            temp = cast() atomicLoad(oldObserver);
             if (cast(DoneObserver!E) temp)
                 break;
         }
@@ -80,7 +80,7 @@ public:
         do
         {
             oldObserver = _observer;
-            auto temp = atomicLoad(oldObserver);
+            auto temp = cast() atomicLoad(oldObserver);
 
             if (temp is DoneObserver!E.instance)
             {
@@ -121,7 +121,7 @@ public:
         {
             oldObserver = _observer;
 
-            auto temp = atomicLoad(oldObserver);
+            auto temp = cast() atomicLoad(oldObserver);
             if (auto composite = cast(CompositeObserver!E) temp)
             {
                 newObserver = cast(shared) composite.remove(observer);
