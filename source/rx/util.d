@@ -4,7 +4,13 @@ import core.atomic;
 import core.sync.mutex;
 import core.sync.condition;
 
-T assumeUnshared(T)(auto ref shared(T) obj)
+// @@TODO@@ Remove this overload, when the phobos of LDC supports TailShared.
+auto ref T assumeUnshared(T)(auto ref T obj) if (!is(T == shared))
+{
+    return obj;
+}
+
+auto ref T assumeUnshared(T)(auto ref shared(T) obj)
 {
     return cast() obj;
 }
