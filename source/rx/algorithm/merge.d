@@ -87,11 +87,13 @@ auto merge(TObservable)(auto ref TObservable observable)
         auto subscribe(TObserver)(TObserver observer)
         {
             auto subject = new SubjectObject!ElementType;
+            auto groupSubscription = new CompositeDisposable;
             auto innerSubscription = subject.doSubscribe(observer);
             auto outerSubscription = _observable.doSubscribe((TObservable.ElementType obj) {
-                obj.doSubscribe(subject);
+                auto subscription = obj.doSubscribe(subject);
+                groupSubscription.insert(subscription.disposableObject());
             }, { subject.completed(); }, (Exception e) { subject.failure(e); });
-            return new CompositeDisposable(innerSubscription, outerSubscription);
+            return new CompositeDisposable(groupSubscription, innerSubscription, outerSubscription);
         }
 
         TObservable _observable;

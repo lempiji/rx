@@ -563,6 +563,7 @@ public:
     ///
     this(Disposable[] disposables...)
     {
+        _gate = new Object;
         _disposables = disposables.dup;
     }
 
@@ -570,12 +571,65 @@ public:
     ///
     void dispose()
     {
-        foreach (ref d; _disposables)
+        Disposable[] currentDisposables;
+        synchronized (_gate)
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+                currentDisposables = _disposables;
+                _disposables = [];
+            }
+        }
+
+        if (currentDisposables)
+        {
+            foreach (d; currentDisposables)
+            {
+                d.dispose();
+            }
+        }
+    }
+
+    void clear()
+    {
+        Disposable[] currentDisposables;
+        synchronized (_gate)
+        {
+            currentDisposables = _disposables;
+            _disposables = [];
+        }
+
+        foreach (d; currentDisposables)
+        {
             d.dispose();
+        }
+    }
+
+    void insert(Disposable item)
+    {
+        assert(item !is null);
+
+        auto shouldDispose = false;
+        synchronized (_gate)
+        {
+            shouldDispose = _disposed;
+            if (!_disposed)
+            {
+                _disposables ~= item;
+            }
+        }
+
+        if (shouldDispose)
+        {
+            item.dispose();
+        }
     }
 
 private:
     Disposable[] _disposables;
+    bool _disposed;
+    Object _gate;
 }
 ///
 unittest
@@ -584,6 +638,14 @@ unittest
     auto d2 = new SerialDisposable;
     auto d = new CompositeDisposable(d1, d2);
     d.dispose();
+}
+
+unittest
+{
+    auto composite = new CompositeDisposable;
+    auto inner = new SerialDisposable;
+    composite.insert(inner);
+    composite.dispose();
 }
 
 ///
