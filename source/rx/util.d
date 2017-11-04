@@ -4,7 +4,33 @@ import core.atomic;
 import core.sync.mutex;
 import core.sync.condition;
 
-T exchange(T, U)(ref shared(T) store, U val)
+// @@TODO@@ Remove this overload, when the phobos of LDC supports TailShared.
+auto ref T assumeUnshared(T)(auto ref T obj) if (!is(T == shared))
+{
+    return obj;
+}
+
+auto ref T assumeUnshared(T)(auto ref shared(T) obj)
+{
+    return cast() obj;
+}
+
+unittest
+{
+    class Test
+    {
+        int hoge()
+        {
+            return 0;
+        }
+    }
+
+    auto raw = new shared(Test);
+    Test local1 = assumeUnshared(raw);
+    Test local2 = assumeUnshared(new shared(Test));
+}
+
+auto exchange(T, U)(ref shared(T) store, U val)
 {
     shared(T) temp = void;
     do
@@ -12,7 +38,7 @@ T exchange(T, U)(ref shared(T) store, U val)
         temp = store;
     }
     while (!cas(&store, temp, val));
-    return cast() atomicLoad(temp);
+    return atomicLoad(temp);
 }
 
 unittest

@@ -110,7 +110,7 @@ public:
 
     void dispose()
     {
-        auto cancel = exchange(_cancel, null);
+        auto cancel = assumeUnshared(exchange(_cancel, null));
         if (cancel !is null)
             cancel.dispose();
     }
