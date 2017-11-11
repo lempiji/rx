@@ -32,7 +32,7 @@ auto asObservable(T)(ref T signal) if (is(T == Signal!U, U) && is(U == interface
 
                 signal.connect(dg);
 
-                return new AnonymouseDisposable({ signal.disconnect(dg); });
+                return new AnonymousDisposable({ signal.disconnect(dg); });
             };
         }
 

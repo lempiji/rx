@@ -26,7 +26,7 @@ void main()
         });
         thread.start();
 
-        return new AnonymouseDisposable({ shutdown = true; });
+        return new AnonymousDisposable({ shutdown = true; });
     });
 
     auto flatten = watcher.map!(events => from(events)).merge();

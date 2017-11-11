@@ -39,7 +39,7 @@ class MyApplication : ApplicationWindow
 		//Create two Observable, and delay one.
 		auto changedText = input.changedAsObservable().map!(entry => entry.getText());
 		auto delayedText = changedText.debounce(300.msecs);
-		
+
 		//Subscribe in the same way.
 		auto d1 = changedText.doSubscribe((string text) { noDelay.setText(text); });
 		auto d2 = delayedText.doSubscribe((string text) { delayed.setText(text); });
@@ -66,7 +66,7 @@ Observable!Entry changedAsObservable(Entry entry)
 
 	return defer!Entry((Observer!Entry observer) {
 		auto handleId = entry.addOnChanged(_ => .put(observer, entry));
-		return new AnonymouseDisposable({
+		return new AnonymousDisposable({
 			Signals.handlerDisconnect(entry, handleId);
 		});
 	}).observableObject!Entry();

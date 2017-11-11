@@ -144,9 +144,9 @@
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/UniqObserver._hasValue.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm.html</loc></url>
 <url><loc>http://127.0.0.1/rx/disposable.html</loc></url>
-<url><loc>http://127.0.0.1/rx/disposable/AnonymouseDisposable.html</loc></url>
-<url><loc>http://127.0.0.1/rx/disposable/AnonymouseDisposable.dispose.html</loc></url>
-<url><loc>http://127.0.0.1/rx/disposable/AnonymouseDisposable.this.html</loc></url>
+<url><loc>http://127.0.0.1/rx/disposable/AnonymousDisposable.html</loc></url>
+<url><loc>http://127.0.0.1/rx/disposable/AnonymousDisposable.dispose.html</loc></url>
+<url><loc>http://127.0.0.1/rx/disposable/AnonymousDisposable.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/disposable/Cancelable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/disposable/Cancelable.isDisposed.html</loc></url>
 <url><loc>http://127.0.0.1/rx/disposable/Disposable.dispose.html</loc></url>

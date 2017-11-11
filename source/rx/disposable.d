@@ -649,7 +649,7 @@ unittest
 }
 
 ///
-class AnonymouseDisposable : Disposable
+class AnonymousDisposable : Disposable
 {
 public:
     ///
@@ -677,7 +677,7 @@ private:
 unittest
 {
     int count = 0;
-    auto d = new AnonymouseDisposable({ count++; });
+    auto d = new AnonymousDisposable({ count++; });
     assert(count == 0);
     d.dispose();
     assert(count == 1);
@@ -718,7 +718,7 @@ public:
             else
             {
                 _count++;
-                return new AnonymouseDisposable(&this.release);
+                return new AnonymousDisposable(&this.release);
             }
         }
     }
@@ -788,7 +788,7 @@ private:
 unittest
 {
     bool disposed = false;
-    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+    auto disposable = new RefCountDisposable(new AnonymousDisposable({
             disposed = true;
         }));
 
@@ -805,7 +805,7 @@ unittest
 unittest
 {
     bool disposed = false;
-    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+    auto disposable = new RefCountDisposable(new AnonymousDisposable({
             disposed = true;
         }));
 
@@ -817,7 +817,7 @@ unittest
 unittest
 {
     bool disposed = false;
-    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+    auto disposable = new RefCountDisposable(new AnonymousDisposable({
             disposed = true;
         }));
 
@@ -832,7 +832,7 @@ unittest
 unittest
 {
     bool disposed = false;
-    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+    auto disposable = new RefCountDisposable(new AnonymousDisposable({
             disposed = true;
         }));
 
@@ -850,7 +850,7 @@ unittest
 unittest
 {
     bool disposed = false;
-    auto disposable = new RefCountDisposable(new AnonymouseDisposable({
+    auto disposable = new RefCountDisposable(new AnonymousDisposable({
             disposed = true;
         }));
 

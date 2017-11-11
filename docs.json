@@ -3147,7 +3147,7 @@
 						"name": "this",
 						"line": 656,
 						"comment": "\n",
-						"deco": "FDFZvZC2rx10disposable20AnonymouseDisposable",
+						"deco": "FDFZvZC2rx10disposable20AnonymousDisposable",
 						"parameters": [
 							{
 								"name": "dispose",
@@ -3173,9 +3173,9 @@
 						]
 					}
 				],
-				"name": "AnonymouseDisposable",
+				"name": "AnonymousDisposable",
 				"line": 652,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_677_16)\n---\nint count = 0;\nauto d = new AnonymouseDisposable({ count++; });\nassert(count == 0);\nd.dispose();\nassert(count == 1);\nd.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_677_16)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_677_16)\n---\nint count = 0;\nauto d = new AnonymousDisposable({ count++; });\nassert(count == 0);\nd.dispose();\nassert(count == 1);\nd.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_677_16)\n",
 				"char": 1,
 				"kind": "class"
 			},
@@ -3232,7 +3232,7 @@
 				],
 				"name": "RefCountDisposable",
 				"line": 689,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_788_17)\n---\nbool disposed = false;\nauto disposable = new RefCountDisposable(new AnonymouseDisposable({\n        disposed = true;\n    }));\n\nauto subscription = disposable.getDisposable();\n\nassert(!disposed);\ndisposable.dispose();\nassert(!disposed);\n\nsubscription.dispose();\nassert(disposed);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_788_17)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_788_17)\n---\nbool disposed = false;\nauto disposable = new RefCountDisposable(new AnonymousDisposable({\n        disposed = true;\n    }));\n\nauto subscription = disposable.getDisposable();\n\nassert(!disposed);\ndisposable.dispose();\nassert(!disposed);\n\nsubscription.dispose();\nassert(disposed);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_788_17)\n",
 				"char": 1,
 				"kind": "class"
 			}

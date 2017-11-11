@@ -679,7 +679,7 @@ unittest
     auto disposed1 = false;
     auto sub1 = defer!int((Observer!int observer) {
         observer.put(1);
-        return new AnonymouseDisposable({ disposed1 = true; });
+        return new AnonymousDisposable({ disposed1 = true; });
     });
 
     auto sub2 = defer!int((Observer!int observer) { observer.put(100); });
