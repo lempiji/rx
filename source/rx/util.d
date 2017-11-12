@@ -5,12 +5,12 @@ import core.sync.mutex;
 import core.sync.condition;
 
 // @@TODO@@ Remove this overload, when the phobos of LDC supports TailShared.
-auto ref T assumeUnshared(T)(auto ref T obj) if (!is(T == shared))
+auto ref T assumeThreadLocal(T)(auto ref T obj) if (!is(T == shared))
 {
     return obj;
 }
 
-auto ref T assumeUnshared(T)(auto ref shared(T) obj)
+auto ref T assumeThreadLocal(T)(auto ref shared(T) obj)
 {
     return cast() obj;
 }
@@ -26,8 +26,8 @@ unittest
     }
 
     auto raw = new shared(Test);
-    Test local1 = assumeUnshared(raw);
-    Test local2 = assumeUnshared(new shared(Test));
+    Test local1 = assumeThreadLocal(raw);
+    Test local2 = assumeThreadLocal(new shared(Test));
 }
 
 auto exchange(T, U)(ref shared(T) store, U val)

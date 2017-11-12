@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Template observableObject</title>
+		<title>Class ObservableObject</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -132,18 +132,18 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Template observableObject</h1><p>Wraps subscribe method in virtual function.
+			<h1>Class ObservableObject</h1><p>Class that implements Observable interface and wraps the subscribe method in virtual function.
 </p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">template</span> <span class="pln">observableObject</span>(E)
-			;
+			<span class="kwd">class</span> <span class="typ">ObservableObject</span>(R, E)
+			<span class="pun">;</span>
 					</div>
 				</code>
 			</div>
 			
-			<section><h2>Contained Functions</h2>
+			<section><h2>Constructors</h2>
 				<table>
 					<col class="caption"/>
 					<tr>
@@ -151,33 +151,45 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
-							<a href="../../rx/observable/observableObject.observableObject.html">observableObject</a>
+							<a href="../../rx/observable/ObservableObject.this.html" class="[&quot;public&quot;]">
+								<code>this</code>
+							</a>
 						</td>
 						<td></td>
 					</tr>
 				</table>
 			</section>
-			<section><h2>Example</h2>
-
-<pre class="code"><code class="lang-d"><span class="typ">int </span><span class="pln">subscribeCount </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
-</span><span class="kwd">class </span><span class="typ">TestObservable </span><span class="pun">: <a href="../../rx/observable/Observable.html"></span><span class="typ">Observable</span></a><span class="pun">!</span><span class="typ">int
-</span><span class="pun">{
-    </span><span class="typ">Disposable </span><span class="pln">subscribe</span><span class="pun">(</span><span class="typ">Observer</span><span class="pun">!</span><span class="typ">int </span><span class="pln">observer</span><span class="pun">)
-    {
-        </span><span class="pln">subscribeCount</span><span class="pun">++;
-        </span><span class="kwd">return </span><span class="typ">NopDisposable<wbr/></span><span class="pun">.</span><span class="pln">instance</span><span class="pun">;
-    }
-}
-
-</span><span class="kwd">auto </span><span class="pln">test </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">TestObservable</span><span class="pun">;
-</span><span class="kwd">auto </span><span class="pln">observable </span><span class="pun">= <a href="../../rx/observable/observableObject.observableObject.html"></span><span class="pln">observableObject</span></a><span class="pun">!</span><span class="typ">int</span><span class="pun">(</span><span class="pln">test</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">observable </span><span class="kwd">is </span><span class="pln">test</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">subscribeCount </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
-</span><span class="kwd">auto </span><span class="pln">d </span><span class="pun">= </span><span class="pln">observable<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="kwd">null</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">subscribeCount </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);
-</span></code></pre>
-</section>
-
+			<section><h2>Fields</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Type</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../rx/observable/ObservableObject._observable.html" class="[&quot;public&quot;]"><code>_observable</code></a>
+						</td>
+						<td class="typecol"><code class="prettyprint lang-d"><span class="pln">R</span></code></td><td></td>
+					</tr>
+				</table>
+			</section>
+			<section><h2>Methods</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<a href="../../rx/observable/ObservableObject.subscribe.html" class="[&quot;public&quot;]">
+								<code>subscribe</code>
+							</a>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</section>
+			
 			<footer>
 				<table class="license-info">
 					<tr>

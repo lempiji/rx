@@ -345,8 +345,8 @@
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.unsubscribe.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject._observer.html</loc></url>
 <url><loc>http://127.0.0.1/rx/util.html</loc></url>
-<url><loc>http://127.0.0.1/rx/util/assumeUnshared.html</loc></url>
-<url><loc>http://127.0.0.1/rx/util/assumeUnshared.html</loc></url>
+<url><loc>http://127.0.0.1/rx/util/assumeThreadLocal.html</loc></url>
+<url><loc>http://127.0.0.1/rx/util/assumeThreadLocal.html</loc></url>
 <url><loc>http://127.0.0.1/rx/util/EventSignal.html</loc></url>
 <url><loc>http://127.0.0.1/rx/util/EventSignal.setSignal.html</loc></url>
 <url><loc>http://127.0.0.1/rx/util/EventSignal.signal.html</loc></url>

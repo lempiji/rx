@@ -6112,7 +6112,7 @@
 				"members": [
 					{
 						"endchar": 1,
-						"name": "assumeUnshared",
+						"name": "assumeThreadLocal",
 						"line": 8,
 						"type": "ref T(auto ref T obj)",
 						"parameters": [
@@ -6133,7 +6133,7 @@
 						]
 					}
 				],
-				"name": "assumeUnshared",
+				"name": "assumeThreadLocal",
 				"line": 8,
 				"parameters": [
 					{
@@ -6149,7 +6149,7 @@
 				"members": [
 					{
 						"endchar": 1,
-						"name": "assumeUnshared",
+						"name": "assumeThreadLocal",
 						"line": 13,
 						"type": "ref T(auto ref shared(T) obj)",
 						"parameters": [
@@ -6170,7 +6170,7 @@
 						]
 					}
 				],
-				"name": "assumeUnshared",
+				"name": "assumeThreadLocal",
 				"line": 13,
 				"parameters": [
 					{

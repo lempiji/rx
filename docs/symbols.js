@@ -318,7 +318,7 @@ var symbols = [
 {name: 'rx.subject.SubjectObject.unsubscribe', kind: "functiondeclaration", path: './rx/subject/SubjectObject.unsubscribe.html', attributes: []},
 {name: 'rx.subject.SubjectObject._observer', kind: "variabledeclaration", path: './rx/subject/SubjectObject._observer.html', attributes: []},
 {name: 'rx.util', kind: "module", path: './rx/util.html', attributes: []},
-{name: 'rx.util.assumeUnshared', kind: "functiondeclaration", path: './rx/util/assumeUnshared.html', attributes: ["auto", "ref"]},
+{name: 'rx.util.assumeThreadLocal', kind: "functiondeclaration", path: './rx/util/assumeThreadLocal.html', attributes: ["auto", "ref"]},
 {name: 'rx.util.EventSignal', kind: "classdeclaration", path: './rx/util/EventSignal.html', attributes: []},
 {name: 'rx.util.EventSignal.setSignal', kind: "functiondeclaration", path: './rx/util/EventSignal.setSignal.html', attributes: []},
 {name: 'rx.util.EventSignal.signal', kind: "functiondeclaration", path: './rx/util/EventSignal.signal.html', attributes: ["property"]},

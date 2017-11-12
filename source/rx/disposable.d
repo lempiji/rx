@@ -356,7 +356,7 @@ public:
     {
         import rx.util;
 
-        auto temp = assumeUnshared(exchange(_disposable, cast(shared) DisposedMarker.instance));
+        auto temp = assumeThreadLocal(exchange(_disposable, cast(shared) DisposedMarker.instance));
         if (temp !is null)
             temp.dispose();
     }
