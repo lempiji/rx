@@ -10,6 +10,7 @@ import rx.util;
 
 import std.functional;
 import std.range;
+import std.typecons;
 
 //####################
 // Scan
@@ -22,7 +23,7 @@ public:
     this(TObserver observer, TAccumulate seed)
     {
         _observer = observer;
-        _current = seed;
+        _current = refCounted(seed);
     }
 
     static if (hasCompleted!TObserver || hasFailure!TObserver)
@@ -30,7 +31,7 @@ public:
         this(TObserver observer, TAccumulate seed, Disposable disposable)
         {
             _observer = observer;
-            _current = seed;
+            _current = refCounted(seed);
             _disposable = disposable;
         }
     }
@@ -44,7 +45,7 @@ public:
     }
 
 private:
-    TAccumulate _current;
+    RefCounted!TAccumulate _current;
 }
 
 unittest
@@ -156,4 +157,37 @@ unittest
     import std.algorithm : equal;
 
     assert(equal(result, [1, 2, 3, 4, 5]));
+}
+
+unittest
+{
+    import rx.subject : SubjectObject;
+
+    auto subject1 = new SubjectObject!int;
+    auto subject2 = new SubjectObject!int;
+
+    import rx.algorithm : merge;
+
+    auto sum = merge(subject1, subject2).scan!"a + b"(0);
+    static assert(isObservable!(typeof(sum), int));
+
+    import std.array : appender;
+
+    auto buf = appender!(int[]);
+    auto disposable = sum.subscribe(buf);
+    scope (exit)
+        disposable.dispose();
+
+    subject1.put(1); // 1
+    subject2.put(1); // 2
+    subject1.put(-1); // 1
+    subject2.put(-1); // 0
+    subject2.put(1); // 1
+    subject2.put(-1); // 0
+
+    auto result = buf.data;
+    assert(result.length == 6);
+    import std.algorithm : equal;
+
+    assert(equal(result, [1, 2, 1, 0, 1, 0]));
 }
