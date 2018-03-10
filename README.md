@@ -3,9 +3,6 @@
 [![Dub version](https://img.shields.io/dub/v/rx.svg)](https://code.dlang.org/packages/rx)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)
 [![Build Status](https://travis-ci.org/lempiji/rx.svg?branch=master)](https://travis-ci.org/lempiji/rx)
-<!---
-[![Coverage Status](https://coveralls.io/repos/github/lempiji/rx/badge.svg?branch=master)](https://coveralls.io/github/lempiji/rx?branch=master)
--->
 
 ### Overview
 
@@ -45,7 +42,6 @@ void main()
     // result is like this
     assert(result == ["0", "2", "4", "6", "8"]);
 }
-
 ```
 
 And [more examples](https://github.com/lempiji/rx/tree/master/examples) or [Documents](https://lempiji.github.io/rx)
@@ -93,6 +89,8 @@ interface Observable(E)
     Disposable subscribe(Observer!E observer);
 }
 ```
+### Supported Compilers
+Supported compilers are `dmd` and `ldc` that latest 3 versions.
 
 ### License
 
