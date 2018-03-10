@@ -97,6 +97,11 @@ Supported compilers are `dmd` and `ldc` that latest 3 versions.
 This library is under the MIT License.  
 Some code is borrowed from [Rx.NET](https://github.com/Reactive-Extensions/Rx.NET).
 
+### Contributing
+Issue and PullRequest are welcome! :smiley:
+
+Refer to [CONTRIBUTING.md](/CONTRIBUTING.md) for details.
+
 ### Future work
 
 - generic observable factory
