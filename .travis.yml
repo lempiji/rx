@@ -6,9 +6,11 @@ os:
 
 d:
   # support 3 versions
+  - dmd
   - dmd-2.079.0
   - dmd-2.078.3
   - dmd-2.077.1
+  - ldc
   - ldc-1.8.0
   - ldc-1.7.0
   - ldc-1.6.0
