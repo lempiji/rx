@@ -158,6 +158,29 @@ unittest
     assert(count == 2);
 }
 
+unittest
+{
+    import rx.subject : SubjectObject;
+
+    auto source1 = new SubjectObject!int;
+    auto source2 = new SubjectObject!int;
+
+    import rx.algorithm : merge;
+
+    auto source = merge(source1, source2).drop(2);
+    int[] result;
+    source.doSubscribe!(n => result ~= n);
+
+    .put(source1, 0);
+    .put(source2, 1);
+    .put(source1, 2);
+    .put(source2, 3);
+
+    assert(result.length == 2);
+    assert(result[0] == 2);
+    assert(result[1] == 3);
+}
+
 //####################
 // Take
 //####################
@@ -185,33 +208,25 @@ auto take(TObservable)(auto ref TObservable observable, size_t n)
                 this(TObserver observer, size_t count, Disposable disposable)
                 {
                     _observer = observer;
-                    _count = count;
+                    _counter = new shared(AtomicCounter)(count);
                     _disposable = disposable;
                 }
 
             public:
                 void put(ElementType obj)
                 {
-                    shared(size_t) oldValue = void;
-                    size_t newValue = void;
-                    do
+                    auto result = _counter.tryDecrement();
+                    if (result.success)
                     {
-                        oldValue = _count;
-                        if (oldValue == 0)
-                            return;
-
-                        newValue = atomicLoad(oldValue) - 1;
-                    }
-                    while (!cas(&_count, oldValue, newValue));
-
-                    .put(_observer, obj);
-                    if (newValue == 0)
-                    {
-                        static if (hasCompleted!TObserver)
+                        .put(_observer, obj);
+                        if (result.count == 0)
                         {
-                            _observer.completed();
+                            static if (hasCompleted!TObserver)
+                            {
+                                _observer.completed();
+                            }
+                            _disposable.dispose();
                         }
-                        _disposable.dispose();
                     }
                 }
 
@@ -235,7 +250,7 @@ auto take(TObservable)(auto ref TObservable observable, size_t n)
 
             private:
                 TObserver _observer;
-                shared(size_t) _count;
+                shared(AtomicCounter) _counter;
                 Disposable _disposable;
             }
 
@@ -331,6 +346,29 @@ unittest
     sub.put(2);
     assert(countPut == 2);
     assert(countCompleted == 1);
+}
+
+unittest
+{
+    import rx.subject : SubjectObject;
+
+    auto source1 = new SubjectObject!int;
+    auto source2 = new SubjectObject!int;
+
+    import rx.algorithm : merge;
+
+    auto source = merge(source1, source2).take(2);
+    int[] result;
+    source.doSubscribe!(n => result ~= n);
+
+    .put(source1, 0);
+    .put(source2, 1);
+    .put(source1, 2);
+    .put(source2, 3);
+
+    assert(result.length == 2);
+    assert(result[0] == 0);
+    assert(result[1] == 1);
 }
 
 //####################
@@ -463,4 +501,28 @@ unittest
     assert(count == 0);
     sub.completed();
     assert(count == 2);
+}
+
+unittest
+{
+    import rx : SubjectObject, merge;
+
+    auto source1 = new SubjectObject!int;
+    auto source2 = new SubjectObject!int;
+
+    auto source = merge(source1, source2).takeLast();
+    int[] result;
+    source.doSubscribe!(n => result ~= n);
+
+    .put(source1, 0);
+    .put(source2, 1);
+    source1.completed();
+    
+    assert(result.length == 0);
+
+    .put(source2, 2);
+    source2.completed();
+
+    assert(result.length == 1);
+    assert(result[0] == 2);
 }
