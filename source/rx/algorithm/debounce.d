@@ -160,8 +160,9 @@ unittest
     Thread.sleep(dur!"msecs"(100));
 
     import std.algorithm : equal;
+    import std.format : format;
 
-    assert(equal(buf.data, [9]));
+    assert(equal(buf.data, [9]), "buf.data is %s".format(buf.data));
 }
 
 unittest

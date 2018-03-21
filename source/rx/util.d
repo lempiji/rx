@@ -110,6 +110,11 @@ public:
     }
 
 public:
+    bool isZero() @property
+    {
+        return atomicLoad(_count) == 0;
+    }
+
     bool tryUpdateCount() @trusted
     {
         shared(size_t) oldValue = void;
@@ -125,6 +130,43 @@ public:
         while (!cas(&_count, oldValue, newValue));
 
         return false;
+    }
+
+    auto tryDecrement() @trusted
+    {
+        static struct DecrementResult
+        {
+            bool success;
+            size_t count;
+        }
+
+        shared(size_t) oldValue = void;
+        size_t newValue = void;
+        do
+        {
+            oldValue = _count;
+            if (oldValue == 0)
+                return DecrementResult(false, oldValue);
+
+            newValue = oldValue - 1;
+        }
+        while (!cas(&_count, oldValue, newValue));
+
+        return DecrementResult(true, newValue);
+    }
+
+    bool trySetZero() @trusted
+    {
+        shared(size_t) oldValue = void;
+        do
+        {
+            oldValue = _count;
+            if (oldValue == 0)
+                return false;
+        }
+        while (!cas(&_count, oldValue, cast(size_t)0));
+
+        return true;
     }
 
 private:

@@ -5,52 +5,67 @@ import rx;
 
 void main()
 {
-	auto signal = new EventSignal;
-	auto client = getAsync("http://dlang.org");
+    auto signal = new EventSignal;
+    auto client = getAsync("dlang.org");
 
-	client.map!(content => content.length)
-		.doSubscribe((size_t len) => writeln("Content-Length: ", len), &signal.setSignal);
+    // dfmt off
+    client.map!(content => content.length)
+		.doSubscribe((size_t length) {
+        	writeln("Content-Length: ", length);
+    	}, () {
+			signal.setSignal();
+		}, (Exception e) {
+        	writeln(e);
+        	signal.setSignal();
+    	});
+	// dfmt on
 
-	signal.wait();
+    signal.wait();
 }
 
 Observable!(char[]) getAsync(const(char)[] url)
 {
-	auto sub = new AsyncSubject!(char[]);
+    auto sub = new AsyncSubject!(char[]);
 
-	import std.parallelism : task, taskPool;
+    import std.net.curl : HTTP, get;
+    import std.parallelism : task, taskPool;
 
-	taskPool.put(task({
-			import std.net.curl : get;
+    taskPool.put(task({
+            auto http = HTTP(url);
+            http.caInfo = "./curl-ca-bundle.crt";
 
-			try
-			{
-				.put(sub, get(url));
-				sub.completed();
-			}
-			catch (Exception e)
-			{
-				sub.failure(e);
-			}
-		}));
-	return sub;
+            try
+            {
+                .put(sub, get(url, http));
+                sub.completed();
+            }
+            catch (Exception e)
+            {
+                sub.failure(e);
+            }
+        }));
+
+    return sub;
 }
 
 auto getDefer(const(char)[] url)
 {
-	return defer!(char[])((Observer!(char[]) observer) {
-		import std.net.curl : get;
+    return defer!(char[])((Observer!(char[]) observer) {
+        import std.net.curl : HTTP, get;
 
-		try
-		{
-			.put(observer, get(url));
-			observer.completed();
-		}
-		catch (Exception e)
-		{
-			observer.failure(e);
-		}
+        try
+        {
+            auto http = HTTP(url);
+            http.caInfo = "./curl-ca-bundle.crt";
 
-		return NopDisposable.instance;
-	}).subscribeOn(new TaskPoolScheduler);
+            .put(observer, get(url, http));
+            observer.completed();
+        }
+        catch (Exception e)
+        {
+            observer.failure(e);
+        }
+
+        return NopDisposable.instance;
+    }).subscribeOn(new TaskPoolScheduler);
 }

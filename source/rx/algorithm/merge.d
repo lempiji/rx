@@ -7,6 +7,7 @@ import rx.disposable;
 import rx.observable;
 import rx.observer;
 import rx.util;
+import std.range : put;
 
 //####################
 // Merge
@@ -27,9 +28,52 @@ public:
 public:
     auto subscribe(T)(T observer)
     {
-        auto d1 = _observable1.doSubscribe(observer);
-        auto d2 = _observable2.doSubscribe(observer);
-        return new CompositeDisposable(disposableObject(d1), disposableObject(d2));
+        static struct MergeObserver
+        {
+            T _observer;
+            shared(AtomicCounter) _counter;
+            Disposable _subscription;
+
+            void put(ElementType obj)
+            {
+                if (_counter.isZero) return;
+
+                .put(_observer, obj);
+            }
+
+            void completed()
+            {
+                auto result = _counter.tryDecrement();
+                if (result.success && result.count == 0)
+                {
+                    static if (hasCompleted!T)
+                    {
+                        _observer.completed();
+                    }
+                    _subscription.dispose();
+                }
+            }
+
+            void failure(Exception e)
+            {
+                if (_counter.trySetZero())
+                {
+                    static if (hasFailure!T)
+                    {
+                        _observer.failure(e);
+                    }
+                    _subscription.dispose();
+                }
+            }
+        }
+
+        auto subscription = new SingleAssignmentDisposable;
+        auto counter = new shared(AtomicCounter)(2);
+        auto mergeObserver = MergeObserver(observer, counter, subscription);
+        auto d1 = _observable1.doSubscribe(mergeObserver);
+        auto d2 = _observable2.doSubscribe(mergeObserver);
+        subscription.setDisposable(new CompositeDisposable(disposableObject(d1), disposableObject(d2)));
+        return subscription;
     }
 
 private:
@@ -67,6 +111,134 @@ unittest
     assert(count == 2);
     s2.put(100);
     assert(count == 2);
+}
+
+unittest
+{
+    import rx : SubjectObject, CounterObserver;
+
+    auto s1 = new SubjectObject!int;
+    auto s2 = new SubjectObject!int;
+
+    auto merged = merge(s1, s2);
+    auto observer = new CounterObserver!int;
+
+    auto disposable = merged.doSubscribe(observer);
+    scope(exit) disposable.dispose();
+
+    s1.put(0);
+    assert(observer.putCount == 1);
+    s2.put(1);
+    assert(observer.putCount == 2);
+    s1.completed();
+    assert(observer.completedCount == 0);
+    s2.completed();
+    assert(observer.completedCount == 1);
+}
+
+unittest
+{
+    import rx : SubjectObject, CounterObserver;
+
+    auto source1 = new SubjectObject!int;
+    auto source2 = new SubjectObject!int;
+    auto subject = merge(source1, source2);
+
+    auto counter = new CounterObserver!int;
+    subject.subscribe(counter);
+
+    source1.put(0);
+    assert(counter.putCount == 1);
+    assert(counter.lastValue == 0);
+    source1.completed();
+    assert(counter.completedCount == 0);
+
+    source2.put(1);
+    assert(counter.putCount == 2);
+    assert(counter.lastValue == 1);
+
+    assert(counter.completedCount == 0);
+    source2.completed();
+    assert(counter.completedCount == 1);
+}
+
+unittest
+{
+    import rx : SubjectObject, CounterObserver;
+
+    auto s1 = new SubjectObject!int;
+    auto s2 = new SubjectObject!int;
+
+    auto merged = merge(s1, s2);
+    auto observer = new CounterObserver!int;
+
+    auto disposable = merged.doSubscribe(observer);
+    scope(exit) disposable.dispose();
+
+    s1.put(0);
+    assert(observer.putCount == 1);
+    s2.put(1);
+    assert(observer.putCount == 2);
+
+    auto ex = new Exception("TEST");
+    s1.failure(ex);
+    assert(observer.failureCount == 1);
+    assert(observer.lastException == ex);
+
+    s2.put(2);
+    assert(observer.putCount == 2);
+    
+    s2.completed();
+    assert(observer.completedCount == 0);
+}
+
+unittest
+{
+    import rx : SubjectObject, CounterObserver;
+
+    auto s1 = new SubjectObject!int;
+    auto s2 = new SubjectObject!int;
+
+    auto merged = merge(s1, s2);
+    auto observer = new CounterObserver!int;
+
+    auto disposable = merged.doSubscribe(observer);
+
+    s1.put(0);
+    s2.put(1);
+    assert(observer.putCount == 2);
+
+    disposable.dispose();
+
+    s1.put(2);
+    s1.completed();
+
+    s2.put(3);
+    s2.completed();
+    // no effect
+    assert(observer.putCount == 2);
+    assert(observer.completedCount == 0);
+    assert(observer.failureCount == 0);
+}
+
+unittest
+{
+    import rx : SubjectObject;
+
+    auto s1 = new SubjectObject!int;
+    auto s2 = new SubjectObject!int;
+
+    int result = -1;
+    auto disposable = merge(s1, s2).doSubscribe((int n) { result = n; });
+    
+    s1.put(0);
+    assert(result == 0);
+    s2.put(1);
+    assert(result == 1);
+
+    s1.failure(null);
+    s2.put(2);
+    assert(result == 1);
 }
 
 ///
