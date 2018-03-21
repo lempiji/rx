@@ -164,7 +164,7 @@ public:
             if (oldValue == 0)
                 return false;
         }
-        while (!cas(&_count, oldValue, 0));
+        while (!cas(&_count, oldValue, cast(size_t)0));
 
         return true;
     }
