@@ -49,6 +49,7 @@
 <url><loc>http://127.0.0.1/rx/algorithm/buffer/BufferedObservable._observable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/buffer/BufferedObserver.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/buffer/BufferedObserver.completed.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/buffer/BufferedObserver.failure.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/buffer/BufferedObserver.put.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/buffer/BufferedObserver.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/buffer/BufferedObserver._buffer.html</loc></url>
@@ -96,6 +97,7 @@
 <url><loc>http://127.0.0.1/rx/algorithm/map/MapObserver.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/map/MapObserver.putImpl.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/map/MapObserver.this.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/map/MapObserver.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/merge.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/merge/merge.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/merge/merge.html</loc></url>
@@ -117,6 +119,7 @@
 <url><loc>http://127.0.0.1/rx/algorithm/scan/ScanObserver.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/scan/ScanObserver.putImpl.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/scan/ScanObserver.this.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/scan/ScanObserver.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/scan/ScanObserver._current.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/tee.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/tee/tee.html</loc></url>
@@ -129,6 +132,7 @@
 <url><loc>http://127.0.0.1/rx/algorithm/tee/TeeObserver.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/tee/TeeObserver.putImpl.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/tee/TeeObserver.this.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/tee/TeeObserver.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/uniq.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/uniq.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/uniq.uniq.html</loc></url>
@@ -139,6 +143,7 @@
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/UniqObservable._observable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/UniqObserver.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/UniqObserver.putImpl.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/uniq/UniqObserver.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/UniqObserver.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/UniqObserver._current.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/uniq/UniqObserver._hasValue.html</loc></url>
@@ -289,7 +294,11 @@
 <url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObservable._observable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObservable._scheduler.html</loc></url>
 <url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObserver.html</loc></url>
+<url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObserver.completed.html</loc></url>
+<url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObserver.failure.html</loc></url>
 <url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObserver.put.html</loc></url>
+<url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObserver.this.html</loc></url>
+<url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObserver._disposable.html</loc></url>
 <url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObserver._observer.html</loc></url>
 <url><loc>http://127.0.0.1/rx/scheduler/ObserveOnObserver._scheduler.html</loc></url>
 <url><loc>http://127.0.0.1/rx/scheduler/Scheduler.html</loc></url>
@@ -333,6 +342,16 @@
 <url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.value.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/BehaviorSubject._subject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/BehaviorSubject._value.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.completed.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.completedCount.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.failure.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.failureCount.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.hasNotBeenCalled.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.lastException.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.lastValue.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.put.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/CounterObserver.putCount.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/Subject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.completed.html</loc></url>

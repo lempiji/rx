@@ -266,7 +266,7 @@
 				],
 				"name": "all",
 				"line": 412,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_all_d_420_7)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all!\"a % 2 == 0\"().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_all_d_420_7)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L420_C1)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all!\"a % 2 == 0\"().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L420_C1)\n",
 				"parameters": [
 					{
 						"name": "pred",
@@ -301,7 +301,7 @@
 				],
 				"name": "all",
 				"line": 449,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_all_d_454_9)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_all_d_454_9)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L454_C1)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.all().doSubscribe((bool res) { result = res; });\n\nsub.put(0);\nsub.completed();\nassert(result);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L454_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -565,7 +565,7 @@
 				],
 				"name": "any",
 				"line": 305,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_any_d_313_10)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any!(\"a % 2 == 0\").doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == false);\nsub.put(0);\nassert(result == true);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_any_d_313_10)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L313_C1)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any!(\"a % 2 == 0\").doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == false);\nsub.put(0);\nassert(result == true);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L313_C1)\n",
 				"parameters": [
 					{
 						"name": "pred",
@@ -600,7 +600,7 @@
 				],
 				"name": "any",
 				"line": 344,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_any_d_349_12)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any().doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == true);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_any_d_349_12)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L349_C1)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nbool result = false;\nsub.any().doSubscribe((bool) { result = true; });\n\nassert(result == false);\nsub.put(1);\nassert(result == true);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L349_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -669,6 +669,21 @@
 								"type": "void()",
 								"endline": 56,
 								"char": 10,
+								"kind": "function"
+							},
+							{
+								"endchar": 9,
+								"name": "failure",
+								"line": 60,
+								"type": "void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 64,
+								"char": 14,
 								"kind": "function"
 							},
 							{
@@ -852,7 +867,7 @@
 				],
 				"name": "buffered",
 				"line": 149,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_buffer_d_156_2)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\n\nauto d = sub.buffered(2).doSubscribe(buf);\n\nsub.put(0);\nsub.put(1);\nassert(buf.data.length == 2);\nassert(buf.data[0] == 0);\nassert(buf.data[1] == 1);\nsub.put(2);\nassert(buf.data.length == 2);\nsub.completed();\nassert(buf.data.length == 3);\nassert(buf.data[2] == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_buffer_d_156_2)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_buffer_d_179_3)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\nimport std.parallelism : taskPool, task;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\nauto d = sub.buffered(100).doSubscribe(buf);\n\nimport std.range : iota;\n\nauto t1 = task({ .put(sub, iota(100)); });\nauto t2 = task({ .put(sub, iota(100)); });\nauto t3 = task({ .put(sub, iota(100)); });\ntaskPool.put(t1);\ntaskPool.put(t2);\ntaskPool.put(t3);\n\nt1.workForce;\nt2.workForce;\nt3.workForce;\n\nsub.completed();\n\nassert(buf.data.length == 300);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_buffer_d_179_3)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L156_C1)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\n\nauto d = sub.buffered(2).doSubscribe(buf);\n\nsub.put(0);\nsub.put(1);\nassert(buf.data.length == 2);\nassert(buf.data[0] == 0);\nassert(buf.data[1] == 1);\nsub.put(2);\nassert(buf.data.length == 2);\nsub.completed();\nassert(buf.data.length == 3);\nassert(buf.data[2] == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L156_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L179_C1)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\nimport std.parallelism : taskPool, task;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\nauto d = sub.buffered(100).doSubscribe(buf);\n\nimport std.range : iota;\n\nauto t1 = task({ .put(sub, iota(100)); });\nauto t2 = task({ .put(sub, iota(100)); });\nauto t3 = task({ .put(sub, iota(100)); });\ntaskPool.put(t1);\ntaskPool.put(t2);\ntaskPool.put(t3);\n\nt1.workForce;\nt2.workForce;\nt3.workForce;\n\nsub.completed();\n\nassert(buf.data.length == 300);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L179_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -937,7 +952,7 @@
 				],
 				"name": "debounce",
 				"line": 21,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_debounce_d_26_0)\n---\nimport rx.subject : SubjectObject;\nimport core.thread : Thread;\nimport core.time : dur;\n\nauto obs = new SubjectObject!int;\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto d = obs.debounce(dur!\"msecs\"(100), new TaskPoolScheduler).doSubscribe(buf);\nscope (exit)\n    d.dispose();\n\n.put(obs, 1);\nThread.sleep(dur!\"msecs\"(200));\n.put(obs, 2);\n.put(obs, 3);\nThread.sleep(dur!\"msecs\"(200));\n\nassert(buf.data.length == 2);\nassert(buf.data[0] == 1);\nassert(buf.data[1] == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_debounce_d_26_0)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L26_C1)\n---\nimport rx.subject : SubjectObject;\nimport core.thread : Thread;\nimport core.time : dur;\n\nauto obs = new SubjectObject!int;\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto d = obs.debounce(dur!\"msecs\"(100), new TaskPoolScheduler).doSubscribe(buf);\nscope (exit)\n    d.dispose();\n\n.put(obs, 1);\nThread.sleep(dur!\"msecs\"(200));\n.put(obs, 2);\n.put(obs, 3);\nThread.sleep(dur!\"msecs\"(200));\n\nassert(buf.data.length == 2);\nassert(buf.data[0] == 1);\nassert(buf.data[1] == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L26_C1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -1232,7 +1247,7 @@
 				],
 				"name": "filter",
 				"line": 18,
-				"comment": "Implements the higher order filter function. The predicate is passed to std.functional.unaryFun, and can either accept a string, or any callable that can be executed via pred(element).\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_filter_d_86_0)\n---\nimport rx.subject : Subject, SubjectObject;\nimport std.array : appender;\n\nSubject!int sub = new SubjectObject!int;\nauto filtered = sub.filter!(n => n % 2 == 0);\nauto buffer = appender!(int[])();\nauto disposable = filtered.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_filter_d_86_0)\n",
+				"comment": "Implements the higher order filter function. The predicate is passed to std.functional.unaryFun, and can either accept a string, or any callable that can be executed via pred(element).\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L86_C1)\n---\nimport rx.subject : Subject, SubjectObject;\nimport std.array : appender;\n\nSubject!int sub = new SubjectObject!int;\nauto filtered = sub.filter!(n => n % 2 == 0);\nauto buffer = appender!(int[])();\nauto disposable = filtered.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L86_C1)\n",
 				"parameters": [
 					{
 						"name": "pred",
@@ -1281,7 +1296,7 @@
 				],
 				"name": "fold",
 				"line": 14,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_fold_d_22_0)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\nauto sum = sub.fold!\"a+b\"(0);\n\nint result = 0;\nauto disposable = sum.doSubscribe((int n) { result = n; });\nscope (exit)\n    disposable.dispose();\n\nforeach (i; 1 .. 11)\n    sub.put(i);\n\nassert(result == 0);\nsub.completed();\nassert(result == 55);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_fold_d_22_0)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L22_C1)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\nauto sum = sub.fold!\"a+b\"(0);\n\nint result = 0;\nauto disposable = sum.doSubscribe((int n) { result = n; });\nscope (exit)\n    disposable.dispose();\n\nforeach (i; 1 .. 11)\n    sub.put(i);\n\nassert(result == 0);\nsub.completed();\nassert(result == 55);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L22_C1)\n",
 				"parameters": [
 					{
 						"name": "fun",
@@ -1379,7 +1394,7 @@
 				],
 				"name": "groupBy",
 				"line": 344,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_groupby_d_355_4)\n---\nauto sub = new SubjectObject!int;\n\nauto group = sub.groupBy!(n => n % 10);\n\nauto tester = new CounterObserver!(typeof(group).ElementType);\nauto disposable = group.subscribe(tester);\n\nsub.put(0);\nassert(tester.putCount == 1);\nassert(tester.lastValue.key == 0);\n\nsub.put(10);\nassert(tester.putCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_groupby_d_355_4)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_groupby_d_373_5)\n---\nauto sub = new SubjectObject!string;\n\nauto group = sub.groupBy!(text => text);\n\nauto tester = new CounterObserver!(typeof(group).ElementType);\nauto disposable = group.subscribe(tester);\n\nsub.put(\"A\");\nassert(tester.putCount == 1);\nassert(tester.lastValue.key == \"A\");\n\nsub.put(\"B\");\nassert(tester.putCount == 2);\nassert(tester.lastValue.key == \"B\");\n\nsub.put(\"XXX\");\nassert(tester.putCount == 3);\nassert(tester.lastValue.key == \"XXX\");\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_groupby_d_373_5)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L355_C1)\n---\nauto sub = new SubjectObject!int;\n\nauto group = sub.groupBy!(n => n % 10);\n\nauto tester = new CounterObserver!(typeof(group).ElementType);\nauto disposable = group.subscribe(tester);\n\nsub.put(0);\nassert(tester.putCount == 1);\nassert(tester.lastValue.key == 0);\n\nsub.put(10);\nassert(tester.putCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L355_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L373_C1)\n---\nauto sub = new SubjectObject!string;\n\nauto group = sub.groupBy!(text => text);\n\nauto tester = new CounterObserver!(typeof(group).ElementType);\nauto disposable = group.subscribe(tester);\n\nsub.put(\"A\");\nassert(tester.putCount == 1);\nassert(tester.lastValue.key == \"A\");\n\nsub.put(\"B\");\nassert(tester.putCount == 2);\nassert(tester.lastValue.key == \"B\");\n\nsub.put(\"XXX\");\nassert(tester.putCount == 3);\nassert(tester.lastValue.key == \"XXX\");\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L373_C1)\n",
 				"parameters": [
 					{
 						"name": "selector",
@@ -1422,6 +1437,25 @@
 								],
 								"endline": 25,
 								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 9,
+								"name": "this",
+								"line": 29,
+								"type": "(TObserver observer, Disposable disposable)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "disposable",
+										"type": "Disposable"
+									}
+								],
+								"endline": 33,
+								"char": 9,
 								"kind": "constructor"
 							},
 							{
@@ -1588,7 +1622,7 @@
 				],
 				"name": "map",
 				"line": 129,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_map_d_137_2)\n---\nimport rx.subject;\nimport std.array : appender;\nimport std.conv : to;\n\nSubject!int sub = new SubjectObject!int;\nauto mapped = sub.map!(n => to!string(n));\nstatic assert(isObservable!(typeof(mapped), string));\nstatic assert(isSubscribable!(typeof(mapped), Observer!string));\n\nauto buffer = appender!(string[])();\nauto disposable = mapped.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [\"0\", \"1\", \"2\"][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_map_d_137_2)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_map_d_162_3)\n---\nimport rx.subject;\nimport std.array : appender;\nimport std.conv : to;\n\nSubject!int sub = new SubjectObject!int;\nauto mapped = sub.map!\"a * 2\";\nstatic assert(isObservable!(typeof(mapped), int));\nstatic assert(isSubscribable!(typeof(mapped), Observer!int));\n\nauto buffer = appender!(int[])();\nauto disposable = mapped.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2, 4][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_map_d_162_3)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L137_C1)\n---\nimport rx.subject;\nimport std.array : appender;\nimport std.conv : to;\n\nSubject!int sub = new SubjectObject!int;\nauto mapped = sub.map!(n => to!string(n));\nstatic assert(isObservable!(typeof(mapped), string));\nstatic assert(isSubscribable!(typeof(mapped), Observer!string));\n\nauto buffer = appender!(string[])();\nauto disposable = mapped.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [\"0\", \"1\", \"2\"][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L137_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L162_C1)\n---\nimport rx.subject;\nimport std.array : appender;\nimport std.conv : to;\n\nSubject!int sub = new SubjectObject!int;\nauto mapped = sub.map!\"a * 2\";\nstatic assert(isObservable!(typeof(mapped), int));\nstatic assert(isSubscribable!(typeof(mapped), Observer!int));\n\nauto buffer = appender!(int[])();\nauto disposable = mapped.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2, 4][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L162_C1)\n",
 				"parameters": [
 					{
 						"name": "f",
@@ -1610,11 +1644,11 @@
 				"members": [
 					{
 						"name": "MergeObservable",
-						"line": 14,
+						"line": 15,
 						"members": [
 							{
 								"name": "ElementType",
-								"line": 18,
+								"line": 19,
 								"type": "CommonType!(TObservable1.ElementType, TObservable2.ElementType)",
 								"char": 5,
 								"kind": "alias"
@@ -1622,7 +1656,7 @@
 							{
 								"endchar": 5,
 								"name": "this",
-								"line": 21,
+								"line": 22,
 								"type": "(TObservable1 o1, TObservable2 o2)",
 								"parameters": [
 									{
@@ -1634,7 +1668,7 @@
 										"type": "TObservable2"
 									}
 								],
-								"endline": 25,
+								"endline": 26,
 								"char": 5,
 								"kind": "constructor"
 							},
@@ -1643,7 +1677,7 @@
 									{
 										"endchar": 5,
 										"name": "subscribe",
-										"line": 28,
+										"line": 29,
 										"type": "(T observer)",
 										"parameters": [
 											{
@@ -1651,7 +1685,7 @@
 												"type": "T"
 											}
 										],
-										"endline": 33,
+										"endline": 77,
 										"char": 10,
 										"kind": "function",
 										"storageClass": [
@@ -1660,7 +1694,7 @@
 									}
 								],
 								"name": "subscribe",
-								"line": 28,
+								"line": 29,
 								"parameters": [
 									{
 										"name": "T",
@@ -1672,14 +1706,14 @@
 							},
 							{
 								"name": "_observable1",
-								"line": 36,
+								"line": 80,
 								"type": "TObservable1",
 								"char": 18,
 								"kind": "variable"
 							},
 							{
 								"name": "_observable2",
-								"line": 37,
+								"line": 81,
 								"type": "TObservable2",
 								"char": 18,
 								"kind": "variable"
@@ -1690,7 +1724,7 @@
 					}
 				],
 				"name": "MergeObservable",
-				"line": 14,
+				"line": 15,
 				"parameters": [
 					{
 						"name": "TObservable1",
@@ -1709,7 +1743,7 @@
 					{
 						"endchar": 1,
 						"name": "merge",
-						"line": 41,
+						"line": 85,
 						"type": "MergeObservable!(T1, T2)(auto ref T1 observable1, auto ref T2 observable2)",
 						"parameters": [
 							{
@@ -1729,14 +1763,14 @@
 								]
 							}
 						],
-						"endline": 44,
+						"endline": 88,
 						"char": 26,
 						"kind": "function"
 					}
 				],
 				"name": "merge",
-				"line": 41,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_merge_d_46_0)\n---\nimport rx.subject : SubjectObject;\n\nauto s1 = new SubjectObject!int;\nauto s2 = new SubjectObject!short;\n\nauto merged = s1.merge(s2);\n\nint count = 0;\nauto d = merged.doSubscribe((int n) { count++; });\n\nassert(count == 0);\ns1.put(1);\nassert(count == 1);\ns2.put(2);\nassert(count == 2);\n\nd.dispose();\n\ns1.put(10);\nassert(count == 2);\ns2.put(100);\nassert(count == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_merge_d_46_0)\n",
+				"line": 85,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L90_C1)\n---\nimport rx.subject : SubjectObject;\n\nauto s1 = new SubjectObject!int;\nauto s2 = new SubjectObject!short;\n\nauto merged = s1.merge(s2);\n\nint count = 0;\nauto d = merged.doSubscribe((int n) { count++; });\n\nassert(count == 0);\ns1.put(1);\nassert(count == 1);\ns2.put(2);\nassert(count == 2);\n\nd.dispose();\n\ns1.put(10);\nassert(count == 2);\ns2.put(100);\nassert(count == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L90_C1)\n",
 				"parameters": [
 					{
 						"name": "T1",
@@ -1755,7 +1789,7 @@
 					{
 						"endchar": 1,
 						"name": "merge",
-						"line": 73,
+						"line": 245,
 						"type": "(auto ref TObservable observable)",
 						"parameters": [
 							{
@@ -1767,7 +1801,7 @@
 								]
 							}
 						],
-						"endline": 103,
+						"endline": 275,
 						"char": 6,
 						"kind": "function",
 						"storageClass": [
@@ -1776,8 +1810,8 @@
 					}
 				],
 				"name": "merge",
-				"line": 73,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_merge_d_106_1)\n---\nimport rx.algorithm.groupby : groupBy;\nimport rx.algorithm.map : map;\nimport rx.algorithm.fold : fold;\nimport rx.subject : SubjectObject, CounterObserver;\n\nauto subject = new SubjectObject!int;\nauto counted = subject.groupBy!(n => n % 10).map!(o => o.fold!((a, b) => a + 1)(0)).merge();\n\nauto counter = new CounterObserver!int;\n\nauto disposable = counted.subscribe(counter);\n\nsubject.put(0);\nsubject.put(0);\nassert(counter.putCount == 0);\nsubject.completed();\nassert(counter.putCount == 1);\nassert(counter.lastValue == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_merge_d_106_1)\n",
+				"line": 245,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L278_C1)\n---\nimport rx.algorithm.groupby : groupBy;\nimport rx.algorithm.map : map;\nimport rx.algorithm.fold : fold;\nimport rx.subject : SubjectObject, CounterObserver;\n\nauto subject = new SubjectObject!int;\nauto counted = subject.groupBy!(n => n % 10).map!(o => o.fold!((a, b) => a + 1)(0)).merge();\n\nauto counter = new CounterObserver!int;\n\nauto disposable = counted.subscribe(counter);\n\nsubject.put(0);\nsubject.put(0);\nassert(counter.putCount == 0);\nsubject.completed();\nassert(counter.putCount == 1);\nassert(counter.lastValue == 2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L278_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -1879,18 +1913,18 @@
 				"members": [
 					{
 						"name": "ScanObserver",
-						"line": 17,
+						"line": 18,
 						"members": [
 							{
 								"name": "SimpleObserverImpl!(TObserver, E)",
-								"line": 19,
+								"line": 20,
 								"char": 5,
 								"kind": "mixin"
 							},
 							{
 								"endchar": 5,
 								"name": "this",
-								"line": 22,
+								"line": 23,
 								"type": "(TObserver observer, TAccumulate seed)",
 								"parameters": [
 									{
@@ -1902,14 +1936,37 @@
 										"type": "TAccumulate"
 									}
 								],
-								"endline": 26,
+								"endline": 27,
 								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 9,
+								"name": "this",
+								"line": 31,
+								"type": "(TObserver observer, TAccumulate seed, Disposable disposable)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "seed",
+										"type": "TAccumulate"
+									},
+									{
+										"name": "disposable",
+										"type": "Disposable"
+									}
+								],
+								"endline": 36,
+								"char": 9,
 								"kind": "constructor"
 							},
 							{
 								"endchar": 5,
 								"name": "putImpl",
-								"line": 39,
+								"line": 40,
 								"type": "void(E obj)",
 								"parameters": [
 									{
@@ -1917,15 +1974,15 @@
 										"type": "E"
 									}
 								],
-								"endline": 44,
+								"endline": 45,
 								"char": 10,
 								"kind": "function"
 							},
 							{
 								"name": "_current",
-								"line": 47,
-								"type": "TAccumulate",
-								"char": 17,
+								"line": 48,
+								"type": "RefCounted!TAccumulate",
+								"char": 28,
 								"kind": "variable"
 							}
 						],
@@ -1934,7 +1991,7 @@
 					}
 				],
 				"name": "ScanObserver",
-				"line": 17,
+				"line": 18,
 				"parameters": [
 					{
 						"name": "f",
@@ -1960,11 +2017,11 @@
 				"members": [
 					{
 						"name": "ScanObservable",
-						"line": 70,
+						"line": 71,
 						"members": [
 							{
 								"name": "ElementType",
-								"line": 72,
+								"line": 73,
 								"type": "TAccumulate",
 								"char": 5,
 								"kind": "alias"
@@ -1972,7 +2029,7 @@
 							{
 								"endchar": 5,
 								"name": "this",
-								"line": 75,
+								"line": 76,
 								"type": "(TObservable observable, TAccumulate seed)",
 								"parameters": [
 									{
@@ -1984,7 +2041,7 @@
 										"type": "TAccumulate"
 									}
 								],
-								"endline": 79,
+								"endline": 80,
 								"char": 5,
 								"kind": "constructor"
 							},
@@ -1993,7 +2050,7 @@
 									{
 										"endchar": 5,
 										"name": "subscribe",
-										"line": 82,
+										"line": 83,
 										"type": "(TObserver observer)",
 										"parameters": [
 											{
@@ -2001,7 +2058,7 @@
 												"type": "TObserver"
 											}
 										],
-										"endline": 96,
+										"endline": 97,
 										"char": 10,
 										"kind": "function",
 										"storageClass": [
@@ -2010,7 +2067,7 @@
 									}
 								],
 								"name": "subscribe",
-								"line": 82,
+								"line": 83,
 								"parameters": [
 									{
 										"name": "TObserver",
@@ -2022,14 +2079,14 @@
 							},
 							{
 								"name": "_observable",
-								"line": 99,
+								"line": 100,
 								"type": "TObservable",
 								"char": 17,
 								"kind": "variable"
 							},
 							{
 								"name": "_seed",
-								"line": 100,
+								"line": 101,
 								"type": "TAccumulate",
 								"char": 17,
 								"kind": "variable"
@@ -2040,7 +2097,7 @@
 					}
 				],
 				"name": "ScanObservable",
-				"line": 70,
+				"line": 71,
 				"parameters": [
 					{
 						"name": "f",
@@ -2065,7 +2122,7 @@
 							{
 								"endchar": 5,
 								"name": "scan",
-								"line": 127,
+								"line": 128,
 								"type": "(auto ref TObservable observable, TAccumulate seed)",
 								"parameters": [
 									{
@@ -2081,7 +2138,7 @@
 										"type": "TAccumulate"
 									}
 								],
-								"endline": 130,
+								"endline": 131,
 								"char": 10,
 								"kind": "function",
 								"storageClass": [
@@ -2090,7 +2147,7 @@
 							}
 						],
 						"name": "scan",
-						"line": 127,
+						"line": 128,
 						"parameters": [
 							{
 								"name": "TObservable",
@@ -2106,8 +2163,8 @@
 					}
 				],
 				"name": "scan",
-				"line": 125,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_scan_d_133_3)\n---\nimport rx.subject : SubjectObject;\n\nauto subject = new SubjectObject!int;\n\nauto sum = subject.scan!((a, b) => a + b)(0);\nstatic assert(isObservable!(typeof(sum), int));\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto disposable = sum.subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\nforeach (_; 0 .. 5)\n{\n    subject.put(1);\n}\n\nauto result = buf.data;\nassert(result.length == 5);\nimport std.algorithm : equal;\n\nassert(equal(result, [1, 2, 3, 4, 5]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_scan_d_133_3)\n",
+				"line": 126,
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L134_C1)\n---\nimport rx.subject : SubjectObject;\n\nauto subject = new SubjectObject!int;\n\nauto sum = subject.scan!((a, b) => a + b)(0);\nstatic assert(isObservable!(typeof(sum), int));\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto disposable = sum.subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\nforeach (_; 0 .. 5)\n{\n    subject.put(1);\n}\n\nauto result = buf.data;\nassert(result.length == 5);\nimport std.algorithm : equal;\n\nassert(equal(result, [1, 2, 3, 4, 5]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L134_C1)\n",
 				"parameters": [
 					{
 						"name": "f",
@@ -2150,6 +2207,25 @@
 								],
 								"endline": 25,
 								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 9,
+								"name": "this",
+								"line": 29,
+								"type": "(TObserver observer, Disposable disposable)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "disposable",
+										"type": "Disposable"
+									}
+								],
+								"endline": 33,
+								"char": 9,
 								"kind": "constructor"
 							},
 							{
@@ -2324,7 +2400,7 @@
 				],
 				"name": "tee",
 				"line": 76,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_tee_d_85_0)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nimport std.array : appender;\n\nauto buf1 = appender!(int[]);\nauto buf2 = appender!(int[]);\n\nimport rx.algorithm : map;\n\nauto disposable = sub.tee!(i => buf1.put(i))().map!(i => i * 2)().subscribe(buf2);\n\nsub.put(1);\nsub.put(2);\ndisposable.dispose();\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buf1.data, [1, 2]));\nassert(equal(buf2.data, [2, 4]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_tee_d_85_0)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L85_C1)\n---\nimport rx.subject : SubjectObject;\n\nauto sub = new SubjectObject!int;\n\nimport std.array : appender;\n\nauto buf1 = appender!(int[]);\nauto buf2 = appender!(int[]);\n\nimport rx.algorithm : map;\n\nauto disposable = sub.tee!(i => buf1.put(i))().map!(i => i * 2)().subscribe(buf2);\n\nsub.put(1);\nsub.put(2);\ndisposable.dispose();\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buf1.data, [1, 2]));\nassert(equal(buf2.data, [2, 4]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L85_C1)\n",
 				"parameters": [
 					{
 						"name": "f",
@@ -2370,6 +2446,28 @@
 								],
 								"endline": 20,
 								"char": 5,
+								"kind": "constructor"
+							},
+							{
+								"endchar": 9,
+								"name": "this",
+								"line": 24,
+								"type": "(ref TObserver observer, Disposable disposable)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver",
+										"storageClass": [
+											"ref"
+										]
+									},
+									{
+										"name": "disposable",
+										"type": "Disposable"
+									}
+								],
+								"endline": 28,
+								"char": 9,
 								"kind": "constructor"
 							},
 							{
@@ -2559,7 +2657,7 @@
 				],
 				"name": "uniq",
 				"line": 195,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_uniq_d_204_4)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\n\nauto disposable = sub.uniq.subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\n.put(sub, [11, 11, 22, 22, 33]);\n\nauto data = buf.data;\nassert(data.length == 3);\nassert(data[0] == 11);\nassert(data[1] == 22);\nassert(data[2] == 33);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_uniq_d_204_4)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_algorithm_uniq_d_226_5)\n---\nimport std.datetime : Date;\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!Date;\nauto buf = appender!(Date[]);\n\nauto disposable = sub.uniq!\"a.year == b.year\".subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\n.put(sub, Date(2000, 1, 1));\n.put(sub, Date(2000, 1, 2));\n.put(sub, Date(2017, 3, 24));\n.put(sub, Date(2017, 4, 24));\n.put(sub, Date(2017, 4, 24));\n\nauto data = buf.data;\nassert(data.length == 2);\nassert(data[0] == Date(2000, 1, 1));\nassert(data[1] == Date(2017, 3, 24));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_algorithm_uniq_d_226_5)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L204_C1)\n---\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!int;\nauto buf = appender!(int[]);\n\nauto disposable = sub.uniq.subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\n.put(sub, [11, 11, 22, 22, 33]);\n\nauto data = buf.data;\nassert(data.length == 3);\nassert(data[0] == 11);\nassert(data[1] == 22);\nassert(data[2] == 33);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L204_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L226_C9)\n---\nimport std.datetime : Date;\nimport rx.subject : SubjectObject;\nimport std.array : appender;\n\nauto sub = new SubjectObject!Date;\nauto buf = appender!(Date[]);\n\nauto disposable = sub.uniq!\"a.year == b.year\".subscribe(buf);\nscope (exit)\n    disposable.dispose();\n\n.put(sub, Date(2000, 1, 1));\n.put(sub, Date(2000, 1, 2));\n.put(sub, Date(2017, 3, 24));\n.put(sub, Date(2017, 4, 24));\n.put(sub, Date(2017, 4, 24));\n\nauto data = buf.data;\nassert(data.length == 2);\nassert(data[0] == Date(2000, 1, 1));\nassert(data[1] == Date(2017, 3, 24));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L226_C9)\n",
 				"parameters": [
 					{
 						"name": "pred",
@@ -2593,7 +2691,7 @@
 				],
 				"name": "isDisposable",
 				"line": 11,
-				"comment": "Tests if something is a Disposable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_19_0)\n---\nstruct A\n{\n    void dispose()\n    {\n    }\n}\n\nclass B\n{\n    void dispose()\n    {\n    }\n}\n\ninterface C\n{\n    void dispose();\n}\n\nstatic assert(isDisposable!A);\nstatic assert(isDisposable!B);\nstatic assert(isDisposable!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_19_0)\n",
+				"comment": "Tests if something is a Disposable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L19_C1)\n---\nstruct A\n{\n    void dispose()\n    {\n    }\n}\n\nclass B\n{\n    void dispose()\n    {\n    }\n}\n\ninterface C\n{\n    void dispose();\n}\n\nstatic assert(isDisposable!A);\nstatic assert(isDisposable!B);\nstatic assert(isDisposable!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L19_C1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -2618,7 +2716,7 @@
 				],
 				"name": "isCancelable",
 				"line": 46,
-				"comment": "Tests if something is a Cancelable\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_54_1)\n---\nstruct A\n{\n    bool isDisposed() @property\n    {\n        return true;\n    }\n\n    void dispose()\n    {\n    }\n}\n\nclass B\n{\n    bool isDisposed() @property\n    {\n        return true;\n    }\n\n    void dispose()\n    {\n    }\n}\n\ninterface C\n{\n    bool isDisposed() @property;\n    void dispose();\n}\n\nstatic assert(isCancelable!A);\nstatic assert(isCancelable!B);\nstatic assert(isCancelable!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_54_1)\n",
+				"comment": "Tests if something is a Cancelable\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L54_C1)\n---\nstruct A\n{\n    bool isDisposed() @property\n    {\n        return true;\n    }\n\n    void dispose()\n    {\n    }\n}\n\nclass B\n{\n    bool isDisposed() @property\n    {\n        return true;\n    }\n\n    void dispose()\n    {\n    }\n}\n\ninterface C\n{\n    bool isDisposed() @property;\n    void dispose();\n}\n\nstatic assert(isCancelable!A);\nstatic assert(isCancelable!B);\nstatic assert(isCancelable!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L54_C1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -2851,7 +2949,7 @@
 				],
 				"name": "disposableObject",
 				"line": 188,
-				"comment": "Wraps dispose method in virtual functions.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_207_4)\n---\nint count = 0;\nstruct TestDisposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nTestDisposable test;\nDisposable disposable = disposableObject(test);\nassert(count == 0);\ndisposable.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_207_4)\n",
+				"comment": "Wraps dispose method in virtual functions.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L207_C1)\n---\nint count = 0;\nstruct TestDisposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nTestDisposable test;\nDisposable disposable = disposableObject(test);\nassert(count == 0);\ndisposable.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L207_C1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -2894,7 +2992,7 @@
 				],
 				"name": "NopDisposable",
 				"line": 274,
-				"comment": "Defines a instance property that return NOP Disposable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_297_7)\n---\nDisposable d1 = NopDisposable.instance;\nDisposable d2 = NopDisposable.instance;\nassert(d1 !is null);\nassert(d1 is d2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_297_7)\n",
+				"comment": "Defines a instance property that return NOP Disposable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L297_C1)\n---\nDisposable d1 = NopDisposable.instance;\nDisposable d2 = NopDisposable.instance;\nassert(d1 !is null);\nassert(d1 is d2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L297_C1)\n",
 				"char": 7,
 				"kind": "class"
 			},
@@ -2948,7 +3046,7 @@
 				],
 				"name": "SingleAssignmentDisposable",
 				"line": 334,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_368_8)\n---\nint count = 0;\nclass TestDisposable : Disposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nauto temp = new SingleAssignmentDisposable;\ntemp.setDisposable(new TestDisposable);\nassert(!temp.isDisposed);\nassert(count == 0);\ntemp.dispose();\nassert(temp.isDisposed);\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_368_8)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L368_C1)\n---\nint count = 0;\nclass TestDisposable : Disposable\n{\n    void dispose()\n    {\n        count++;\n    }\n}\n\nauto temp = new SingleAssignmentDisposable;\ntemp.setDisposable(new TestDisposable);\nassert(!temp.isDisposed);\nassert(count == 0);\ntemp.dispose();\nassert(temp.isDisposed);\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L368_C1)\n",
 				"char": 7,
 				"kind": "class"
 			},
@@ -3133,7 +3231,7 @@
 				],
 				"name": "CompositeDisposable",
 				"line": 560,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_635_14)\n---\nauto d1 = new SingleAssignmentDisposable;\nauto d2 = new SerialDisposable;\nauto d = new CompositeDisposable(d1, d2);\nd.dispose();\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_635_14)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L635_C1)\n---\nauto d1 = new SingleAssignmentDisposable;\nauto d2 = new SerialDisposable;\nauto d = new CompositeDisposable(d1, d2);\nd.dispose();\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L635_C1)\n",
 				"char": 1,
 				"kind": "class"
 			},
@@ -3147,7 +3245,7 @@
 						"name": "this",
 						"line": 656,
 						"comment": "\n",
-						"deco": "FDFZvZC2rx10disposable20AnonymousDisposable",
+						"deco": "FDFZvZC2rx10disposable19AnonymousDisposable",
 						"parameters": [
 							{
 								"name": "dispose",
@@ -3175,7 +3273,7 @@
 				],
 				"name": "AnonymousDisposable",
 				"line": 652,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_677_16)\n---\nint count = 0;\nauto d = new AnonymousDisposable({ count++; });\nassert(count == 0);\nd.dispose();\nassert(count == 1);\nd.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_677_16)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L677_C1)\n---\nint count = 0;\nauto d = new AnonymousDisposable({ count++; });\nassert(count == 0);\nd.dispose();\nassert(count == 1);\nd.dispose();\nassert(count == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L677_C1)\n",
 				"char": 1,
 				"kind": "class"
 			},
@@ -3232,7 +3330,7 @@
 				],
 				"name": "RefCountDisposable",
 				"line": 689,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_disposable_d_788_17)\n---\nbool disposed = false;\nauto disposable = new RefCountDisposable(new AnonymousDisposable({\n        disposed = true;\n    }));\n\nauto subscription = disposable.getDisposable();\n\nassert(!disposed);\ndisposable.dispose();\nassert(!disposed);\n\nsubscription.dispose();\nassert(disposed);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_disposable_d_788_17)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L788_C1)\n---\nbool disposed = false;\nauto disposable = new RefCountDisposable(new AnonymousDisposable({\n        disposed = true;\n    }));\n\nauto subscription = disposable.getDisposable();\n\nassert(!disposed);\ndisposable.dispose();\nassert(!disposed);\n\nsubscription.dispose();\nassert(disposed);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L788_C1)\n",
 				"char": 1,
 				"kind": "class"
 			}
@@ -3260,7 +3358,7 @@
 				],
 				"name": "isObservable",
 				"line": 14,
-				"comment": "Tests if something is a Observable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_33_0)\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    Disposable subscribe(T)(T observer)\n    {\n        static assert(isObserver!(T, int));\n        return null;\n    }\n}\n\nstatic assert(isObservable!(TestObservable));\nstatic assert(isObservable!(TestObservable, int));\nstatic assert(!isObservable!(TestObservable, Object));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_33_0)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_52_1)\n---\nstatic assert(isObservable!(Observable!int));\nstatic assert(!isObservable!(Observer!int));\nstatic assert(!isObservable!(string));\nstatic assert(!isObservable!(Object));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_52_1)\n",
+				"comment": "Tests if something is a Observable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L33_C1)\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    Disposable subscribe(T)(T observer)\n    {\n        static assert(isObserver!(T, int));\n        return null;\n    }\n}\n\nstatic assert(isObservable!(TestObservable));\nstatic assert(isObservable!(TestObservable, int));\nstatic assert(!isObservable!(TestObservable, Object));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L33_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L52_C1)\n---\nstatic assert(isObservable!(Observable!int));\nstatic assert(!isObservable!(Observer!int));\nstatic assert(!isObservable!(string));\nstatic assert(!isObservable!(Object));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L52_C1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -3316,7 +3414,7 @@
 				],
 				"name": "isSubscribable",
 				"line": 61,
-				"comment": "Test if the observer can subscribe to the observable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_73_2)\n---\nstruct TestDisposable\n{\n    void dispose()\n    {\n    }\n}\n\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void completed()\n    {\n    }\n\n    void failure(Exception e)\n    {\n    }\n}\n\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    TestDisposable subscribe(TestObserver observer)\n    {\n        return TestDisposable();\n    }\n}\n\nstatic assert(isSubscribable!(TestObservable, TestObserver));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_73_2)\n",
+				"comment": "Test if the observer can subscribe to the observable.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L73_C1)\n---\nstruct TestDisposable\n{\n    void dispose()\n    {\n    }\n}\n\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void completed()\n    {\n    }\n\n    void failure(Exception e)\n    {\n    }\n}\n\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    TestDisposable subscribe(TestObserver observer)\n    {\n        return TestDisposable();\n    }\n}\n\nstatic assert(isSubscribable!(TestObservable, TestObserver));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L73_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -3369,7 +3467,7 @@
 				],
 				"name": "doSubscribe",
 				"line": 111,
-				"comment": "The helper for subscribe easier.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_172_3)\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    auto subscribe(TObserver)(TObserver observer)\n    {\n        .put(observer, [0, 1, 2]);\n        return NopDisposable.instance;\n    }\n}\n\nTestObservable observable;\nint[] result;\nobservable.doSubscribe!(n => result ~= n);\nassert(result.length == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_172_3)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_192_4)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n}\n\nstruct TestObservable1\n{\n    alias ElementType = int;\n    Disposable subscribe(Observer!int observer)\n    {\n        return null;\n    }\n}\n\nstruct TestObservable2\n{\n    alias ElementType = int;\n    Disposable subscribe(T)(T observer)\n    {\n        return null;\n    }\n}\n\nTestObservable1 o1;\nauto d0 = o1.doSubscribe((int n) {  }, () {  }, (Exception e) {  });\nauto d1 = o1.doSubscribe((int n) {  }, () {  });\nauto d2 = o1.doSubscribe((int n) {  }, (Exception e) {  });\nauto d3 = o1.doSubscribe((int n) {  });\nauto d4 = o1.doSubscribe(TestObserver());\nTestObservable2 o2;\nauto d5 = o2.doSubscribe((int n) {  }, () {  }, (Exception e) {  });\nauto d6 = o2.doSubscribe((int n) {  }, () {  });\nauto d7 = o2.doSubscribe((int n) {  }, (Exception e) {  });\nauto d8 = o2.doSubscribe((int n) {  });\nauto d9 = o2.doSubscribe(TestObserver());\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_192_4)\n",
+				"comment": "The helper for subscribe easier.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L172_C1)\n---\nstruct TestObservable\n{\n    alias ElementType = int;\n\n    auto subscribe(TObserver)(TObserver observer)\n    {\n        .put(observer, [0, 1, 2]);\n        return NopDisposable.instance;\n    }\n}\n\nTestObservable observable;\nint[] result;\nobservable.doSubscribe!(n => result ~= n);\nassert(result.length == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L172_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L192_C1)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n}\n\nstruct TestObservable1\n{\n    alias ElementType = int;\n    Disposable subscribe(Observer!int observer)\n    {\n        return null;\n    }\n}\n\nstruct TestObservable2\n{\n    alias ElementType = int;\n    Disposable subscribe(T)(T observer)\n    {\n        return null;\n    }\n}\n\nTestObservable1 o1;\nauto d0 = o1.doSubscribe((int n) {  }, () {  }, (Exception e) {  });\nauto d1 = o1.doSubscribe((int n) {  }, () {  });\nauto d2 = o1.doSubscribe((int n) {  }, (Exception e) {  });\nauto d3 = o1.doSubscribe((int n) {  });\nauto d4 = o1.doSubscribe(TestObserver());\nTestObservable2 o2;\nauto d5 = o2.doSubscribe((int n) {  }, () {  }, (Exception e) {  });\nauto d6 = o2.doSubscribe((int n) {  }, () {  });\nauto d7 = o2.doSubscribe((int n) {  }, (Exception e) {  });\nauto d8 = o2.doSubscribe((int n) {  });\nauto d9 = o2.doSubscribe(TestObserver());\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L192_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -3716,7 +3814,7 @@
 				],
 				"name": "observableObject",
 				"line": 313,
-				"comment": "Wraps subscribe method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_328_8)\n---\nint subscribeCount = 0;\nclass TestObservable : Observable!int\n{\n    Disposable subscribe(Observer!int observer)\n    {\n        subscribeCount++;\n        return NopDisposable.instance;\n    }\n}\n\nauto test = new TestObservable;\nauto observable = observableObject!int(test);\nassert(observable is test);\nassert(subscribeCount == 0);\nauto d = observable.subscribe(null);\nassert(subscribeCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_328_8)\n",
+				"comment": "Wraps subscribe method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L328_C1)\n---\nint subscribeCount = 0;\nclass TestObservable : Observable!int\n{\n    Disposable subscribe(Observer!int observer)\n    {\n        subscribeCount++;\n        return NopDisposable.instance;\n    }\n}\n\nauto test = new TestObservable;\nauto observable = observableObject!int(test);\nassert(observable is test);\nassert(subscribeCount == 0);\nauto d = observable.subscribe(null);\nassert(subscribeCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L328_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -3743,7 +3841,7 @@
 				],
 				"name": "defer",
 				"line": 444,
-				"comment": "Create observable by function that template parameter.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_475_10)\n---\nauto sub = defer!(int, (observer) {\n    observer.put(1);\n    observer.put(2);\n    observer.put(3);\n    observer.completed();\n});\n\nint countPut = 0;\nint countCompleted = 0;\nstruct A\n{\n    void put(int n)\n    {\n        countPut++;\n    }\n\n    void completed()\n    {\n        countCompleted++;\n    }\n}\n\nassert(countPut == 0);\nassert(countCompleted == 0);\nauto d = sub.doSubscribe(A());\nassert(countPut == 3);\nassert(countCompleted == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_475_10)\n",
+				"comment": "Create observable by function that template parameter.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L475_C1)\n---\nauto sub = defer!(int, (observer) {\n    observer.put(1);\n    observer.put(2);\n    observer.put(3);\n    observer.completed();\n});\n\nint countPut = 0;\nint countCompleted = 0;\nstruct A\n{\n    void put(int n)\n    {\n        countPut++;\n    }\n\n    void completed()\n    {\n        countCompleted++;\n    }\n}\n\nassert(countPut == 0);\nassert(countCompleted == 0);\nauto d = sub.doSubscribe(A());\nassert(countPut == 3);\nassert(countCompleted == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L475_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -3929,7 +4027,7 @@
 			{
 				"name": "asObservable",
 				"line": 908,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_911_22)\n---\nimport std.range : iota;\n\nauto obs = from(iota(10));\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_911_22)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observable_d_927_23)\n---\nimport std.range : iota;\n\nauto obs = iota(10).asObservable();\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observable_d_927_23)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L911_C1)\n---\nimport std.range : iota;\n\nauto obs = from(iota(10));\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L911_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L927_C1)\n---\nimport std.range : iota;\n\nauto obs = iota(10).asObservable();\nauto res = new int[10];\nauto d = obs.subscribe(res[]);\nscope (exit)\n    d.dispose();\n\nassert(res.length == 10);\nassert(res[0] == 0);\nassert(res[9] == 9);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L927_C1)\n",
 				"char": 1,
 				"kind": "alias"
 			}
@@ -3957,7 +4055,7 @@
 				],
 				"name": "hasCompleted",
 				"line": 10,
-				"comment": "Tests if something has completed method.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_20_0)\n---\nstruct A\n{\n    void completed();\n}\n\nstruct B\n{\n    void _completed();\n}\n\nstatic assert(hasCompleted!A);\nstatic assert(!hasCompleted!B);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_20_0)\n",
+				"comment": "Tests if something has completed method.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L20_C1)\n---\nstruct A\n{\n    void completed();\n}\n\nstruct B\n{\n    void _completed();\n}\n\nstatic assert(hasCompleted!A);\nstatic assert(!hasCompleted!B);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L20_C1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -3983,7 +4081,7 @@
 				],
 				"name": "hasFailure",
 				"line": 37,
-				"comment": "Tests if something has failure method.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_48_1)\n---\nstruct A\n{\n    void failure(Exception e);\n}\n\nstruct B\n{\n    void _failure(Exception e);\n}\n\nstruct C\n{\n    void failure();\n}\n\nstatic assert(hasFailure!A);\nstatic assert(!hasFailure!B);\nstatic assert(!hasFailure!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_48_1)\n",
+				"comment": "Tests if something has failure method.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L48_C1)\n---\nstruct A\n{\n    void failure(Exception e);\n}\n\nstruct B\n{\n    void _failure(Exception e);\n}\n\nstruct C\n{\n    void failure();\n}\n\nstatic assert(hasFailure!A);\nstatic assert(!hasFailure!B);\nstatic assert(!hasFailure!C);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L48_C1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -4009,7 +4107,7 @@
 				],
 				"name": "isObserver",
 				"line": 71,
-				"comment": "Tests if something is Observer.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_76_2)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void completed()\n    {\n    }\n\n    void failure(Exception e)\n    {\n    }\n}\n\nstatic assert(isObserver!(TestObserver, int));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_76_2)\n",
+				"comment": "Tests if something is Observer.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L76_C1)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void completed()\n    {\n    }\n\n    void failure(Exception e)\n    {\n    }\n}\n\nstatic assert(isObserver!(TestObserver, int));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L76_C1)\n",
 				"parameters": [
 					{
 						"name": "T",
@@ -4058,7 +4156,7 @@
 				],
 				"name": "Observer",
 				"line": 97,
-				"comment": "Wraps completed and failure method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_105_3)\n---\nalias TObserver = Observer!byte;\nstatic assert(isObserver!(TObserver, byte));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_105_3)\n",
+				"comment": "Wraps completed and failure method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L105_C1)\n---\nalias TObserver = Observer!byte;\nstatic assert(isObserver!(TObserver, byte));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L105_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -4177,7 +4275,7 @@
 				],
 				"name": "observerObject",
 				"line": 144,
-				"comment": "Wraps subscribe method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_152_4)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void put(Object obj)\n    {\n    }\n}\n\nObserver!int observer = observerObject!int(TestObserver());\nobserver.put(0);\nobserver.completed();\nobserver.failure(null);\nstatic assert(isObserver!(typeof(observer), int));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_152_4)\n",
+				"comment": "Wraps subscribe method in virtual function.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L152_C1)\n---\nstruct TestObserver\n{\n    void put(int n)\n    {\n    }\n\n    void put(Object obj)\n    {\n    }\n}\n\nObserver!int observer = observerObject!int(TestObserver());\nobserver.put(0);\nobserver.completed();\nobserver.failure(null);\nstatic assert(isObserver!(typeof(observer), int));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L152_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -4259,7 +4357,7 @@
 				],
 				"name": "NopObserver",
 				"line": 310,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_341_8)\n---\nObserver!int o1 = NopObserver!int.instance;\nObserver!int o2 = NopObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_341_8)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L341_C1)\n---\nObserver!int o1 = NopObserver!int.instance;\nObserver!int o2 = NopObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L341_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -4386,7 +4484,7 @@
 				],
 				"name": "DoneObserver",
 				"line": 350,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_398_9)\n---\nObserver!int o1 = DoneObserver!int.instance;\nObserver!int o2 = DoneObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_398_9)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L398_C1)\n---\nObserver!int o1 = DoneObserver!int.instance;\nObserver!int o2 = DoneObserver!int.instance;\nassert(o1 !is null);\nassert(o1 is o2);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L398_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -4527,7 +4625,7 @@
 				],
 				"name": "CompositeObserver",
 				"line": 414,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_482_11)\n---\nint count = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        count++;\n    }\n}\n\nauto c1 = new CompositeObserver!int;\nc1.put(0);\nauto o1 = observerObject!int(TestObserver());\nauto c2 = c1.add(o1);\nc1.put(0);\nassert(count == 0);\nc2.put(0);\nassert(count == 1);\nauto c3 = c2.add(observerObject!int(TestObserver()));\nc3.put(0);\nassert(count == 3);\nauto c4 = c3.remove(o1);\nc4.put(0);\nassert(count == 4);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_482_11)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L482_C1)\n---\nint count = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        count++;\n    }\n}\n\nauto c1 = new CompositeObserver!int;\nc1.put(0);\nauto o1 = observerObject!int(TestObserver());\nauto c2 = c1.add(o1);\nc1.put(0);\nassert(count == 0);\nc2.put(0);\nassert(count == 1);\nauto c3 = c2.add(observerObject!int(TestObserver()));\nc3.put(0);\nassert(count == 3);\nauto c4 = c3.remove(o1);\nc4.put(0);\nassert(count == 4);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L482_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -4568,7 +4666,7 @@
 				],
 				"name": "makeObserver",
 				"line": 527,
-				"comment": "The helper for the own observer.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_observer_d_632_13)\n---\nint countPut = 0;\nint countCompleted = 0;\nint countFailure = 0;\n\nauto observer = makeObserver((int) { countPut++; }, () { countCompleted++; }, (Exception) {\n    countFailure++;\n});\n\n.put(observer, 0);\nassert(countPut == 1);\n\nobserver.completed();\nassert(countCompleted == 1);\n\nobserver.failure(null);\nassert(countFailure == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_observer_d_632_13)\n",
+				"comment": "The helper for the own observer.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L632_C1)\n---\nint countPut = 0;\nint countCompleted = 0;\nint countFailure = 0;\n\nauto observer = makeObserver((int) { countPut++; }, () { countCompleted++; }, (Exception) {\n    countFailure++;\n});\n\n.put(observer, 0);\nassert(countPut == 1);\n\nobserver.completed();\nassert(countCompleted == 1);\n\nobserver.failure(null);\nassert(countFailure == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L632_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -4746,7 +4844,7 @@
 				],
 				"name": "drop",
 				"line": 43,
-				"comment": "Creates the observable that results from discarding the first n elements from the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_range_d_115_1)\n---\nimport rx.subject;\n\nauto subject = new SubjectObject!int;\nauto dropped = subject.drop(1);\nstatic assert(isObservable!(typeof(dropped), int));\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto disposable = dropped.subscribe(buf);\n\nsubject.put(0);\nassert(buf.data.length == 0);\nsubject.put(1);\nassert(buf.data.length == 1);\n\nauto buf2 = appender!(int[]);\ndropped.subscribe(buf2);\nassert(buf2.data.length == 0);\nsubject.put(2);\nassert(buf2.data.length == 0);\nassert(buf.data.length == 2);\nsubject.put(3);\nassert(buf2.data.length == 1);\nassert(buf.data.length == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_range_d_115_1)\n",
+				"comment": "Creates the observable that results from discarding the first n elements from the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L115_C1)\n---\nimport rx.subject;\n\nauto subject = new SubjectObject!int;\nauto dropped = subject.drop(1);\nstatic assert(isObservable!(typeof(dropped), int));\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto disposable = dropped.subscribe(buf);\n\nsubject.put(0);\nassert(buf.data.length == 0);\nsubject.put(1);\nassert(buf.data.length == 1);\n\nauto buf2 = appender!(int[]);\ndropped.subscribe(buf2);\nassert(buf2.data.length == 0);\nsubject.put(2);\nassert(buf2.data.length == 0);\nassert(buf.data.length == 2);\nsubject.put(3);\nassert(buf2.data.length == 1);\nassert(buf.data.length == 3);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L115_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -4761,7 +4859,7 @@
 					{
 						"endchar": 1,
 						"name": "take",
-						"line": 165,
+						"line": 188,
 						"type": "(auto ref TObservable observable, size_t n)",
 						"parameters": [
 							{
@@ -4777,7 +4875,7 @@
 								"type": "size_t"
 							}
 						],
-						"endline": 254,
+						"endline": 269,
 						"char": 6,
 						"kind": "function",
 						"storageClass": [
@@ -4786,8 +4884,8 @@
 					}
 				],
 				"name": "take",
-				"line": 165,
-				"comment": "Creates a sub-observable consisting of only up to the first n elements of the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_range_d_256_3)\n---\nimport std.array;\nimport rx.subject;\n\nauto pub = new SubjectObject!int;\nauto sub = appender!(int[]);\n\nauto d = pub.take(2).subscribe(sub);\nforeach (i; 0 .. 10)\n{\n    pub.put(i);\n}\n\nimport std.algorithm;\n\nassert(equal(sub.data, [0, 1]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_range_d_256_3)\n",
+				"line": 188,
+				"comment": "Creates a sub-observable consisting of only up to the first n elements of the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L271_C1)\n---\nimport std.array;\nimport rx.subject;\n\nauto pub = new SubjectObject!int;\nauto sub = appender!(int[]);\n\nauto d = pub.take(2).subscribe(sub);\nforeach (i; 0 .. 10)\n{\n    pub.put(i);\n}\n\nimport std.algorithm;\n\nassert(equal(sub.data, [0, 1]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L271_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -4802,7 +4900,7 @@
 					{
 						"endchar": 1,
 						"name": "takeLast",
-						"line": 340,
+						"line": 378,
 						"type": "(auto ref TObservable observable)",
 						"parameters": [
 							{
@@ -4814,7 +4912,7 @@
 								]
 							}
 						],
-						"endline": 410,
+						"endline": 448,
 						"char": 6,
 						"kind": "function",
 						"storageClass": [
@@ -4823,8 +4921,8 @@
 					}
 				],
 				"name": "takeLast",
-				"line": 340,
-				"comment": "Creates a observable that take only a last element of the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_range_d_412_6)\n---\nimport rx.subject;\n\nauto sub = new SubjectObject!int;\n\nint putCount = 0;\nint completedCount = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        putCount++;\n    }\n\n    void completed()\n    {\n        completedCount++;\n    }\n}\n\nauto d = sub.takeLast.subscribe(TestObserver());\n\nassert(putCount == 0);\nsub.put(1);\nassert(putCount == 0);\nsub.put(10);\nassert(putCount == 0);\nsub.completed();\nassert(putCount == 1);\nassert(completedCount == 1);\n\nsub.put(100);\nassert(putCount == 1);\nassert(completedCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_range_d_412_6)\n",
+				"line": 378,
+				"comment": "Creates a observable that take only a last element of the given source.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L450_C1)\n---\nimport rx.subject;\n\nauto sub = new SubjectObject!int;\n\nint putCount = 0;\nint completedCount = 0;\nstruct TestObserver\n{\n    void put(int n)\n    {\n        putCount++;\n    }\n\n    void completed()\n    {\n        completedCount++;\n    }\n}\n\nauto d = sub.takeLast.subscribe(TestObserver());\n\nassert(putCount == 0);\nsub.put(1);\nassert(putCount == 0);\nsub.put(10);\nassert(putCount == 0);\nsub.completed();\nassert(putCount == 1);\nassert(completedCount == 1);\n\nsub.put(100);\nassert(putCount == 1);\nassert(completedCount == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L450_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -4835,7 +4933,7 @@
 				"kind": "template"
 			}
 		],
-		"comment": " This module defines some operations like range.\nExample:\nOverview$(DDOX_UNITTEST_HEADER __unittest_source_rx_range_d_17_0)\n---\nimport rx.subject;\nimport std.algorithm : equal;\nimport std.array : appender;\nimport std.conv : to;\n\nauto subject = new SubjectObject!int;\nauto pub = subject.drop(2).take(3);\n\nauto buf = appender!(int[]);\nauto disposable = pub.subscribe(observerObject!int(buf));\n\nforeach (i; 0 .. 10)\n{\n    subject.put(i);\n}\n\nauto result = buf.data;\nassert(equal(result, [2, 3, 4]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_range_d_17_0)\n",
+		"comment": " This module defines some operations like range.\nExample:\nOverview$(DDOX_UNITTEST_HEADER __unittest_L17_C1)\n---\nimport rx.subject;\nimport std.algorithm : equal;\nimport std.array : appender;\nimport std.conv : to;\n\nauto subject = new SubjectObject!int;\nauto pub = subject.drop(2).take(3);\n\nauto buf = appender!(int[]);\nauto disposable = pub.subscribe(observerObject!int(buf));\n\nforeach (i; 0 .. 10)\n{\n    subject.put(i);\n}\n\nauto result = buf.data;\nassert(equal(result, [2, 3, 4]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L17_C1)\n",
 		"kind": "module"
 	},
 	{
@@ -5192,6 +5290,29 @@
 						"line": 265,
 						"members": [
 							{
+								"endchar": 9,
+								"name": "this",
+								"line": 270,
+								"type": "(TObserver observer, TScheduler scheduler, Disposable disposable)",
+								"parameters": [
+									{
+										"name": "observer",
+										"type": "TObserver"
+									},
+									{
+										"name": "scheduler",
+										"type": "TScheduler"
+									},
+									{
+										"name": "disposable",
+										"type": "Disposable"
+									}
+								],
+								"endline": 275,
+								"char": 9,
+								"kind": "constructor"
+							},
+							{
 								"endchar": 5,
 								"name": "put",
 								"line": 286,
@@ -5207,6 +5328,30 @@
 								"kind": "function"
 							},
 							{
+								"endchar": 9,
+								"name": "completed",
+								"line": 310,
+								"type": "void()",
+								"endline": 313,
+								"char": 14,
+								"kind": "function"
+							},
+							{
+								"endchar": 9,
+								"name": "failure",
+								"line": 317,
+								"type": "void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 320,
+								"char": 14,
+								"kind": "function"
+							},
+							{
 								"name": "_observer",
 								"line": 323,
 								"type": "TObserver",
@@ -5218,6 +5363,13 @@
 								"line": 324,
 								"type": "TScheduler",
 								"char": 16,
+								"kind": "variable"
+							},
+							{
+								"name": "_disposable",
+								"line": 327,
+								"type": "Disposable",
+								"char": 20,
 								"kind": "variable"
 							}
 						],
@@ -5517,7 +5669,7 @@
 				],
 				"name": "subscribeOn",
 				"line": 538,
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_scheduler_d_544_10)\n---\nimport rx.observable : defer;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new LocalScheduler;\n\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto d = scheduled.doSubscribe((int n) { value = n; });\nscope (exit)\n    d.dispose();\n\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_scheduler_d_544_10)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_scheduler_d_564_11)\n---\nimport rx.observable : defer;\nimport rx.util : EventSignal;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new TaskPoolScheduler;\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto signal = new EventSignal;\nauto d = scheduled.subscribe((int n) { value = n; signal.setSignal(); });\nscope (exit)\n    d.dispose();\n\nsignal.wait();\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_scheduler_d_564_11)\n",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L544_C1)\n---\nimport rx.observable : defer;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new LocalScheduler;\n\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto d = scheduled.doSubscribe((int n) { value = n; });\nscope (exit)\n    d.dispose();\n\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L544_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L564_C1)\n---\nimport rx.observable : defer;\nimport rx.util : EventSignal;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new TaskPoolScheduler;\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto signal = new EventSignal;\nauto d = scheduled.subscribe((int n) { value = n; signal.setSignal(); });\nscope (exit)\n    d.dispose();\n\nsignal.wait();\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L564_C1)\n",
 				"parameters": [
 					{
 						"name": "TObservable",
@@ -5741,7 +5893,7 @@
 				],
 				"name": "SubjectObject",
 				"line": 20,
-				"comment": "Represents an object that is both an observable sequence as well as an observer. Each notification is broadcasted to all subscribed observers.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_source_rx_subject_d_148_0)\n---\nimport std.array : appender;\n\nauto data = appender!(int[])();\nauto subject = new SubjectObject!int;\nauto disposable = subject.subscribe(observerObject!(int)(data));\nassert(disposable !is null);\nsubject.put(0);\nsubject.put(1);\n\nimport std.algorithm : equal;\n\nassert(equal(data.data, [0, 1]));\n\ndisposable.dispose();\nsubject.put(2);\nassert(equal(data.data, [0, 1]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_source_rx_subject_d_148_0)\n",
+				"comment": "Represents an object that is both an observable sequence as well as an observer. Each notification is broadcasted to all subscribed observers.\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L148_C1)\n---\nimport std.array : appender;\n\nauto data = appender!(int[])();\nauto subject = new SubjectObject!int;\nauto disposable = subject.subscribe(observerObject!(int)(data));\nassert(disposable !is null);\nsubject.put(0);\nsubject.put(1);\n\nimport std.algorithm : equal;\n\nassert(equal(data.data, [0, 1]));\n\ndisposable.dispose();\nsubject.put(2);\nassert(equal(data.data, [0, 1]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L148_C1)\n",
 				"parameters": [
 					{
 						"name": "E",
@@ -5914,6 +6066,111 @@
 					}
 				],
 				"char": 1,
+				"kind": "template"
+			},
+			{
+				"members": [
+					{
+						"name": "CounterObserver",
+						"line": 642,
+						"members": [
+							{
+								"name": "putCount",
+								"line": 645,
+								"type": "size_t",
+								"char": 16,
+								"kind": "variable"
+							},
+							{
+								"name": "completedCount",
+								"line": 646,
+								"type": "size_t",
+								"char": 16,
+								"kind": "variable"
+							},
+							{
+								"name": "failureCount",
+								"line": 647,
+								"type": "size_t",
+								"char": 16,
+								"kind": "variable"
+							},
+							{
+								"name": "lastValue",
+								"line": 648,
+								"type": "T",
+								"char": 11,
+								"kind": "variable"
+							},
+							{
+								"name": "lastException",
+								"line": 649,
+								"type": "Exception",
+								"char": 19,
+								"kind": "variable"
+							},
+							{
+								"endchar": 9,
+								"name": "hasNotBeenCalled",
+								"line": 652,
+								"type": "const pure nothrow @nogc @property @safe bool()",
+								"endline": 655,
+								"char": 14,
+								"kind": "function"
+							},
+							{
+								"endchar": 9,
+								"name": "put",
+								"line": 658,
+								"type": "void(T obj)",
+								"parameters": [
+									{
+										"name": "obj",
+										"type": "T"
+									}
+								],
+								"endline": 662,
+								"char": 14,
+								"kind": "function"
+							},
+							{
+								"endchar": 9,
+								"name": "completed",
+								"line": 664,
+								"type": "void()",
+								"endline": 667,
+								"char": 14,
+								"kind": "function"
+							},
+							{
+								"endchar": 9,
+								"name": "failure",
+								"line": 669,
+								"type": "void(Exception e)",
+								"parameters": [
+									{
+										"name": "e",
+										"type": "Exception"
+									}
+								],
+								"endline": 673,
+								"char": 14,
+								"kind": "function"
+							}
+						],
+						"char": 5,
+						"kind": "class"
+					}
+				],
+				"name": "CounterObserver",
+				"line": 642,
+				"parameters": [
+					{
+						"name": "T",
+						"kind": "type"
+					}
+				],
+				"char": 5,
 				"kind": "template"
 			},
 			{
@@ -6271,23 +6528,23 @@
 			},
 			{
 				"name": "TicketBase",
-				"line": 134,
+				"line": 176,
 				"members": [
 					{
 						"endchar": 5,
 						"name": "stamp",
-						"line": 137,
+						"line": 179,
 						"deco": "OFZb",
-						"endline": 140,
+						"endline": 182,
 						"char": 10,
 						"kind": "function"
 					},
 					{
 						"endchar": 5,
 						"name": "isStamped",
-						"line": 143,
+						"line": 185,
 						"deco": "OFNdZb",
-						"endline": 146,
+						"endline": 188,
 						"char": 10,
 						"kind": "function"
 					}
@@ -6297,7 +6554,7 @@
 			},
 			{
 				"name": "Ticket",
-				"line": 152,
+				"line": 194,
 				"deco": "OC2rx4util10TicketBase",
 				"char": 1,
 				"kind": "alias"
