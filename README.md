@@ -109,6 +109,6 @@ Refer to [CONTRIBUTING.md](/CONTRIBUTING.md) for details.
 - more subjects
   - publish, replay
 - more algorithms
-  - window, combineLatest, zip
+  - window, zip
 - more test
 - more documents
