@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Function DisposableObject.dispose</title>
-		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
-		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
-		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
+		<title>Function combineLatest.combineLatest</title>
+		<link rel="stylesheet" type="text/css" href="../../../styles/ddox.css"/>
+		<link rel="stylesheet" href="../../../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../../scripts/ddox.js">/**/</script>
 	</head>
 	<body onload="setupDdox();">
 		<nav id="main-nav">
@@ -16,7 +16,7 @@
 				<form action="#" method="GET">
 					<input id="symbolSearch" type="text" name="q" placeholder="Search for symbols" autocomplete="off" onchange="performSymbolSearch(40);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
 				</form>
-				<ul id="symbolSearchResults" class="symbolList" style="display: none"></ul><script type="application/javascript" src="../../symbols.js"></script><script type="application/javascript">var symbolSearchRootDir = "../../";
+				<ul id="symbolSearchResults" class="symbolList" style="display: none"></ul><script type="application/javascript" src="../../../symbols.js"></script><script type="application/javascript">var symbolSearchRootDir = "../../../";
 $('#symbolSearchPane').show();</script>
 			</div>
 			<ul class="tree-view">
@@ -24,90 +24,90 @@ $('#symbolSearchPane').show();</script>
 					<div class="package ">rx
 					</div>
 			<ul class="tree-view">
-				<li class="tree-view collapsed">
+				<li class="tree-view ">
 					<div class="package ">algorithm
 					</div>
 			<ul class="tree-view">
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/all.html">all</a>
+						<a href="../../../rx/algorithm/all.html">all</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/any.html">any</a>
+						<a href="../../../rx/algorithm/any.html">any</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/buffer.html">buffer</a>
+						<a href="../../../rx/algorithm/buffer.html">buffer</a>
+					</div>
+				</li>
+				<li>
+					<div class="module selected">
+						<a href="../../../rx/algorithm/combineLatest.html">combineLatest</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/combineLatest.html">combineLatest</a>
+						<a href="../../../rx/algorithm/filter.html">filter</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/filter.html">filter</a>
+						<a href="../../../rx/algorithm/fold.html">fold</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/fold.html">fold</a>
+						<a href="../../../rx/algorithm/groupby.html">groupby</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/groupby.html">groupby</a>
+						<a href="../../../rx/algorithm/map.html">map</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/map.html">map</a>
+						<a href="../../../rx/algorithm/merge.html">merge</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/merge.html">merge</a>
+						<a href="../../../rx/algorithm/scan.html">scan</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/algorithm/scan.html">scan</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../rx/algorithm/tee.html">tee</a>
+						<a href="../../../rx/algorithm/tee.html">tee</a>
 					</div>
 				</li>
 			</ul>
 				</li>
 				<li>
-					<div class="module selected">
-						<a href="../../rx/disposable.html">disposable</a>
+					<div class="module ">
+						<a href="../../../rx/disposable.html">disposable</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/observable.html">observable</a>
+						<a href="../../../rx/observable.html">observable</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/observer.html">observer</a>
+						<a href="../../../rx/observer.html">observer</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/range.html">range</a>
+						<a href="../../../rx/range.html">range</a>
 					</div>
 				</li>
 				<li>
 					<div class="module ">
-						<a href="../../rx/subject.html">subject</a>
+						<a href="../../../rx/subject.html">subject</a>
 					</div>
 				</li>
 			</ul>
@@ -115,11 +115,18 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Function DisposableObject.dispose</h1><p></p>
+			<h1>Function combineLatest.combineLatest</h1><p></p>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="typ">void</span> <span class="pln">dispose</span><span class="pun">(</span><span class="pun">)</span><span class="pun">;</span>
+			<span class="typ">CombineLatestObservable</span>!(f,TObservables) <span class="pln">combineLatest</span>(TObservables...)
+			<span class="pun">(</span>
+			<br/>
+			&nbsp;&nbsp;<span class="typ">TObservables</span> <span class="pln">observables</span>
+			<br/>
+			<span class="pun">)</span>
+			<br/>
+			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">allSatisfy</span><span class="pun">!(</span><span class="pln">isObservable</span><span class="pun">, </span><span class="typ">TObservables</span><span class="pun">)</span><span class="pun">);</span>
 					</div>
 				</code>
 			</div>

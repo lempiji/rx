@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Module rx.algorithm.buffer</title>
+		<title>Function withDisposed.withDisposed</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -24,7 +24,7 @@ $('#symbolSearchPane').show();</script>
 					<div class="package ">rx
 					</div>
 			<ul class="tree-view">
-				<li class="tree-view ">
+				<li class="tree-view collapsed">
 					<div class="package ">algorithm
 					</div>
 			<ul class="tree-view">
@@ -39,7 +39,7 @@ $('#symbolSearchPane').show();</script>
 					</div>
 				</li>
 				<li>
-					<div class="module selected">
+					<div class="module ">
 						<a href="../../rx/algorithm/buffer.html">buffer</a>
 					</div>
 				</li>
@@ -86,7 +86,7 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 				</li>
 				<li>
-					<div class="module ">
+					<div class="module selected">
 						<a href="../../rx/disposable.html">disposable</a>
 					</div>
 				</li>
@@ -115,26 +115,23 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Module rx.algorithm.buffer</h1><p>This module defines algorithm 'buffer'
-</p>
-			<section></section>
-			<section>
-				<h2>Functions</h2>
-				<table>
-					<col class="caption"/>
-					<tr>
-						<th>Name</th><th>Description</th>
-					</tr>
-					<tr>
-						<td>
-							<code>
-								<a id="buffered" class="public" href="../../rx/algorithm/buffer/buffered.html">buffered</a><span class="decoration">(observable, bufferSize)</span>
-							</code>
-						</td>
-						<td></td>
-					</tr>
-				</table>
-			</section>
+			<h1>Function withDisposed.withDisposed</h1><p></p>
+			<div class="prototype">
+				<code class="lang-d">
+					<div class="single-prototype">
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">withDisposed</span>(TDisposable)
+			<span class="pun">(</span>
+			<br/>
+			&nbsp;&nbsp;<span class="kwd">auto ref </span><span class="typ">TDisposable</span> <span class="pln">disposable</span>
+			<br/>
+			<span class="pun">)</span>
+			<br/>
+			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isDisposable</span><span class="pun">!</span><span class="typ">TDisposable</span><span class="pun">);</span>
+					</div>
+				</code>
+			</div>
+			
+			
 			<footer>
 				<table class="license-info">
 					<tr>
