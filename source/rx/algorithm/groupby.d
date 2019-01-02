@@ -127,6 +127,7 @@ public:
         catch (Exception e)
         {
             failure(e);
+            return;
         }
 
         if (fireNewEntry)
@@ -390,4 +391,68 @@ unittest
     sub.put("XXX");
     assert(tester.putCount == 3);
     assert(tester.lastValue.key == "XXX");
+}
+
+unittest
+{
+    auto sub = new SubjectObject!string;
+
+    string delegate(string _) dg = (test) { throw new Exception(""); };
+
+    auto group = sub.groupBy!(dg);
+
+    auto tester = new CounterObserver!(typeof(group).ElementType);
+    auto disposable = group.subscribe(tester);
+
+    sub.put("A");
+    assert(tester.putCount == 0);
+    assert(tester.completedCount == 0);
+    assert(tester.failureCount == 1);
+}
+
+unittest
+{
+    auto sub = new SubjectObject!string;
+
+    auto group = sub.groupBy!(test => null);
+
+    auto tester = new CounterObserver!(typeof(group).ElementType);
+    auto disposable = group.subscribe(tester);
+
+    sub.put("A");
+    assert(tester.putCount == 1);
+    assert(tester.lastValue.key is null);
+}
+
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!int;
+
+    auto group = sub.groupBy!(i => i % 2 == 0);
+
+    auto evenObserver = new CounterObserver!int;
+    auto oddObserver = new CounterObserver!int;
+
+    auto container = new CompositeDisposable();
+    auto disposable = group.doSubscribe!((o) {
+        container.insert(o.fold!"a + b"(0).doSubscribe(o.key ? evenObserver : oddObserver));
+    });
+    container.insert(disposable);
+
+    scope (exit)
+        container.dispose();
+
+    sub.put(1);
+    assert(oddObserver.putCount == 0);
+    sub.put(2);
+    assert(evenObserver.putCount == 0);
+    sub.put(3);
+    sub.put(4);
+    sub.completed();
+    assert(oddObserver.putCount == 1);
+    assert(oddObserver.lastValue == 4);
+    assert(evenObserver.putCount == 1);
+    assert(evenObserver.lastValue == 6);
 }
