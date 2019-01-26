@@ -610,7 +610,7 @@ public:
     {
         assert(item !is null);
 
-        auto shouldDispose = false;
+        bool shouldDispose = void;
         synchronized (_gate)
         {
             shouldDispose = _disposed;
@@ -643,9 +643,35 @@ unittest
 unittest
 {
     auto composite = new CompositeDisposable;
-    auto inner = new SerialDisposable;
+    auto disposed = false;
+    auto inner = new AnonymousDisposable({ disposed = true; });
     composite.insert(inner);
     composite.dispose();
+    assert(disposed);
+}
+
+unittest
+{
+    auto composite = new CompositeDisposable;
+    size_t _count = 0;
+    auto inner = new AnonymousDisposable({ _count++; });
+    composite.insert(inner);
+    composite.clear(); // clear items and dispose all
+    assert(_count == 1);
+
+    composite.clear();
+    assert(_count == 1);
+}
+
+unittest
+{
+    auto composite = new CompositeDisposable;
+    composite.dispose();
+
+    auto disposed = false;
+    auto inner2 = new AnonymousDisposable({ disposed = true; });
+    composite.insert(inner2);
+    assert(disposed);
 }
 
 ///
