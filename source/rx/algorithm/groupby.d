@@ -426,6 +426,22 @@ unittest
 
 unittest
 {
+    auto sub = new SubjectObject!string;
+
+    auto group = sub.groupBy!(test => null);
+
+    auto tester = new CounterObserver!string;
+    auto disposable = group.doSubscribe!((o) {
+        o.doSubscribe(tester);
+    });
+
+    sub.put("A");
+    assert(tester.putCount == 1);
+    assert(tester.lastValue == "A");
+}
+
+unittest
+{
     import rx;
 
     auto sub = new SubjectObject!int;
