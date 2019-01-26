@@ -2,8 +2,8 @@
 
 [![Dub version](https://img.shields.io/dub/v/rx.svg)](https://code.dlang.org/packages/rx)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)
-[![Build Status](https://travis-ci.org/lempiji/rx.svg?branch=master)](https://travis-ci.org/lempiji/rx)
-[![codecov](https://codecov.io/gh/lempiji/rx/branch/master/graph/badge.svg)](https://codecov.io/gh/lempiji/rx)
+[![Build Status](https://travis-ci.org/lempiji/rx.svg?branch=dev)](https://travis-ci.org/lempiji/rx)
+[![codecov](https://codecov.io/gh/lempiji/rx/branch/dev/graph/badge.svg)](https://codecov.io/gh/lempiji/rx/branch/dev)
 
 ### Overview
 
@@ -53,13 +53,13 @@ Setting dependencies in dub.json
 {
     ...
     "dependencies": {
-        "rx": "~>0.8.0"
+        "rx": "~>0.10.0"
     }
 }
 ```
 or dub.sdl
 ```
-dependency "rx" version="~>0.8.0"
+dependency "rx" version="~>0.10.0"
 ```
 
 ### Concepts
