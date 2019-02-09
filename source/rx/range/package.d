@@ -1,6 +1,3 @@
-/+++++++++++++++++++++++++++++
- + This module defines some operations like range.
- +/
 module rx.range;
 
 public import rx.range.drop;

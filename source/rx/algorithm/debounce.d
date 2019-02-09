@@ -1,3 +1,6 @@
+/+++++++++++++++++++++++++++++
+ + This module defines algorithm 'debounce'
+ +/
 module rx.algorithm.debounce;
 
 import core.time;

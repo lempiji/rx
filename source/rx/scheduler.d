@@ -1,3 +1,6 @@
+/++
+ + This module defines the concept of Scheduler.
+ +/
 module rx.scheduler;
 
 import rx.disposable;
@@ -262,6 +265,7 @@ unittest
     static assert(!__traits(compiles, { HistoricalScheduler!LocalScheduler s; }));
 }
 
+///
 struct ObserveOnObserver(TObserver, TScheduler, E)
 {
 public:
@@ -328,6 +332,7 @@ private:
     }
 }
 
+///
 struct ObserveOnObservable(TObservable, TScheduler : Scheduler)
 {
     alias ElementType = TObservable.ElementType;
@@ -387,12 +392,14 @@ unittest
     assert(flag2);
 }
 
+///
 ObserveOnObservable!(TObservable, TScheduler) observeOn(TObservable, TScheduler : Scheduler)(
         auto ref TObservable observable, TScheduler scheduler)
 {
     return typeof(return)(observable, scheduler);
 }
 
+///
 unittest
 {
     import std.concurrency;
@@ -696,11 +703,13 @@ shared static this()
     s_scheduler = new TaskPoolScheduler;
 }
 
+///
 Scheduler currentScheduler() @property
 {
     return s_scheduler;
 }
 
+///
 TScheduler currentScheduler(TScheduler : Scheduler)(TScheduler scheduler) @property
 {
     s_scheduler = scheduler;

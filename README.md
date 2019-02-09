@@ -103,13 +103,30 @@ Issue and PullRequest are welcome! :smiley:
 
 Refer to [CONTRIBUTING.md](/CONTRIBUTING.md) for details.
 
+### Development
+
+#### Build and unittest
+
+```bash
+git clone https://github.com/lempiji/rx
+cd rx
+dub test
+```
+
+#### Update documents
+
+```bash
+dub build -c ddox
+```
+
+
 ### Future work
 
 - generic observable factory
-  - create, start, timer, interval
+    - create, start, timer, interval
 - more subjects
-  - publish, replay
+    - publish, replay
 - more algorithms
-  - window, zip
+    - window, zip
 - more test
 - more documents

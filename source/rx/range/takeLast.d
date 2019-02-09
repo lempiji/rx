@@ -1,3 +1,7 @@
+/+++++++++++++++++++++++++++++
+ + This module is a submodule of rx.range.
+ + It provides basic operation a 'takeLast'
+ +/
 module rx.range.takeLast;
 
 import rx.disposable;

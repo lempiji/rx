@@ -1,4 +1,8 @@
-module rx.range.take;
+/+++++++++++++++++++++++++++++
+ + This module is a submodule of rx.range.
+ + It provides basic operation a 'take'
+ +/
+ module rx.range.take;
 
 import rx.disposable;
 import rx.observer;

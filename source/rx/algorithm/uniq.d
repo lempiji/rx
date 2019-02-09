@@ -1,3 +1,8 @@
+/+++++++++++++++++++++++++++++
+ + This module defines algorithm 'uniq'
+ +
+ + This is also called 'distinctUntilChanged'.
+ +/
 module rx.algorithm.uniq;
 
 import rx.disposable;
