@@ -610,7 +610,7 @@ public:
     {
         assert(item !is null);
 
-        auto shouldDispose = false;
+        bool shouldDispose = void;
         synchronized (_gate)
         {
             shouldDispose = _disposed;
@@ -643,9 +643,35 @@ unittest
 unittest
 {
     auto composite = new CompositeDisposable;
-    auto inner = new SerialDisposable;
+    auto disposed = false;
+    auto inner = new AnonymousDisposable({ disposed = true; });
     composite.insert(inner);
     composite.dispose();
+    assert(disposed);
+}
+
+unittest
+{
+    auto composite = new CompositeDisposable;
+    size_t _count = 0;
+    auto inner = new AnonymousDisposable({ _count++; });
+    composite.insert(inner);
+    composite.clear(); // clear items and dispose all
+    assert(_count == 1);
+
+    composite.clear();
+    assert(_count == 1);
+}
+
+unittest
+{
+    auto composite = new CompositeDisposable;
+    composite.dispose();
+
+    auto disposed = false;
+    auto inner2 = new AnonymousDisposable({ disposed = true; });
+    composite.insert(inner2);
+    assert(disposed);
 }
 
 ///
@@ -867,4 +893,157 @@ unittest
 
     subscription2.dispose();
     assert(disposed);
+}
+
+///
+template withDisposed(alias f)
+{
+    auto withDisposed(TDisposable)(auto ref TDisposable disposable)
+            if (isDisposable!TDisposable)
+    {
+        return new CompositeDisposable(disposable, new AnonymousDisposable({
+                f();
+            }));
+    }
+}
+
+///ditto
+auto withDisposed(TDisposable)(auto ref TDisposable disposable, void delegate() disposed)
+        if (isDisposable!TDisposable)
+{
+    return new CompositeDisposable(disposable, new AnonymousDisposable(disposed));
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!int;
+    size_t putCount = 0;
+    size_t disposedCount = 0;
+
+    auto disposable = sub.doSubscribe!(_ => putCount++)
+        .withDisposed!(() => disposedCount++);
+
+    sub.put(1);
+    disposable.dispose();
+
+    assert(putCount == 1);
+    assert(disposedCount == 1);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!int;
+    size_t putCount = 0;
+
+    bool disposed = false;
+    alias traceDispose = withDisposed!(() => disposed = true);
+
+    auto disposable = traceDispose(sub.doSubscribe!(_ => putCount++));
+
+    sub.put(1);
+    sub.completed();
+
+    assert(putCount == 1);
+    assert(!disposed);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!int;
+    size_t putCount = 0;
+
+    bool disposed = false;
+    alias traceDispose = withDisposed!(() => disposed = true);
+
+    auto disposable = traceDispose(sub.doSubscribe!(_ => putCount++));
+
+    sub.put(1);
+    disposable.dispose();
+
+    assert(putCount == 1);
+    assert(disposed);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!int;
+    size_t putCount = 0;
+
+    bool disposed = false;
+    auto disposable = sub.doSubscribe!(_ => putCount++).withDisposed(() {
+        disposed = true;
+    });
+
+    sub.put(1);
+    disposable.dispose();
+
+    assert(putCount == 1);
+    assert(disposed);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!int;
+    size_t disposedCount = 0;
+
+    auto disposable = sub.doSubscribe!((int) {  })
+        .withDisposed!(() { disposedCount++; });
+
+    disposable.dispose();
+    disposable.dispose();
+
+    assert(disposedCount == 1);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!int;
+    size_t putCount = 0;
+
+    bool disposed = false;
+    auto disposable = sub.doSubscribe!(_ => putCount++).withDisposed(() {
+        disposed = true;
+    });
+
+    sub.put(1);
+    disposable.dispose();
+
+    assert(putCount == 1);
+    assert(disposed);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!int;
+    size_t disposedCount = 0;
+
+    auto disposable = sub.doSubscribe!((int) {  }).withDisposed(() {
+        disposedCount++;
+    });
+
+    disposable.dispose();
+    disposable.dispose();
+
+    assert(disposedCount == 1);
 }

@@ -1,3 +1,6 @@
+/++
+ + This module is a utility for some implements at internals.
+ +/
 module rx.util;
 
 import core.atomic;
@@ -5,16 +8,19 @@ import core.sync.mutex;
 import core.sync.condition;
 
 // @@TODO@@ Remove this overload, when the phobos of LDC supports TailShared.
+///
 auto ref T assumeThreadLocal(T)(auto ref T obj) if (!is(T == shared))
 {
     return obj;
 }
 
+///
 auto ref T assumeThreadLocal(T)(auto ref shared(T) obj)
 {
     return cast() obj;
 }
 
+///
 unittest
 {
     class Test
@@ -30,6 +36,7 @@ unittest
     Test local2 = assumeThreadLocal(new shared(Test));
 }
 
+///
 auto exchange(T, U)(ref shared(T) store, U val)
 {
     shared(T) temp = void;
@@ -41,6 +48,7 @@ auto exchange(T, U)(ref shared(T) store, U val)
     return atomicLoad(temp);
 }
 
+///
 unittest
 {
     shared(int) n = 1;
@@ -49,9 +57,11 @@ unittest
     assert(temp == 1);
 }
 
+///
 class EventSignal
 {
 public:
+    ///
     this()
     {
         _mutex = new Mutex;
@@ -59,6 +69,7 @@ public:
     }
 
 public:
+    ///
     bool signal() @property
     {
         synchronized (_mutex)
@@ -68,6 +79,7 @@ public:
     }
 
 public:
+    ///
     void setSignal()
     {
         synchronized (_mutex)
@@ -77,6 +89,7 @@ public:
         }
     }
 
+    ///
     void wait()
     {
         synchronized (_mutex)
@@ -93,6 +106,7 @@ private:
     bool _signal;
 }
 
+///
 unittest
 {
     auto event = new EventSignal;
@@ -101,20 +115,24 @@ unittest
     assert(event.signal);
 }
 
+///
 package shared class AtomicCounter
 {
 public:
+    ///
     this(size_t n)
     {
         _count = n;
     }
 
 public:
+    ///
     bool isZero() @property
     {
         return atomicLoad(_count) == 0;
     }
 
+    ///
     bool tryUpdateCount() @trusted
     {
         shared(size_t) oldValue = void;
@@ -132,6 +150,7 @@ public:
         return false;
     }
 
+    ///
     auto tryDecrement() @trusted
     {
         static struct DecrementResult
@@ -155,6 +174,7 @@ public:
         return DecrementResult(true, newValue);
     }
 
+    ///
     bool trySetZero() @trusted
     {
         shared(size_t) oldValue = void;
@@ -173,15 +193,18 @@ private:
     size_t _count;
 }
 
+///
 shared class TicketBase
 {
 public:
+    ///
     bool stamp()
     {
         return cas(&_flag, false, true);
     }
 
 public:
+    ///
     bool isStamped() @property
     {
         return atomicLoad(_flag);
@@ -191,8 +214,10 @@ private:
     bool _flag = false;
 }
 
+///
 alias Ticket = shared(TicketBase);
 
+///
 unittest
 {
     auto t = new Ticket;

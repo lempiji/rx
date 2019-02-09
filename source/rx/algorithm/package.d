@@ -3,6 +3,7 @@ module rx.algorithm;
 public import rx.algorithm.all;
 public import rx.algorithm.any;
 public import rx.algorithm.buffer;
+public import rx.algorithm.combineLatest;
 public import rx.algorithm.debounce;
 public import rx.algorithm.filter;
 public import rx.algorithm.fold;

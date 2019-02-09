@@ -21,13 +21,11 @@ $('#symbolSearchPane').show();</script>
 			</div>
 			<ul class="tree-view">
 				<li class="tree-view ">
-					<div class="package ">
-						<a href="../../../rx.html">rx</a>
+					<div class="package ">rx
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view ">
-					<div class="package ">
-						<a href="../../../rx/algorithm.html">algorithm</a>
+					<div class="package ">algorithm
 					</div>
 			<ul class="tree-view">
 				<li>
@@ -43,6 +41,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../rx/algorithm/buffer.html">buffer</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../rx/algorithm/combineLatest.html">combineLatest</a>
 					</div>
 				</li>
 				<li>
@@ -92,6 +95,27 @@ $('#symbolSearchPane').show();</script>
 				</li>
 			</ul>
 				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">range
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../rx/range/drop.html">drop</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../rx/range/take.html">take</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../rx/range/takeLast.html">takeLast</a>
+					</div>
+				</li>
+			</ul>
+				</li>
 				<li>
 					<div class="module ">
 						<a href="../../../rx/disposable.html">disposable</a>
@@ -105,11 +129,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../rx/observer.html">observer</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../../rx/range.html">range</a>
 					</div>
 				</li>
 				<li>
@@ -157,7 +176,8 @@ $('#symbolSearchPane').show();</script>
 				</table>
 			</section>
 			<section><h2>Example</h2>
-
+<p>ditto
+</p>
 <pre class="code"><code class="lang-d"><span class="kwd">import <a href="../../../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pln"> </span><span class="pun">: </span><span class="typ">SubjectObject</span><span class="pun">;
 </span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">array </span><span class="pun">: </span><span class="pln">appender</span><span class="pun">;
 
@@ -178,7 +198,8 @@ $('#symbolSearchPane').show();</script>
 </span></code></pre>
 </section>
 <section><h2>Example</h2>
-
+<p>ditto
+</p>
 <pre class="code"><code class="lang-d"><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">datetime </span><span class="pun">: </span><span class="typ">Date</span><span class="pun">;
 </span><span class="kwd">import <a href="../../../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pln"> </span><span class="pun">: </span><span class="typ">SubjectObject</span><span class="pun">;
 </span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">array </span><span class="pun">: </span><span class="pln">appender</span><span class="pun">;
@@ -187,6 +208,32 @@ $('#symbolSearchPane').show();</script>
 </span><span class="kwd">auto </span><span class="pln">buf </span><span class="pun">= </span><span class="pln">appender</span><span class="pun">!(</span><span class="typ">Date</span><span class="pun">[]);
 
 </span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">uniq</span><span class="pun">!</span><span class="str">"a.year == b.year"<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">buf</span><span class="pun">);
+</span><span class="kwd">scope </span><span class="pun">(</span><span class="pln">exit</span><span class="pun">)
+    </span><span class="pln">disposable<wbr/></span><span class="pun">.</span><span class="pln">dispose</span><span class="pun">();
+
+<wbr/>.</span><span class="pln">put</span><span class="pun">(</span><span class="pln">sub</span><span class="pun">, </span><span class="typ">Date</span><span class="pun">(</span><span class="lit">2000</span><span class="pun">, </span><span class="lit">1</span><span class="pun">, </span><span class="lit">1</span><span class="pun">));
+<wbr/>.</span><span class="pln">put</span><span class="pun">(</span><span class="pln">sub</span><span class="pun">, </span><span class="typ">Date</span><span class="pun">(</span><span class="lit">2000</span><span class="pun">, </span><span class="lit">1</span><span class="pun">, </span><span class="lit">2</span><span class="pun">));
+<wbr/>.</span><span class="pln">put</span><span class="pun">(</span><span class="pln">sub</span><span class="pun">, </span><span class="typ">Date</span><span class="pun">(</span><span class="lit">2017</span><span class="pun">, </span><span class="lit">3</span><span class="pun">, </span><span class="lit">24</span><span class="pun">));
+<wbr/>.</span><span class="pln">put</span><span class="pun">(</span><span class="pln">sub</span><span class="pun">, </span><span class="typ">Date</span><span class="pun">(</span><span class="lit">2017</span><span class="pun">, </span><span class="lit">4</span><span class="pun">, </span><span class="lit">24</span><span class="pun">));
+<wbr/>.</span><span class="pln">put</span><span class="pun">(</span><span class="pln">sub</span><span class="pun">, </span><span class="typ">Date</span><span class="pun">(</span><span class="lit">2017</span><span class="pun">, </span><span class="lit">4</span><span class="pun">, </span><span class="lit">24</span><span class="pun">));
+
+</span><span class="kwd">auto </span><span class="pln">data </span><span class="pun">= </span><span class="pln">buf<wbr/></span><span class="pun">.</span><span class="pln">data</span><span class="pun">;
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">data<wbr/></span><span class="pun">.</span><span class="pln">length </span><span class="pun">== </span><span class="lit">2</span><span class="pun">);
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">data</span><span class="pun">[</span><span class="lit">0</span><span class="pun">] == </span><span class="typ">Date</span><span class="pun">(</span><span class="lit">2000</span><span class="pun">, </span><span class="lit">1</span><span class="pun">, </span><span class="lit">1</span><span class="pun">));
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">data</span><span class="pun">[</span><span class="lit">1</span><span class="pun">] == </span><span class="typ">Date</span><span class="pun">(</span><span class="lit">2017</span><span class="pun">, </span><span class="lit">3</span><span class="pun">, </span><span class="lit">24</span><span class="pun">));
+</span></code></pre>
+</section>
+<section><h2>Example</h2>
+<p>ditto
+</p>
+<pre class="code"><code class="lang-d"><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">datetime </span><span class="pun">: </span><span class="typ">Date</span><span class="pun">;
+</span><span class="kwd">import <a href="../../../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pln"> </span><span class="pun">: </span><span class="typ">SubjectObject</span><span class="pun">;
+</span><span class="kwd">import </span><span class="pln">std<wbr/></span><span class="pun">.</span><span class="pln">array </span><span class="pun">: </span><span class="pln">appender</span><span class="pun">;
+
+</span><span class="kwd">auto </span><span class="pln">sub </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SubjectObject</span><span class="pun">!</span><span class="typ">Date</span><span class="pun">;
+</span><span class="kwd">auto </span><span class="pln">buf </span><span class="pun">= </span><span class="pln">appender</span><span class="pun">!(</span><span class="typ">Date</span><span class="pun">[]);
+
+</span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">distinctUntilChanged</span><span class="pun">!</span><span class="str">"a.year == b.year"<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">buf</span><span class="pun">);
 </span><span class="kwd">scope </span><span class="pun">(</span><span class="pln">exit</span><span class="pun">)
     </span><span class="pln">disposable<wbr/></span><span class="pun">.</span><span class="pln">dispose</span><span class="pun">();
 

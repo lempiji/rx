@@ -1,3 +1,8 @@
+/+++++++++++++++++++++++++++++
+ + This module defines algorithm 'uniq'
+ +
+ + This is also called 'distinctUntilChanged'.
+ +/
 module rx.algorithm.uniq;
 
 import rx.disposable;
@@ -200,7 +205,10 @@ template uniq(alias pred = "a == b")
     }
 }
 
-///
+///ditto
+alias distinctUntilChanged = uniq;
+
+///ditto
 unittest
 {
     import rx.subject : SubjectObject;
@@ -222,7 +230,7 @@ unittest
     assert(data[2] == 33);
 }
 
-///
+///ditto
 @system unittest
 {
     import std.datetime : Date;
@@ -233,6 +241,32 @@ unittest
     auto buf = appender!(Date[]);
 
     auto disposable = sub.uniq!"a.year == b.year".subscribe(buf);
+    scope (exit)
+        disposable.dispose();
+
+    .put(sub, Date(2000, 1, 1));
+    .put(sub, Date(2000, 1, 2));
+    .put(sub, Date(2017, 3, 24));
+    .put(sub, Date(2017, 4, 24));
+    .put(sub, Date(2017, 4, 24));
+
+    auto data = buf.data;
+    assert(data.length == 2);
+    assert(data[0] == Date(2000, 1, 1));
+    assert(data[1] == Date(2017, 3, 24));
+}
+
+///ditto
+@system unittest
+{
+    import std.datetime : Date;
+    import rx.subject : SubjectObject;
+    import std.array : appender;
+    
+    auto sub = new SubjectObject!Date;
+    auto buf = appender!(Date[]);
+
+    auto disposable = sub.distinctUntilChanged!"a.year == b.year".subscribe(buf);
     scope (exit)
         disposable.dispose();
 

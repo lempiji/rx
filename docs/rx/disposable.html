@@ -21,13 +21,11 @@ $('#symbolSearchPane').show();</script>
 			</div>
 			<ul class="tree-view">
 				<li class="tree-view ">
-					<div class="package ">
-						<a href="../rx.html">rx</a>
+					<div class="package ">rx
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view collapsed">
-					<div class="package ">
-						<a href="../rx/algorithm.html">algorithm</a>
+					<div class="package ">algorithm
 					</div>
 			<ul class="tree-view">
 				<li>
@@ -43,6 +41,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../rx/algorithm/buffer.html">buffer</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../rx/algorithm/combineLatest.html">combineLatest</a>
 					</div>
 				</li>
 				<li>
@@ -92,6 +95,27 @@ $('#symbolSearchPane').show();</script>
 				</li>
 			</ul>
 				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">range
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../rx/range/drop.html">drop</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../rx/range/take.html">take</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../rx/range/takeLast.html">takeLast</a>
+					</div>
+				</li>
+			</ul>
+				</li>
 				<li>
 					<div class="module selected">
 						<a href="../rx/disposable.html">disposable</a>
@@ -105,11 +129,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../rx/observer.html">observer</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../rx/range.html">range</a>
 					</div>
 				</li>
 				<li>
@@ -145,11 +164,19 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="disposableObject" class="[&quot;public&quot;]" href="../rx/disposable/disposableObject.html">disposableObject</a><span class="decoration">(disposable)</span>
+								<a id="disposableObject" class="public" href="../rx/disposable/disposableObject.html">disposableObject</a><span class="decoration">(disposable)</span>
 							</code>
 						</td>
 						<td>Wraps dispose method in virtual functions.
 </td>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="withDisposed" class="public" href="../rx/disposable/withDisposed.html">withDisposed</a><span class="decoration">(disposable, disposed)</span>
+							</code>
+						</td>
+						<td></td>
 					</tr>
 				</table>
 			</section>
@@ -163,7 +190,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="Cancelable" class="[&quot;public&quot;]" href="../rx/disposable/Cancelable.html">Cancelable</a>
+								<a id="Cancelable" class="public" href="../rx/disposable/Cancelable.html">Cancelable</a>
 							</code>
 						</td>
 						<td>Wrapper for cancelable objects.
@@ -172,7 +199,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="Disposable" class="[&quot;public&quot;]" href="../rx/disposable/Disposable.html">Disposable</a>
+								<a id="Disposable" class="public" href="../rx/disposable/Disposable.html">Disposable</a>
 							</code>
 						</td>
 						<td>Wrapper for disposable objects.
@@ -190,7 +217,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="AnonymousDisposable" class="[&quot;public&quot;]" href="../rx/disposable/AnonymousDisposable.html">AnonymousDisposable</a>
+								<a id="AnonymousDisposable" class="public" href="../rx/disposable/AnonymousDisposable.html">AnonymousDisposable</a>
 							</code>
 						</td>
 						<td></td>
@@ -198,7 +225,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="CancelableObject" class="[&quot;public&quot;]" href="../rx/disposable/CancelableObject.html">CancelableObject</a>
+								<a id="CancelableObject" class="public" href="../rx/disposable/CancelableObject.html">CancelableObject</a>
 							</code>
 						</td>
 						<td>Class that implements the Cancelable interface and wraps the  isDisposed property in virtual functions.
@@ -207,7 +234,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="CancellationToken" class="[&quot;public&quot;]" href="../rx/disposable/CancellationToken.html">CancellationToken</a>
+								<a id="CancellationToken" class="public" href="../rx/disposable/CancellationToken.html">CancellationToken</a>
 							</code>
 						</td>
 						<td>Simply implements for Cancelable interface. Its propagates notification that operations should be canceled.
@@ -216,7 +243,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="CompositeDisposable" class="[&quot;public&quot;]" href="../rx/disposable/CompositeDisposable.html">CompositeDisposable</a>
+								<a id="CompositeDisposable" class="public" href="../rx/disposable/CompositeDisposable.html">CompositeDisposable</a>
 							</code>
 						</td>
 						<td></td>
@@ -224,7 +251,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="DisposableObject" class="[&quot;public&quot;]" href="../rx/disposable/DisposableObject.html">DisposableObject</a>
+								<a id="DisposableObject" class="public" href="../rx/disposable/DisposableObject.html">DisposableObject</a>
 							</code>
 						</td>
 						<td>Class that implements the Disposable interface and wraps the dispose methods in virtual functions.
@@ -233,7 +260,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="NopDisposable" class="[&quot;public&quot;]" href="../rx/disposable/NopDisposable.html">NopDisposable</a>
+								<a id="NopDisposable" class="public" href="../rx/disposable/NopDisposable.html">NopDisposable</a>
 							</code>
 						</td>
 						<td>Defines a instance property that return NOP Disposable.
@@ -242,7 +269,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="RefCountDisposable" class="[&quot;public&quot;]" href="../rx/disposable/RefCountDisposable.html">RefCountDisposable</a>
+								<a id="RefCountDisposable" class="public" href="../rx/disposable/RefCountDisposable.html">RefCountDisposable</a>
 							</code>
 						</td>
 						<td></td>
@@ -250,7 +277,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="SerialDisposable" class="[&quot;public&quot;]" href="../rx/disposable/SerialDisposable.html">SerialDisposable</a>
+								<a id="SerialDisposable" class="public" href="../rx/disposable/SerialDisposable.html">SerialDisposable</a>
 							</code>
 						</td>
 						<td></td>
@@ -258,7 +285,7 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="SignalDisposable" class="[&quot;public&quot;]" href="../rx/disposable/SignalDisposable.html">SignalDisposable</a>
+								<a id="SignalDisposable" class="public" href="../rx/disposable/SignalDisposable.html">SignalDisposable</a>
 							</code>
 						</td>
 						<td></td>
@@ -266,7 +293,24 @@ $('#symbolSearchPane').show();</script>
 					<tr>
 						<td>
 							<code>
-								<a id="SingleAssignmentDisposable" class="[&quot;public&quot;]" href="../rx/disposable/SingleAssignmentDisposable.html">SingleAssignmentDisposable</a>
+								<a id="SingleAssignmentDisposable" class="public" href="../rx/disposable/SingleAssignmentDisposable.html">SingleAssignmentDisposable</a>
+							</code>
+						</td>
+						<td></td>
+					</tr>
+				</table>
+			</section>
+			<section>
+				<h2>Templates</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="withDisposed" class="public" href="../rx/disposable/withDisposed.html">withDisposed</a>
 							</code>
 						</td>
 						<td></td>
@@ -282,7 +326,7 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
-							<a id="isCancelable" class="[&quot;public&quot;]" href="../rx/disposable/isCancelable.html">
+							<a id="isCancelable" class="public" href="../rx/disposable/isCancelable.html">
 								<code>isCancelable</code>
 							</a>
 						</td>
@@ -293,7 +337,7 @@ $('#symbolSearchPane').show();</script>
 					</tr>
 					<tr>
 						<td>
-							<a id="isDisposable" class="[&quot;public&quot;]" href="../rx/disposable/isDisposable.html">
+							<a id="isDisposable" class="public" href="../rx/disposable/isDisposable.html">
 								<code>isDisposable</code>
 							</a>
 						</td>

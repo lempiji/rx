@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8"/>
-		<title>Function takeLast</title>
+		<title>Module rx.range.takeLast</title>
 		<link rel="stylesheet" type="text/css" href="../../styles/ddox.css"/>
 		<link rel="stylesheet" href="../../prettify/prettify.css" type="text/css"/>
 		<script type="text/javascript" src="../../scripts/jquery.js">/**/</script><script type="text/javascript" src="../../scripts/ddox.js">/**/</script>
@@ -21,13 +21,11 @@ $('#symbolSearchPane').show();</script>
 			</div>
 			<ul class="tree-view">
 				<li class="tree-view ">
-					<div class="package ">
-						<a href="../../rx.html">rx</a>
+					<div class="package ">rx
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view collapsed">
-					<div class="package ">
-						<a href="../../rx/algorithm.html">algorithm</a>
+					<div class="package ">algorithm
 					</div>
 			<ul class="tree-view">
 				<li>
@@ -43,6 +41,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../rx/algorithm/buffer.html">buffer</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../rx/algorithm/combineLatest.html">combineLatest</a>
 					</div>
 				</li>
 				<li>
@@ -92,6 +95,27 @@ $('#symbolSearchPane').show();</script>
 				</li>
 			</ul>
 				</li>
+				<li class="tree-view ">
+					<div class="package ">range
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../rx/range/drop.html">drop</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../rx/range/take.html">take</a>
+					</div>
+				</li>
+				<li>
+					<div class="module selected">
+						<a href="../../rx/range/takeLast.html">takeLast</a>
+					</div>
+				</li>
+			</ul>
+				</li>
 				<li>
 					<div class="module ">
 						<a href="../../rx/disposable.html">disposable</a>
@@ -105,11 +129,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../rx/observer.html">observer</a>
-					</div>
-				</li>
-				<li>
-					<div class="module selected">
-						<a href="../../rx/range.html">range</a>
 					</div>
 				</li>
 				<li>
@@ -132,59 +151,28 @@ $('#symbolSearchPane').show();</script>
 			</ul>
 		</nav>
 		<div id="main-contents">
-			<h1>Function takeLast</h1><p>Creates a observable that take only a last element of the given source.
+			<h1>Module rx.range.takeLast</h1><p>This module is a submodule of rx.range.
+ It provides basic operation a 'takeLast'
 </p>
-			<div class="prototype">
-				<code class="lang-d">
-					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">takeLast</span>(TObservable)
-			<span class="pun">(</span>
-			<br/>
-			&nbsp;&nbsp;<span class="kwd">auto ref </span><span class="typ">TObservable</span> <span class="pln">observable</span>
-			<br/>
-			<span class="pun">)</span><span class="pun">;</span>
-					</div>
-				</code>
-			</div>
-			
-			<section><h2>Example</h2>
-
-<pre class="code"><code class="lang-d"><span class="kwd">import <a href="../../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pun">;
-
-</span><span class="kwd">auto </span><span class="pln">sub </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SubjectObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
-
-</span><span class="typ">int </span><span class="pln">putCount </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
-</span><span class="typ">int </span><span class="pln">completedCount </span><span class="pun">= </span><span class="lit">0</span><span class="pun">;
-</span><span class="kwd">struct </span><span class="typ">TestObserver
-</span><span class="pun">{
-    </span><span class="typ">void </span><span class="pln">put</span><span class="pun">(</span><span class="typ">int </span><span class="pln">n</span><span class="pun">)
-    {
-        </span><span class="pln">putCount</span><span class="pun">++;
-    }
-
-    </span><span class="typ">void </span><span class="pln">completed</span><span class="pun">()
-    {
-        </span><span class="pln">completedCount</span><span class="pun">++;
-    }
-}
-
-</span><span class="kwd">auto </span><span class="pln">d </span><span class="pun">= </span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">takeLast<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="typ">TestObserver</span><span class="pun">());
-
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
-</span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">1</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
-</span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">10</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
-</span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">completed</span><span class="pun">();
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">completedCount </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);
-
-</span><span class="pln">sub<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">100</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">completedCount </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);
-</span></code></pre>
-</section>
-
+			<section></section>
+			<section>
+				<h2>Functions</h2>
+				<table>
+					<col class="caption"/>
+					<tr>
+						<th>Name</th><th>Description</th>
+					</tr>
+					<tr>
+						<td>
+							<code>
+								<a id="takeLast" class="public" href="../../rx/range/takeLast/takeLast.html">takeLast</a><span class="decoration">(observable)</span>
+							</code>
+						</td>
+						<td>Creates a observable that take only a last element of the given source.
+</td>
+					</tr>
+				</table>
+			</section>
 			<footer>
 				<table class="license-info">
 					<tr>

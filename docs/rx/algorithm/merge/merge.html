@@ -21,13 +21,11 @@ $('#symbolSearchPane').show();</script>
 			</div>
 			<ul class="tree-view">
 				<li class="tree-view ">
-					<div class="package ">
-						<a href="../../../rx.html">rx</a>
+					<div class="package ">rx
 					</div>
 			<ul class="tree-view">
 				<li class="tree-view ">
-					<div class="package ">
-						<a href="../../../rx/algorithm.html">algorithm</a>
+					<div class="package ">algorithm
 					</div>
 			<ul class="tree-view">
 				<li>
@@ -43,6 +41,11 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../rx/algorithm/buffer.html">buffer</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../rx/algorithm/combineLatest.html">combineLatest</a>
 					</div>
 				</li>
 				<li>
@@ -92,6 +95,27 @@ $('#symbolSearchPane').show();</script>
 				</li>
 			</ul>
 				</li>
+				<li class="tree-view collapsed">
+					<div class="package ">range
+					</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module ">
+						<a href="../../../rx/range/drop.html">drop</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../rx/range/take.html">take</a>
+					</div>
+				</li>
+				<li>
+					<div class="module ">
+						<a href="../../../rx/range/takeLast.html">takeLast</a>
+					</div>
+				</li>
+			</ul>
+				</li>
 				<li>
 					<div class="module ">
 						<a href="../../../rx/disposable.html">disposable</a>
@@ -105,11 +129,6 @@ $('#symbolSearchPane').show();</script>
 				<li>
 					<div class="module ">
 						<a href="../../../rx/observer.html">observer</a>
-					</div>
-				</li>
-				<li>
-					<div class="module ">
-						<a href="../../../rx/range.html">range</a>
 					</div>
 				</li>
 				<li>
@@ -150,45 +169,7 @@ $('#symbolSearchPane').show();</script>
 			<div class="prototype">
 				<code class="lang-d">
 					<div class="single-prototype">
-			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">merge</span>(TObservable)
-			<span class="pun">(</span>
-			<br/>
-			&nbsp;&nbsp;<span class="kwd">auto ref </span><span class="typ">TObservable</span> <span class="pln">observable</span>
-			<br/>
-			<span class="pun">)</span>
-			<br/>
-			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isObservable</span><span class="pun">!</span><span class="typ">TObservable </span><span class="pun">&amp;&amp; </span><span class="pln">isObservable</span><span class="pun">!(</span><span class="typ">TObservable<wbr/></span><span class="pun">.</span><span class="typ">ElementType</span><span class="pun">)</span><span class="pun">);</span>
-					</div>
-				</code>
-			</div>
-			
-			<section><h3>Example</h3>
-
-<pre class="code"><code class="lang-d"><span class="kwd">import <a href="../../../rx/algorithm/groupby.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">algorithm<wbr/></span><span class="pun">.</span><span class="pln">groupby</span></a><span class="pln"> </span><span class="pun">: </span><span class="pln">groupBy</span><span class="pun">;
-</span><span class="kwd">import <a href="../../../rx/algorithm/map.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">algorithm<wbr/></span><span class="pun">.</span><span class="pln">map</span></a><span class="pln"> </span><span class="pun">: </span><span class="pln">map</span><span class="pun">;
-</span><span class="kwd">import <a href="../../../rx/algorithm/fold.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">algorithm<wbr/></span><span class="pun">.</span><span class="pln">fold</span></a><span class="pln"> </span><span class="pun">: </span><span class="pln">fold</span><span class="pun">;
-</span><span class="kwd">import <a href="../../../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pln"> </span><span class="pun">: </span><span class="typ">SubjectObject</span><span class="pun">, </span><span class="typ">CounterObserver</span><span class="pun">;
-
-</span><span class="kwd">auto </span><span class="pln">subject </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SubjectObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
-</span><span class="kwd">auto </span><span class="pln">counted </span><span class="pun">= </span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">groupBy</span><span class="pun">!(</span><span class="pln">n </span><span class="pun">=&gt; </span><span class="pln">n </span><span class="pun">% </span><span class="lit">10</span><span class="pun">)<wbr/>.</span><span class="pln">map</span><span class="pun">!(</span><span class="pln">o </span><span class="pun">=&gt; </span><span class="pln">o<wbr/></span><span class="pun">.</span><span class="pln">fold</span><span class="pun">!((</span><span class="pln">a</span><span class="pun">, </span><span class="pln">b</span><span class="pun">) =&gt; </span><span class="pln">a </span><span class="pun">+ </span><span class="lit">1</span><span class="pun">)(</span><span class="lit">0</span><span class="pun">))<wbr/>.</span><span class="pln">merge</span><span class="pun">();
-
-</span><span class="kwd">auto </span><span class="pln">counter </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">CounterObserver</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
-
-</span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">counted<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">counter</span><span class="pun">);
-
-</span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);
-</span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">counter<wbr/></span><span class="pun">.</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
-</span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">completed</span><span class="pun">();
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">counter<wbr/></span><span class="pun">.</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);
-</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">counter<wbr/></span><span class="pun">.</span><span class="pln">lastValue </span><span class="pun">== </span><span class="lit">2</span><span class="pun">);
-</span></code></pre>
-</section>
-<h2 id="1">Function merge</h2><p></p>
-			<div class="prototype">
-				<code class="lang-d">
-					<div class="single-prototype">
-			<a href="../../../rx/algorithm/merge/MergeObservable.html"><span class="typ">MergeObservable</span></a>!(T1,T2) <span class="pln">merge</span>(T1, T2)
+			<span class="typ">MergeObservable</span>!(T1,T2) <span class="pln">merge</span>(T1, T2)
 			<span class="pun">(</span>
 			<br/>
 			&nbsp;&nbsp;<span class="kwd">auto ref </span><span class="pln">T1</span> <span class="pln">observable1</span><span class="pun">,</span>
@@ -224,6 +205,44 @@ $('#symbolSearchPane').show();</script>
 </span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">count </span><span class="pun">== </span><span class="lit">2</span><span class="pun">);
 </span><span class="pln">s2<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">100</span><span class="pun">);
 </span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">count </span><span class="pun">== </span><span class="lit">2</span><span class="pun">);
+</span></code></pre>
+</section>
+<h2 id="1">Function merge</h2><p></p>
+			<div class="prototype">
+				<code class="lang-d">
+					<div class="single-prototype">
+			<span class="kwd">auto </span><span class="kwd">auto</span> <span class="pln">merge</span>(TObservable)
+			<span class="pun">(</span>
+			<br/>
+			&nbsp;&nbsp;<span class="kwd">auto ref </span><span class="typ">TObservable</span> <span class="pln">observable</span>
+			<br/>
+			<span class="pun">)</span>
+			<br/>
+			<span class="kwd">if</span> <span class="pun">(</span><span class="pln">isObservable</span><span class="pun">!</span><span class="typ">TObservable </span><span class="pun">&amp;&amp; </span><span class="pln">isObservable</span><span class="pun">!(</span><span class="typ">TObservable<wbr/></span><span class="pun">.</span><span class="typ">ElementType</span><span class="pun">)</span><span class="pun">);</span>
+					</div>
+				</code>
+			</div>
+			
+			<section><h3>Example</h3>
+
+<pre class="code"><code class="lang-d"><span class="kwd">import <a href="../../../rx/algorithm/groupby.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">algorithm<wbr/></span><span class="pun">.</span><span class="pln">groupby</span></a><span class="pln"> </span><span class="pun">: </span><span class="pln">groupBy</span><span class="pun">;
+</span><span class="kwd">import <a href="../../../rx/algorithm/map.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">algorithm<wbr/></span><span class="pun">.</span><span class="pln">map</span></a><span class="pln"> </span><span class="pun">: </span><span class="pln">map</span><span class="pun">;
+</span><span class="kwd">import <a href="../../../rx/algorithm/fold.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">algorithm<wbr/></span><span class="pun">.</span><span class="pln">fold</span></a><span class="pln"> </span><span class="pun">: </span><span class="pln">fold</span><span class="pun">;
+</span><span class="kwd">import <a href="../../../rx/subject.html"></span><span class="pln">rx<wbr/></span><span class="pun">.</span><span class="pln">subject</span></a><span class="pln"> </span><span class="pun">: </span><span class="typ">SubjectObject</span><span class="pun">, </span><span class="typ">CounterObserver</span><span class="pun">;
+
+</span><span class="kwd">auto </span><span class="pln">subject </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">SubjectObject</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
+</span><span class="kwd">auto </span><span class="pln">counted </span><span class="pun">= </span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">groupBy</span><span class="pun">!(</span><span class="pln">n </span><span class="pun">=&gt; </span><span class="pln">n </span><span class="pun">% </span><span class="lit">10</span><span class="pun">)<wbr/>.</span><span class="pln">map</span><span class="pun">!(</span><span class="pln">o </span><span class="pun">=&gt; </span><span class="pln">o<wbr/></span><span class="pun">.</span><span class="pln">fold</span><span class="pun">!((</span><span class="pln">a</span><span class="pun">, </span><span class="pln">b</span><span class="pun">) =&gt; </span><span class="pln">a </span><span class="pun">+ </span><span class="lit">1</span><span class="pun">)(</span><span class="lit">0</span><span class="pun">))<a href="../../../rx/algorithm/merge/merge.html"></span><wbr/><span class="pun">.</span><span class="pln">merge</span></a><span class="pun">();
+
+</span><span class="kwd">auto </span><span class="pln">counter </span><span class="pun">= </span><span class="kwd">new </span><span class="typ">CounterObserver</span><span class="pun">!</span><span class="typ">int</span><span class="pun">;
+
+</span><span class="kwd">auto </span><span class="pln">disposable </span><span class="pun">= </span><span class="pln">counted<wbr/></span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">counter</span><span class="pun">);
+
+</span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);
+</span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">put</span><span class="pun">(</span><span class="lit">0</span><span class="pun">);
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">counter<wbr/></span><span class="pun">.</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">0</span><span class="pun">);
+</span><span class="pln">subject<wbr/></span><span class="pun">.</span><span class="pln">completed</span><span class="pun">();
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">counter<wbr/></span><span class="pun">.</span><span class="pln">putCount </span><span class="pun">== </span><span class="lit">1</span><span class="pun">);
+</span><span class="kwd">assert</span><span class="pun">(</span><span class="pln">counter<wbr/></span><span class="pun">.</span><span class="pln">lastValue </span><span class="pun">== </span><span class="lit">2</span><span class="pun">);
 </span></code></pre>
 </section>
 
