@@ -1,0 +1,9 @@
+{
+	"name": "concurrency",
+	"authors": [
+		"lempiji"
+	],
+	"dependencies": {
+		"rx": { "path": "../../" }
+	}
+}
