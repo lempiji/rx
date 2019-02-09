@@ -2969,6 +2969,36 @@
 				"parameters": [
 					{
 						"kind": "type",
+						"name": "TObserver"
+					},
+					{
+						"kind": "type",
+						"name": "TScheduler"
+					},
+					{
+						"kind": "type",
+						"name": "E"
+					}
+				],
+				"line": 269,
+				"kind": "template",
+				"char": 1,
+				"members": [
+					{
+						"kind": "struct",
+						"char": 1,
+						"members": [],
+						"line": 269,
+						"name": "ObserveOnObserver"
+					}
+				],
+				"name": "ObserveOnObserver",
+				"comment": "\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
 						"name": "TObservable"
 					},
 					{
@@ -2977,7 +3007,77 @@
 						"name": "TScheduler"
 					}
 				],
-				"line": 486,
+				"line": 336,
+				"kind": "template",
+				"char": 1,
+				"members": [
+					{
+						"kind": "struct",
+						"char": 1,
+						"members": [],
+						"line": 336,
+						"name": "ObserveOnObservable"
+					}
+				],
+				"name": "ObserveOnObservable",
+				"comment": "\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
+						"name": "TObservable"
+					},
+					{
+						"kind": "type",
+						"deco": "C2rx9scheduler9Scheduler",
+						"name": "TScheduler"
+					}
+				],
+				"line": 396,
+				"kind": "template",
+				"char": 47,
+				"members": [
+					{
+						"parameters": [
+							{
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								],
+								"name": "observable"
+							},
+							{
+								"type": "TScheduler",
+								"name": "scheduler"
+							}
+						],
+						"line": 396,
+						"kind": "function",
+						"char": 47,
+						"name": "observeOn",
+						"type": "ObserveOnObservable!(TObservable, TScheduler)(auto ref TObservable observable, TScheduler scheduler)",
+						"endchar": 1,
+						"endline": 400
+					}
+				],
+				"name": "observeOn",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L403_C1)\n---\nimport std.concurrency;\nimport rx.subject;\n\nauto subject = new SubjectObject!int;\nauto scheduler = new LocalScheduler;\nauto scheduled = subject.observeOn(scheduler);\n\nimport std.array : appender;\n\nauto buf = appender!(int[]);\nauto observer = observerObject!int(buf);\n\nauto d1 = scheduled.subscribe(buf);\nauto d2 = scheduled.subscribe(observer);\n\nsubject.put(0);\nassert(buf.data.length == 2);\n\nsubject.put(1);\nassert(buf.data.length == 4);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L403_C1)\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
+						"name": "TObservable"
+					},
+					{
+						"kind": "type",
+						"deco": "C2rx9scheduler9Scheduler",
+						"name": "TScheduler"
+					}
+				],
+				"line": 490,
 				"kind": "template",
 				"char": 1,
 				"members": [
@@ -2985,7 +3085,7 @@
 						"kind": "class",
 						"char": 1,
 						"members": [],
-						"line": 486,
+						"line": 490,
 						"name": "SubscribeOnObservable"
 					}
 				],
@@ -3004,7 +3104,7 @@
 						"name": "TScheduler"
 					}
 				],
-				"line": 541,
+				"line": 545,
 				"kind": "template",
 				"char": 49,
 				"members": [
@@ -3027,17 +3127,58 @@
 								"name": "scheduler"
 							}
 						],
-						"line": 541,
+						"line": 545,
 						"kind": "function",
 						"char": 49,
 						"name": "subscribeOn",
 						"type": "SubscribeOnObservable!(TObservable, TScheduler)(auto ref TObservable observable, auto ref TScheduler scheduler)",
 						"endchar": 1,
-						"endline": 545
+						"endline": 549
 					}
 				],
 				"name": "subscribeOn",
-				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L547_C1)\n---\nimport rx.observable : defer;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new LocalScheduler;\n\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto d = scheduled.doSubscribe((int n) { value = n; });\nscope (exit)\n    d.dispose();\n\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L547_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L567_C1)\n---\nimport rx.observable : defer;\nimport rx.util : EventSignal;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new TaskPoolScheduler;\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto signal = new EventSignal;\nauto d = scheduled.subscribe((int n) { value = n; signal.setSignal(); });\nscope (exit)\n    d.dispose();\n\nsignal.wait();\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L567_C1)\n"
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L551_C1)\n---\nimport rx.observable : defer;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new LocalScheduler;\n\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto d = scheduled.doSubscribe((int n) { value = n; });\nscope (exit)\n    d.dispose();\n\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L551_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L571_C1)\n---\nimport rx.observable : defer;\nimport rx.util : EventSignal;\n\nauto sub = defer!int((Observer!int observer) {\n    .put(observer, 100);\n    return NopDisposable.instance;\n});\nauto scheduler = new TaskPoolScheduler;\nauto scheduled = sub.subscribeOn(scheduler);\n\nint value = 0;\nauto signal = new EventSignal;\nauto d = scheduled.subscribe((int n) { value = n; signal.setSignal(); });\nscope (exit)\n    d.dispose();\n\nsignal.wait();\nassert(value == 100);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L571_C1)\n"
+			},
+			{
+				"line": 707,
+				"kind": "function",
+				"char": 11,
+				"name": "currentScheduler",
+				"deco": "FNdZC2rx9scheduler9Scheduler",
+				"endchar": 1,
+				"endline": 710,
+				"comment": "\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
+						"deco": "C2rx9scheduler9Scheduler",
+						"name": "TScheduler"
+					}
+				],
+				"line": 713,
+				"kind": "template",
+				"char": 12,
+				"members": [
+					{
+						"parameters": [
+							{
+								"type": "TScheduler",
+								"name": "scheduler"
+							}
+						],
+						"line": 713,
+						"kind": "function",
+						"char": 12,
+						"name": "currentScheduler",
+						"type": "@property TScheduler(TScheduler scheduler)",
+						"endchar": 1,
+						"endline": 717
+					}
+				],
+				"name": "currentScheduler",
+				"comment": "\n"
 			}
 		],
 		"comment": " This module defines the concept of Scheduler.\n",
@@ -3513,7 +3654,285 @@
 	{
 		"kind": "module",
 		"file": "source\\rx\\util.d",
-		"members": [],
+		"members": [
+			{
+				"constraint": "!is(T == shared)",
+				"parameters": [
+					{
+						"kind": "type",
+						"name": "T"
+					}
+				],
+				"line": 12,
+				"kind": "template",
+				"char": 12,
+				"members": [
+					{
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"type": "T",
+								"storageClass": [
+									"auto",
+									"ref"
+								],
+								"name": "obj"
+							}
+						],
+						"line": 12,
+						"kind": "function",
+						"char": 12,
+						"name": "assumeThreadLocal",
+						"type": "ref T(auto ref T obj)",
+						"endchar": 1,
+						"endline": 15
+					}
+				],
+				"name": "assumeThreadLocal",
+				"comment": "\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
+						"name": "T"
+					}
+				],
+				"line": 18,
+				"kind": "template",
+				"char": 12,
+				"members": [
+					{
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"type": "shared(T)",
+								"storageClass": [
+									"auto",
+									"ref"
+								],
+								"name": "obj"
+							}
+						],
+						"line": 18,
+						"kind": "function",
+						"char": 12,
+						"name": "assumeThreadLocal",
+						"type": "ref T(auto ref shared(T) obj)",
+						"endchar": 1,
+						"endline": 21
+					}
+				],
+				"name": "assumeThreadLocal",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L24_C1)\n---\nclass Test\n{\n    int hoge()\n    {\n        return 0;\n    }\n}\n\nauto raw = new shared(Test);\nTest local1 = assumeThreadLocal(raw);\nTest local2 = assumeThreadLocal(new shared(Test));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L24_C1)\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
+						"name": "T"
+					},
+					{
+						"kind": "type",
+						"name": "U"
+					}
+				],
+				"line": 40,
+				"kind": "template",
+				"char": 6,
+				"members": [
+					{
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"type": "shared(T)",
+								"storageClass": [
+									"ref"
+								],
+								"name": "store"
+							},
+							{
+								"type": "U",
+								"name": "val"
+							}
+						],
+						"line": 40,
+						"kind": "function",
+						"char": 6,
+						"name": "exchange",
+						"type": "(ref shared(T) store, U val)",
+						"endchar": 1,
+						"endline": 49
+					}
+				],
+				"name": "exchange",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L52_C1)\n---\nshared(int) n = 1;\nauto temp = exchange(n, 10);\nassert(n == 10);\nassert(temp == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L52_C1)\n"
+			},
+			{
+				"kind": "class",
+				"line": 61,
+				"char": 1,
+				"members": [
+					{
+						"line": 65,
+						"kind": "constructor",
+						"originalType": "()",
+						"char": 5,
+						"name": "this",
+						"deco": "FZC2rx4util11EventSignal",
+						"endchar": 5,
+						"endline": 69,
+						"comment": "\n"
+					},
+					{
+						"line": 73,
+						"kind": "function",
+						"char": 10,
+						"name": "signal",
+						"deco": "FNdZb",
+						"endchar": 5,
+						"endline": 79,
+						"comment": "\n"
+					},
+					{
+						"line": 83,
+						"kind": "function",
+						"char": 10,
+						"name": "setSignal",
+						"deco": "FZv",
+						"endchar": 5,
+						"endline": 90,
+						"comment": "\n"
+					},
+					{
+						"line": 93,
+						"kind": "function",
+						"char": 10,
+						"name": "wait",
+						"deco": "FZv",
+						"endchar": 5,
+						"endline": 101,
+						"comment": "\n"
+					}
+				],
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L110_C1)\n---\nauto event = new EventSignal;\nassert(!event.signal);\nevent.setSignal();\nassert(event.signal);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L110_C1)\n",
+				"name": "EventSignal"
+			},
+			{
+				"line": 119,
+				"kind": "class",
+				"char": 16,
+				"members": [
+					{
+						"parameters": [
+							{
+								"deco": "k",
+								"name": "n"
+							}
+						],
+						"line": 123,
+						"kind": "constructor",
+						"originalType": "shared (size_t n)",
+						"char": 5,
+						"name": "this",
+						"deco": "OFkZOC2rx4util13AtomicCounter",
+						"endchar": 5,
+						"endline": 126,
+						"comment": "\n"
+					},
+					{
+						"line": 130,
+						"kind": "function",
+						"char": 10,
+						"name": "isZero",
+						"deco": "OFNdZb",
+						"endchar": 5,
+						"endline": 133,
+						"comment": "\n"
+					},
+					{
+						"line": 136,
+						"kind": "function",
+						"char": 10,
+						"name": "tryUpdateCount",
+						"deco": "OFNeZb",
+						"endchar": 5,
+						"endline": 151,
+						"comment": "\n"
+					},
+					{
+						"storageClass": [
+							"auto"
+						],
+						"line": 154,
+						"kind": "function",
+						"originalType": "shared @trusted ()",
+						"char": 10,
+						"name": "tryDecrement",
+						"deco": "OFNeZS2rx4util13AtomicCounter12tryDecrementMOFNeZ15DecrementResult",
+						"endchar": 5,
+						"endline": 175,
+						"comment": "\n"
+					},
+					{
+						"line": 178,
+						"kind": "function",
+						"char": 10,
+						"name": "trySetZero",
+						"deco": "OFNeZb",
+						"endchar": 5,
+						"endline": 190,
+						"comment": "\n"
+					}
+				],
+				"name": "AtomicCounter",
+				"protection": "package",
+				"comment": "\n"
+			},
+			{
+				"kind": "class",
+				"line": 197,
+				"char": 8,
+				"members": [
+					{
+						"line": 201,
+						"kind": "function",
+						"char": 10,
+						"name": "stamp",
+						"deco": "OFZb",
+						"endchar": 5,
+						"endline": 204,
+						"comment": "\n"
+					},
+					{
+						"line": 208,
+						"kind": "function",
+						"char": 10,
+						"name": "isStamped",
+						"deco": "OFNdZb",
+						"endchar": 5,
+						"endline": 211,
+						"comment": "\n"
+					}
+				],
+				"comment": "\n",
+				"name": "TicketBase"
+			},
+			{
+				"kind": "alias",
+				"line": 218,
+				"char": 1,
+				"deco": "OC2rx4util10TicketBase",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L221_C1)\n---\nauto t = new Ticket;\nassert(!t.isStamped);\nassert(t.stamp());\nassert(t.isStamped);\nassert(!t.stamp());\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L221_C1)\n",
+				"name": "Ticket"
+			}
+		],
 		"comment": " This module is a utility for some implements at internals.\n",
 		"name": "rx.util"
 	}
