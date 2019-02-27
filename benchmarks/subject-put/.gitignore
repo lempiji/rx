@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/subscribers
+subscribers.so
+subscribers.dylib
+subscribers.dll
+subscribers.a
+subscribers.lib
+subscribers-test-*
+*.exe
+*.o
+*.obj
+*.lst
