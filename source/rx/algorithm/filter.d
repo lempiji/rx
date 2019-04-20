@@ -19,66 +19,7 @@ template filter(alias pred)
 {
     auto filter(TObservable)(auto ref TObservable observable)
     {
-        static struct FilterObservable
-        {
-            alias ElementType = TObservable.ElementType;
-
-        public:
-            this(TObservable observable)
-            {
-                _observable = observable;
-            }
-
-        public:
-            auto subscribe(TObserver)(TObserver observer)
-            {
-                static struct FilterObserver
-                {
-                    mixin SimpleObserverImpl!(TObserver, ElementType);
-
-                public:
-                    this(TObserver observer)
-                    {
-                        _observer = observer;
-                    }
-
-                    static if (hasCompleted!TObserver || hasFailure!TObserver)
-                    {
-                        this(TObserver observer, Disposable disposable)
-                        {
-                            _observer = observer;
-                            _disposable = disposable;
-                        }
-                    }
-
-                private:
-                    void putImpl(ElementType obj)
-                    {
-                        alias fun = unaryFun!pred;
-                        if (fun(obj))
-                            .put(_observer, obj);
-                    }
-                }
-
-                alias ObserverType = FilterObserver;
-                static if (hasCompleted!TObserver || hasFailure!TObserver)
-                {
-                    auto disposable = new SingleAssignmentDisposable;
-                    disposable.setDisposable(disposableObject(doSubscribe(_observable,
-                            FilterObserver(observer, disposable))));
-                    return disposable;
-                }
-                else
-                {
-                    return doSubscribe(_observable, FilterObserver(observer));
-                }
-            }
-
-        private:
-            TObservable _observable;
-        }
-
-        return FilterObservable(observable);
+        return FilterObservable!(pred, TObservable)(observable);
     }
 }
 
@@ -155,7 +96,8 @@ unittest
 
             auto sub = new SubjectObject!int;
             auto sum = 0;
-            auto d = sub.filter!(a => a.length > 0).doSubscribe!(n => sum += n); //a.length can not compile
+            auto d = sub.filter!(a => a.length > 0)
+            .doSubscribe!(n => sum += n); //a.length can not compile
         }));
 }
 
@@ -166,7 +108,8 @@ unittest
     auto sub = new SubjectObject!int;
 
     auto sum = 0;
-    auto d = sub.filter!(a => a > 0).doSubscribe!(n => sum += n);
+    auto d = sub.filter!(a => a > 0)
+        .doSubscribe!(n => sum += n);
     scope (exit)
         d.dispose();
 
@@ -176,4 +119,66 @@ unittest
     .put(sub, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
     assert(sum == 55);
+}
+
+///
+struct FilterObservable(alias pred, TObservable)
+{
+    alias ElementType = TObservable.ElementType;
+
+public:
+    ///
+    this(TObservable observable)
+    {
+        _observable = observable;
+    }
+
+public:
+    ///
+    auto subscribe(TObserver)(TObserver observer)
+    {
+        alias ObserverType = FilterObserver!(pred, TObserver, ElementType);
+        static if (hasCompleted!TObserver || hasFailure!TObserver)
+        {
+            auto disposable = new SingleAssignmentDisposable;
+            disposable.setDisposable(disposableObject(doSubscribe(_observable,
+                    ObserverType(observer, disposable))));
+            return disposable;
+        }
+        else
+        {
+            return doSubscribe(_observable, ObserverType(observer));
+        }
+    }
+
+private:
+    TObservable _observable;
+}
+
+struct FilterObserver(alias pred, TObserver, E)
+{
+    mixin SimpleObserverImpl!(TObserver, E);
+
+public:
+    this(TObserver observer)
+    {
+        _observer = observer;
+    }
+
+    static if (hasCompleted!TObserver || hasFailure!TObserver)
+    {
+        this(TObserver observer, Disposable disposable)
+        {
+            _observer = observer;
+            _disposable = disposable;
+        }
+    }
+
+private:
+    void putImpl(E obj)
+    {
+        alias fun = unaryFun!pred;
+        if (fun(obj))
+            .put(_observer, obj);
+    }
 }
