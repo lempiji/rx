@@ -767,3 +767,29 @@ unittest
     .put(subject, 10);
     assert(num == 1);
 }
+
+///
+auto asBehaviorSubject(TObservable)(auto ref TObservable observable)
+{
+    alias E = TObservable.ElementType;
+    auto subject = new BehaviorSubject!E;
+    observable.doSubscribe(subject);
+    return subject;
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto num1 = new BehaviorSubject!int;
+    auto num2 = new BehaviorSubject!int;
+
+    BehaviorSubject!int sum = combineLatest!((l, r) => l + r)(num1, num2).asBehaviorSubject();
+
+    assert(sum.value == 0);
+    num1.value = 10;
+    assert(sum.value == 10);
+    num2.value = 20;
+    assert(sum.value == 30);
+}
