@@ -25,6 +25,27 @@
 				"dub run ddox --arch=x86_mscoff -- generate-html docs.json docs",
 				"del __dummy.html"
 			]
+		},
+		{
+			"name": "diff",
+			"postGenerateCommands": [
+				"dub build -c makedeps -f",
+				"dub fetch ddeps",
+				"dub run ddeps -- --focus=rx --output=deps.dot",
+				"dot -Tsvg -odeps.svg deps.dot",
+				"dot -Tpng -odeps.png deps.dot"
+			]
+		},
+		{
+			"name": "diff-update",
+			"postGenerateCommands": [
+				"dub fetch ddeps",
+				"dub run ddeps -- --update"
+			]
+		},
+		{
+			"name": "makedeps",
+			"dflags": ["-deps=deps.txt"]
 		}
 	]
 }
