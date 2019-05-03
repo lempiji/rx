@@ -412,14 +412,90 @@
 								"name": "filter",
 								"type": "(auto ref TObservable observable)",
 								"endchar": 5,
-								"endline": 82
+								"endline": 23
 							}
 						],
 						"name": "filter"
 					}
 				],
 				"name": "filter",
-				"comment": "Implements the higher order filter function. The predicate is passed to std.functional.unaryFun, and can either accept a string, or any callable that can be executed via pred(element).\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L86_C1)\n---\nimport rx.subject : Subject, SubjectObject;\nimport std.array : appender;\n\nSubject!int sub = new SubjectObject!int;\nauto filtered = sub.filter!(n => n % 2 == 0);\nauto buffer = appender!(int[])();\nauto disposable = filtered.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L86_C1)\n"
+				"comment": "Implements the higher order filter function. The predicate is passed to std.functional.unaryFun, and can either accept a string, or any callable that can be executed via pred(element).\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L27_C1)\n---\nimport rx.subject : Subject, SubjectObject;\nimport std.array : appender;\n\nSubject!int sub = new SubjectObject!int;\nauto filtered = sub.filter!(n => n % 2 == 0);\nauto buffer = appender!(int[])();\nauto disposable = filtered.subscribe(buffer);\nscope (exit)\n    disposable.dispose();\n\nsub.put(0);\nsub.put(1);\nsub.put(2);\nsub.put(3);\n\nimport std.algorithm : equal;\n\nassert(equal(buffer.data, [0, 2][]));\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L27_C1)\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "alias",
+						"name": "pred"
+					},
+					{
+						"kind": "type",
+						"name": "TObservable"
+					}
+				],
+				"line": 125,
+				"kind": "template",
+				"char": 1,
+				"members": [
+					{
+						"kind": "struct",
+						"char": 1,
+						"members": [
+							{
+								"parameters": [
+									{
+										"type": "TObservable",
+										"name": "observable"
+									}
+								],
+								"line": 131,
+								"kind": "constructor",
+								"char": 5,
+								"name": "this",
+								"type": "(TObservable observable)",
+								"endchar": 5,
+								"endline": 134,
+								"comment": "\n"
+							},
+							{
+								"parameters": [
+									{
+										"kind": "type",
+										"name": "TObserver"
+									}
+								],
+								"line": 138,
+								"kind": "template",
+								"char": 10,
+								"members": [
+									{
+										"storageClass": [
+											"auto"
+										],
+										"parameters": [
+											{
+												"type": "TObserver",
+												"name": "observer"
+											}
+										],
+										"line": 138,
+										"kind": "function",
+										"char": 10,
+										"name": "subscribe",
+										"type": "(TObserver observer)",
+										"endchar": 5,
+										"endline": 152
+									}
+								],
+								"name": "subscribe",
+								"comment": "\n"
+							}
+						],
+						"line": 125,
+						"name": "FilterObservable"
+					}
+				],
+				"name": "FilterObservable",
+				"comment": "\n"
 			}
 		],
 		"comment": " This module defines algorithm 'filter'\n",
@@ -3646,6 +3722,215 @@
 				],
 				"name": "BehaviorSubject",
 				"comment": "\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
+						"name": "TObservable"
+					}
+				],
+				"line": 772,
+				"kind": "template",
+				"char": 6,
+				"members": [
+					{
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								],
+								"name": "observable"
+							}
+						],
+						"line": 772,
+						"kind": "function",
+						"char": 6,
+						"name": "asBehaviorSubject",
+						"type": "(auto ref TObservable observable)",
+						"endchar": 1,
+						"endline": 778
+					}
+				],
+				"name": "asBehaviorSubject",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L781_C1)\n---\nimport rx;\n\nauto num1 = new BehaviorSubject!int;\nauto num2 = new BehaviorSubject!int;\n\nBehaviorSubject!int sum = combineLatest!((l, r) => l + r)(num1, num2).asBehaviorSubject();\n\nassert(sum.value == 0);\nnum1.value = 10;\nassert(sum.value == 10);\nnum2.value = 20;\nassert(sum.value == 30);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L781_C1)\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
+						"name": "E"
+					}
+				],
+				"line": 798,
+				"kind": "template",
+				"char": 1,
+				"members": [
+					{
+						"kind": "class",
+						"char": 1,
+						"members": [
+							{
+								"parameters": [
+									{
+										"type": "size_t",
+										"name": "bufferSize"
+									}
+								],
+								"line": 807,
+								"kind": "constructor",
+								"char": 5,
+								"name": "this",
+								"type": "(size_t bufferSize)",
+								"endchar": 5,
+								"endline": 811,
+								"comment": "\n"
+							},
+							{
+								"parameters": [
+									{
+										"kind": "type",
+										"name": "TObserver"
+									}
+								],
+								"line": 815,
+								"kind": "template",
+								"char": 16,
+								"members": [
+									{
+										"parameters": [
+											{
+												"type": "TObserver",
+												"storageClass": [
+													"auto",
+													"ref"
+												],
+												"name": "observer"
+											}
+										],
+										"line": 815,
+										"kind": "function",
+										"char": 16,
+										"name": "subscribe",
+										"type": "Disposable(auto ref TObserver observer)",
+										"endchar": 5,
+										"endline": 822
+									}
+								],
+								"name": "subscribe",
+								"comment": "\n"
+							},
+							{
+								"parameters": [
+									{
+										"type": "Observer!E",
+										"name": "observer"
+									}
+								],
+								"line": 825,
+								"kind": "function",
+								"char": 16,
+								"name": "subscribe",
+								"type": "Disposable(Observer!E observer)",
+								"endchar": 5,
+								"endline": 832,
+								"comment": "\n"
+							},
+							{
+								"parameters": [
+									{
+										"type": "E",
+										"name": "obj"
+									}
+								],
+								"line": 835,
+								"kind": "function",
+								"char": 10,
+								"name": "put",
+								"type": "void(E obj)",
+								"endchar": 5,
+								"endline": 840,
+								"comment": "\n"
+							},
+							{
+								"line": 843,
+								"kind": "function",
+								"char": 10,
+								"name": "completed",
+								"type": "void()",
+								"endchar": 5,
+								"endline": 847,
+								"comment": "\n"
+							},
+							{
+								"parameters": [
+									{
+										"type": "Exception",
+										"name": "e"
+									}
+								],
+								"line": 850,
+								"kind": "function",
+								"char": 10,
+								"name": "failure",
+								"type": "void(Exception e)",
+								"endchar": 5,
+								"endline": 854,
+								"comment": "\n"
+							}
+						],
+						"line": 798,
+						"name": "ReplaySubject"
+					}
+				],
+				"name": "ReplaySubject",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L858_C1)\n---\nauto sub = new ReplaySubject!int(1);\n.put(sub, 1);\n\nint[] buf;\nauto d = sub.doSubscribe!(v => buf ~= v);\nscope (exit)\n    d.dispose();\n\nassert(buf.length == 1);\nassert(buf[0] == 1);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L858_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L873_C1)\n---\nauto sub = new ReplaySubject!int(1);\n.put(sub, 1);\n.put(sub, 2);\n\nint[] buf;\nauto d = sub.doSubscribe!(v => buf ~= v);\nscope (exit)\n    d.dispose();\n\nassert(buf == [2]);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L873_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L888_C1)\n---\nauto sub = new ReplaySubject!int(2);\n.put(sub, 1);\n.put(sub, 2);\n.put(sub, 3);\n\nint[] buf;\nauto d = sub.doSubscribe!(v => buf ~= v);\nscope (exit)\n    d.dispose();\n\nassert(buf == [2, 3]);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L888_C1)\n"
+			},
+			{
+				"parameters": [
+					{
+						"kind": "type",
+						"name": "TObservable"
+					}
+				],
+				"line": 1144,
+				"kind": "template",
+				"char": 6,
+				"members": [
+					{
+						"storageClass": [
+							"auto"
+						],
+						"parameters": [
+							{
+								"type": "TObservable",
+								"storageClass": [
+									"auto",
+									"ref"
+								],
+								"name": "observable"
+							},
+							{
+								"type": "size_t",
+								"name": "bufferSize"
+							}
+						],
+						"line": 1144,
+						"kind": "function",
+						"char": 6,
+						"name": "asReplaySubject",
+						"type": "(auto ref TObservable observable, size_t bufferSize)",
+						"endchar": 1,
+						"endline": 1150
+					}
+				],
+				"name": "asReplaySubject",
+				"comment": "\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L1153_C1)\n---\nimport rx;\n\nauto sub = defer!(int, (observer) {\n    observer.put(10);\n    observer.put(20);\n    observer.put(30);\n    observer.completed();\n    return NopDisposable.instance;\n});\n\nReplaySubject!int nums = sub.asReplaySubject(4);\n\nint[] data;\nnums.doSubscribe!(x => data ~= x);\n\nassert(data == [10, 20, 30]);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L1153_C1)\nExample:\n$(DDOX_UNITTEST_HEADER __unittest_L1174_C1)\n---\nimport rx;\n\nauto sub = defer!(int, (observer) {\n    observer.put(10);\n    observer.put(20);\n    observer.put(30);\n    observer.failure(null);\n    return NopDisposable.instance;\n});\n\nReplaySubject!int nums = sub.asReplaySubject(2);\n\nint[] data;\nnums.doSubscribe!(x => data ~= x);\n\nassert(data == [20, 30]);\n\n---\n$(DDOX_UNITTEST_FOOTER __unittest_L1174_C1)\n"
 			}
 		],
 		"comment": " This module defines the Subject and some implements.\n",

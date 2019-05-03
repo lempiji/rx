@@ -20,6 +20,9 @@
 <url><loc>http://127.0.0.1/rx/algorithm/filter.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/filter/filter.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/filter/filter.filter.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/filter/FilterObservable.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/filter/FilterObservable.subscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/algorithm/filter/FilterObservable.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/fold.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/fold/fold.html</loc></url>
 <url><loc>http://127.0.0.1/rx/algorithm/groupby.html</loc></url>
@@ -156,6 +159,8 @@
 <url><loc>http://127.0.0.1/rx/scheduler/TaskPoolScheduler.html</loc></url>
 <url><loc>http://127.0.0.1/rx/scheduler/ThreadScheduler.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/asBehaviorSubject.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/asReplaySubject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/AsyncSubject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/AsyncSubject.completed.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/AsyncSubject.failure.html</loc></url>
@@ -173,6 +178,13 @@
 <url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.value.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/BehaviorSubject.value.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/ReplaySubject.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/ReplaySubject.completed.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/ReplaySubject.failure.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/ReplaySubject.put.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/ReplaySubject.subscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/ReplaySubject.subscribe.html</loc></url>
+<url><loc>http://127.0.0.1/rx/subject/ReplaySubject.this.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/Subject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.html</loc></url>
 <url><loc>http://127.0.0.1/rx/subject/SubjectObject.completed.html</loc></url>
