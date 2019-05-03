@@ -125,8 +125,8 @@ dub build -c ddox
 - generic observable factory
     - create, start, timer, interval
 - more subjects
-    - publish, replay
+    - publish, replay, connectable
 - more algorithms
-    - window, zip
+    - window, zip, multicast
 - more test
 - more documents
