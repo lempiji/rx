@@ -42,6 +42,10 @@ digraph {
         "std.typecons"
         "std.typetuple"
     }
+    {
+        node [style=filled color="#bef5cb" fillcolor="#e6ffed"];
+        "rx.range.takeUntil"
+    }
     "rx" -> "rx.algorithm";
     "rx" -> "rx.disposable";
     "rx" -> "rx.observable";
@@ -189,4 +193,9 @@ digraph {
     "rx.util" -> "core.atomic";
     "rx.util" -> "core.sync.condition";
     "rx.util" -> "core.sync.mutex";
+    "rx.range.takeUntil" -> "rx.disposable" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "rx.observable" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "rx.observer" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "rx.util" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "std.range" [color="#2cbe4e"];
 }
