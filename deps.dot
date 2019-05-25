@@ -193,6 +193,7 @@ digraph {
     "rx.util" -> "core.atomic";
     "rx.util" -> "core.sync.condition";
     "rx.util" -> "core.sync.mutex";
+    "rx.range" -> "rx.range.takeUntil" [color="#2cbe4e"];
     "rx.range.takeUntil" -> "rx.disposable" [color="#2cbe4e"];
     "rx.range.takeUntil" -> "rx.observable" [color="#2cbe4e"];
     "rx.range.takeUntil" -> "rx.observer" [color="#2cbe4e"];
