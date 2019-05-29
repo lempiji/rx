@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-110454541-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-110454541-2');
+	</script>
+
+        <title>observableObject (rx.observable.observableObject)</title>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link rel="stylesheet" href="style.css" />
+        <script type="text/javascript" src="script.js"></script>
+
+	
+	<link rel="prefetch" href="search-results.html" />
+</head>
+<body>
+	<div id="page-header">
+		<div id="logotype">
+		<span>Documentation</span>
+		<nav>
+			<a href="http://dlang.org/">Dlang.org</a>
+		</nav>
+		</div>
+
+		<form action="search-docs.html" id="search">
+			<input type="search" placeholder="Find a symbol name..." name="searchTerm" />
+			<input type="submit" value="Go" />
+		</form>
+	</div>
+	<div id="page-body">
+		<div id="page-content">
+		<h1>observableObject</h1><div class="breadcrumbs"><a href="rx.html" class="breadcrumb">rx</a><a href="rx.observable.html" class="breadcrumb">observable</a></div><div><div class="documentation-comment synopsis"><div><p>Wraps subscribe method in virtual function.</p></div></div></div><div class="annotated-prototype"><div class="function-prototype"><div class="parent-prototype"><span class="builtin-type">template</span> <span class="name">observableObject</span><span class="template-params">(E)</span></div><div><div class="attributes"></div><div class="return-type"><a data-ident="Observable" href="rx.observable.Observable.html" title="rx.observable.Observable" class="name">Observable</a>!<span data-ident="E" class="name">E</span></div><div class="function-name">observableObject</div><div class="template-parameters">(<div class="parameters-list toplevel"><div class="template-parameter-item parameter-item">	<span><span data-ident="R" class="name">R</span></span></div></div>)</div><div class="runtime-parameters">(<div class="parameters-list toplevel"><div class="runtime-parameter-item parameter-item"><span class="parameter-type-holder"><span class="parameter-type"><span class="storage-class">auto</span> <span class="storage-class">ref</span> <span data-ident="R" class="name">R</span></span></span> <span data-ident="observable" class="parameter-name name"><a href="#param-observable">observable</a></span></div></div>)</div><div class="function-contracts"></div></div></div></div><div><h2 id="examples"><a href="#examples" class="header-anchor">Examples</a></h2><div class="documentation-comment"><div></div></div><div class="unittest-example-holder"><div class="documentation-comment"></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="type">int</span> <span class="hid">subscribeCount</span> = <span class="num">0</span>;
+<span class="br">2 </span><span class="kwrd">class</span> <span class="hid">TestObservable</span> : <span class="hid">Observable</span>!<span class="type">int</span>
+<span class="br">3 </span>{
+<span class="br">4 </span>    <span class="hid">Disposable</span> <span class="hid">subscribe</span>(<span class="hid">Observer</span>!<span class="type">int</span> <span class="hid">observer</span>)
+<span class="br">5 </span>    {
+<span class="br">6 </span>        <span class="hid">subscribeCount</span>++;
+<span class="br">7 </span>        <span class="kwrd">return</span> <span class="hid">NopDisposable</span>.<span class="hid">instance</span>;
+<span class="br">8 </span>    }
+<span class="br">9 </span>}
+<span class="br">10 </span>
+<span class="br">11 </span><span class="kwrd">auto</span> <span class="hid">test</span> = <span class="kwrd">new</span> <span class="hid">TestObservable</span>;
+<span class="br">12 </span><span class="kwrd">auto</span> <span class="hid">observable</span> = <span class="hid">observableObject</span>!<span class="type">int</span>(<span class="hid">test</span>);
+<span class="br">13 </span><span class="kwrd">assert</span>(<span class="hid">observable</span> <span class="kwrd">is</span> <span class="hid">test</span>);
+<span class="br">14 </span><span class="kwrd">assert</span>(<span class="hid">subscribeCount</span> == <span class="num">0</span>);
+<span class="br">15 </span><span class="kwrd">auto</span> <span class="hid">d</span> = <span class="hid">observable</span>.<span class="hid">subscribe</span>(<span class="kwrd">null</span>);
+<span class="br">16 </span><span class="kwrd">assert</span>(<span class="hid">subscribeCount</span> == <span class="num">1</span>);</pre></div></div></div>
+		<div id="page-nav"><a href="rx.html" class="parent">rx</a><a href="rx.observable.html" class="parent">observable</a>
+		<span class="type-separator">aliases</span><ul><li><a href="rx.observable.asObservable.html" class="alias">asObservable</a></li></ul><span class="type-separator">classes</span><ul><li><a href="rx.observable.ObservableObject.html" class="class">ObservableObject</a></li></ul><span class="type-separator">functions</span><ul><li><a href="rx.observable.defer.html" class="function">defer</a></li><li><a href="rx.observable.doSubscribe.1.html" class="function">doSubscribe</a></li><li><a href="rx.observable.empty.html" class="function">empty</a></li><li><a href="rx.observable.error.html" class="function">error</a></li><li><a href="rx.observable.from.html" class="function">from</a></li><li><a href="rx.observable.never.html" class="function">never</a></li></ul><span class="type-separator">interfaces</span><ul><li><a href="rx.observable.Observable.html" class="interface">Observable</a></li></ul><span class="type-separator">templates</span><ul><li><a href="rx.observable.isObservable.1.html" class="template">isObservable</a></li><li><a href="rx.observable.isSubscribable.html" class="template">isSubscribable</a></li><li><a href="rx.observable.observableObject.html" class="template current">observableObject</a></li></ul></div>
+	</div>
+	<div id="page-footer">Page generated by <a href="https://github.com/adamdruppe/adrdox">adrdox</a></div>
+</body>
+</html>

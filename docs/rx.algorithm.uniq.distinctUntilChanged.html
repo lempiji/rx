@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-110454541-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-110454541-2');
+	</script>
+
+        <title>distinctUntilChanged (rx.algorithm.uniq.distinctUntilChanged)</title>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link rel="stylesheet" href="style.css" />
+        <script type="text/javascript" src="script.js"></script>
+
+	
+	<link rel="prefetch" href="search-results.html" />
+</head>
+<body>
+	<div id="page-header">
+		<div id="logotype">
+		<span>Documentation</span>
+		<nav>
+			<a href="http://dlang.org/">Dlang.org</a>
+		</nav>
+		</div>
+
+		<form action="search-docs.html" id="search">
+			<input type="search" placeholder="Find a symbol name..." name="searchTerm" />
+			<input type="submit" value="Go" />
+		</form>
+	</div>
+	<div id="page-body">
+		<div id="page-content">
+		<h1>distinctUntilChanged</h1><div class="breadcrumbs"><a href="rx.html" class="breadcrumb">rx</a><a href="rx.algorithm.html" class="breadcrumb">algorithm</a><a href="rx.algorithm.uniq.html" class="breadcrumb">uniq</a></div><div><div class="documentation-comment synopsis"><div></div></div></div><div class="annotated-prototype"><ol class="overloads"><li class="overload-option ditto-option"><a href="rx.algorithm.uniq.uniq.html"><span class="overload-signature"><span class="builtin-type">template</span> <span class="name">uniq</span><span class="template-params">(alias pred = &quot;a == b&quot;)</span></span></a></li><li class="active-overload-option"><span class="overload-signature"><span class="builtin-type">alias</span> <span class="name">distinctUntilChanged</span> = <tt class="highlighted"><span class="hid">uniq</span></tt></span><div class="declaration-prototype"><span class="builtin-type">alias</span> <span class="name">distinctUntilChanged</span> = <a data-ident="uniq" href="rx.algorithm.uniq.uniq.html" title="rx.algorithm.uniq.uniq" class="name">uniq</a></div></li></ol></div><div><h2 id="examples"><a href="#examples" class="header-anchor">Examples</a></h2><div class="documentation-comment"><div></div></div><div class="unittest-example-holder"><div class="documentation-comment"><p>ditto</p></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="kwrd">import</span> <span class="hid">rx</span>.<span class="hid">subject</span> : <span class="hid">SubjectObject</span>;
+<span class="br">2 </span><span class="kwrd">import</span> <span class="hid">std</span>.<span class="hid">array</span> : <span class="hid">appender</span>;
+<span class="br">3 </span>
+<span class="br">4 </span><span class="kwrd">auto</span> <span class="hid">sub</span> = <span class="kwrd">new</span> <span class="hid">SubjectObject</span>!<span class="type">int</span>;
+<span class="br">5 </span><span class="kwrd">auto</span> <span class="hid">buf</span> = <span class="hid">appender</span>!(<span class="type">int</span>[]);
+<span class="br">6 </span>
+<span class="br">7 </span><span class="kwrd">auto</span> <span class="hid">disposable</span> = <span class="hid">sub</span>.<span class="hid">uniq</span>.<span class="hid">subscribe</span>(<span class="hid">buf</span>);
+<span class="br">8 </span><span class="kwrd">scope</span> (<span class="hid">exit</span>)
+<span class="br">9 </span>    <span class="hid">disposable</span>.<span class="hid">dispose</span>();
+<span class="br">10 </span>
+<span class="br">11 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, [<span class="num">11</span>, <span class="num">11</span>, <span class="num">22</span>, <span class="num">22</span>, <span class="num">33</span>]);
+<span class="br">12 </span>
+<span class="br">13 </span><span class="kwrd">auto</span> <span class="hid">data</span> = <span class="hid">buf</span>.<span class="hid">data</span>;
+<span class="br">14 </span><span class="kwrd">assert</span>(<span class="hid">data</span>.<span class="hid">length</span> == <span class="num">3</span>);
+<span class="br">15 </span><span class="kwrd">assert</span>(<span class="hid">data</span>[<span class="num">0</span>] == <span class="num">11</span>);
+<span class="br">16 </span><span class="kwrd">assert</span>(<span class="hid">data</span>[<span class="num">1</span>] == <span class="num">22</span>);
+<span class="br">17 </span><span class="kwrd">assert</span>(<span class="hid">data</span>[<span class="num">2</span>] == <span class="num">33</span>);</pre></div><div class="unittest-example-holder"><div class="documentation-comment"><p>ditto</p></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="kwrd">import</span> <span class="hid">std</span>.<span class="hid">datetime</span> : <span class="hid">Date</span>;
+<span class="br">2 </span><span class="kwrd">import</span> <span class="hid">rx</span>.<span class="hid">subject</span> : <span class="hid">SubjectObject</span>;
+<span class="br">3 </span><span class="kwrd">import</span> <span class="hid">std</span>.<span class="hid">array</span> : <span class="hid">appender</span>;
+<span class="br">4 </span>
+<span class="br">5 </span><span class="kwrd">auto</span> <span class="hid">sub</span> = <span class="kwrd">new</span> <span class="hid">SubjectObject</span>!<span class="hid">Date</span>;
+<span class="br">6 </span><span class="kwrd">auto</span> <span class="hid">buf</span> = <span class="hid">appender</span>!(<span class="hid">Date</span>[]);
+<span class="br">7 </span>
+<span class="br">8 </span><span class="kwrd">auto</span> <span class="hid">disposable</span> = <span class="hid">sub</span>.<span class="hid">uniq</span>!<span class="str">&quot;a.year == b.year&quot;</span>.<span class="hid">subscribe</span>(<span class="hid">buf</span>);
+<span class="br">9 </span><span class="kwrd">scope</span> (<span class="hid">exit</span>)
+<span class="br">10 </span>    <span class="hid">disposable</span>.<span class="hid">dispose</span>();
+<span class="br">11 </span>
+<span class="br">12 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2000</span>, <span class="num">1</span>, <span class="num">1</span>));
+<span class="br">13 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2000</span>, <span class="num">1</span>, <span class="num">2</span>));
+<span class="br">14 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2017</span>, <span class="num">3</span>, <span class="num">24</span>));
+<span class="br">15 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2017</span>, <span class="num">4</span>, <span class="num">24</span>));
+<span class="br">16 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2017</span>, <span class="num">4</span>, <span class="num">24</span>));
+<span class="br">17 </span>
+<span class="br">18 </span><span class="kwrd">auto</span> <span class="hid">data</span> = <span class="hid">buf</span>.<span class="hid">data</span>;
+<span class="br">19 </span><span class="kwrd">assert</span>(<span class="hid">data</span>.<span class="hid">length</span> == <span class="num">2</span>);
+<span class="br">20 </span><span class="kwrd">assert</span>(<span class="hid">data</span>[<span class="num">0</span>] == <span class="hid">Date</span>(<span class="num">2000</span>, <span class="num">1</span>, <span class="num">1</span>));
+<span class="br">21 </span><span class="kwrd">assert</span>(<span class="hid">data</span>[<span class="num">1</span>] == <span class="hid">Date</span>(<span class="num">2017</span>, <span class="num">3</span>, <span class="num">24</span>));</pre></div><div class="unittest-example-holder"><div class="documentation-comment"><p>ditto</p></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="kwrd">import</span> <span class="hid">std</span>.<span class="hid">datetime</span> : <span class="hid">Date</span>;
+<span class="br">2 </span><span class="kwrd">import</span> <span class="hid">rx</span>.<span class="hid">subject</span> : <span class="hid">SubjectObject</span>;
+<span class="br">3 </span><span class="kwrd">import</span> <span class="hid">std</span>.<span class="hid">array</span> : <span class="hid">appender</span>;
+<span class="br">4 </span>
+<span class="br">5 </span><span class="kwrd">auto</span> <span class="hid">sub</span> = <span class="kwrd">new</span> <span class="hid">SubjectObject</span>!<span class="hid">Date</span>;
+<span class="br">6 </span><span class="kwrd">auto</span> <span class="hid">buf</span> = <span class="hid">appender</span>!(<span class="hid">Date</span>[]);
+<span class="br">7 </span>
+<span class="br">8 </span><span class="kwrd">auto</span> <span class="hid">disposable</span> = <span class="hid">sub</span>.<span class="hid">distinctUntilChanged</span>!<span class="str">&quot;a.year == b.year&quot;</span>.<span class="hid">subscribe</span>(<span class="hid">buf</span>);
+<span class="br">9 </span><span class="kwrd">scope</span> (<span class="hid">exit</span>)
+<span class="br">10 </span>    <span class="hid">disposable</span>.<span class="hid">dispose</span>();
+<span class="br">11 </span>
+<span class="br">12 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2000</span>, <span class="num">1</span>, <span class="num">1</span>));
+<span class="br">13 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2000</span>, <span class="num">1</span>, <span class="num">2</span>));
+<span class="br">14 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2017</span>, <span class="num">3</span>, <span class="num">24</span>));
+<span class="br">15 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2017</span>, <span class="num">4</span>, <span class="num">24</span>));
+<span class="br">16 </span>.<span class="hid">put</span>(<span class="hid">sub</span>, <span class="hid">Date</span>(<span class="num">2017</span>, <span class="num">4</span>, <span class="num">24</span>));
+<span class="br">17 </span>
+<span class="br">18 </span><span class="kwrd">auto</span> <span class="hid">data</span> = <span class="hid">buf</span>.<span class="hid">data</span>;
+<span class="br">19 </span><span class="kwrd">assert</span>(<span class="hid">data</span>.<span class="hid">length</span> == <span class="num">2</span>);
+<span class="br">20 </span><span class="kwrd">assert</span>(<span class="hid">data</span>[<span class="num">0</span>] == <span class="hid">Date</span>(<span class="num">2000</span>, <span class="num">1</span>, <span class="num">1</span>));
+<span class="br">21 </span><span class="kwrd">assert</span>(<span class="hid">data</span>[<span class="num">1</span>] == <span class="hid">Date</span>(<span class="num">2017</span>, <span class="num">3</span>, <span class="num">24</span>));</pre></div></div></div>
+		<div id="page-nav"><a href="rx.html" class="parent">rx</a><a href="rx.algorithm.html" class="parent">algorithm</a><a href="rx.algorithm.uniq.html" class="parent">uniq</a>
+		<span class="type-separator">aliases</span><ul><li><a href="rx.algorithm.uniq.distinctUntilChanged.html" class="alias current">distinctUntilChanged</a></li></ul><span class="type-separator">templates</span><ul><li><a href="rx.algorithm.uniq.uniq.html" class="template">uniq</a></li></ul></div>
+	</div>
+	<div id="page-footer">Page generated by <a href="https://github.com/adamdruppe/adrdox">adrdox</a></div>
+</body>
+</html>

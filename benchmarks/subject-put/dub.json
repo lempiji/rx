@@ -1,0 +1,11 @@
+{
+	"authors": [
+		"lempiji"
+	],
+	"description": "Benchmark for many observers.",
+	"license": "proprietary",
+	"name": "subject-put",
+	"dependencies": {
+		"rx": { "path": "../../" }
+	}
+}

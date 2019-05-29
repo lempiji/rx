@@ -1,0 +1,202 @@
+digraph {
+    {
+        "core.atomic"
+        "core.internal.traits"
+        "core.stdc.string"
+        "core.sync.condition"
+        "core.sync.mutex"
+        "core.thread"
+        "core.time"
+        "rx"
+        "rx.algorithm"
+        "rx.algorithm.all"
+        "rx.algorithm.any"
+        "rx.algorithm.buffer"
+        "rx.algorithm.combineLatest"
+        "rx.algorithm.debounce"
+        "rx.algorithm.filter"
+        "rx.algorithm.fold"
+        "rx.algorithm.groupby"
+        "rx.algorithm.map"
+        "rx.algorithm.merge"
+        "rx.algorithm.scan"
+        "rx.algorithm.tee"
+        "rx.algorithm.uniq"
+        "rx.disposable"
+        "rx.observable"
+        "rx.observer"
+        "rx.range"
+        "rx.range.drop"
+        "rx.range.take"
+        "rx.range.takeLast"
+        "rx.scheduler"
+        "rx.subject"
+        "rx.util"
+        "std.algorithm.internal"
+        "std.concurrency"
+        "std.exception"
+        "std.functional"
+        "std.meta"
+        "std.parallelism"
+        "std.range"
+        "std.typecons"
+        "std.typetuple"
+    }
+    {
+        node [style=filled color="#bef5cb" fillcolor="#e6ffed"];
+        "rx.range.takeUntil"
+    }
+    "rx" -> "rx.algorithm";
+    "rx" -> "rx.disposable";
+    "rx" -> "rx.observable";
+    "rx" -> "rx.observer";
+    "rx" -> "rx.range";
+    "rx" -> "rx.scheduler";
+    "rx" -> "rx.subject";
+    "rx" -> "rx.util";
+    "rx.algorithm" -> "rx.algorithm.all";
+    "rx.algorithm" -> "rx.algorithm.any";
+    "rx.algorithm" -> "rx.algorithm.buffer";
+    "rx.algorithm" -> "rx.algorithm.combineLatest";
+    "rx.algorithm" -> "rx.algorithm.debounce";
+    "rx.algorithm" -> "rx.algorithm.filter";
+    "rx.algorithm" -> "rx.algorithm.fold";
+    "rx.algorithm" -> "rx.algorithm.groupby";
+    "rx.algorithm" -> "rx.algorithm.map";
+    "rx.algorithm" -> "rx.algorithm.merge";
+    "rx.algorithm" -> "rx.algorithm.scan";
+    "rx.algorithm" -> "rx.algorithm.tee";
+    "rx.algorithm" -> "rx.algorithm.uniq";
+    "rx.algorithm.all" -> "rx.disposable";
+    "rx.algorithm.all" -> "rx.observable";
+    "rx.algorithm.all" -> "rx.observer";
+    "rx.algorithm.all" -> "rx.util";
+    "rx.algorithm.all" -> "std.functional";
+    "rx.algorithm.all" -> "std.range";
+    "rx.algorithm.any" -> "rx.disposable";
+    "rx.algorithm.any" -> "rx.observable";
+    "rx.algorithm.any" -> "rx.observer";
+    "rx.algorithm.any" -> "rx.util";
+    "rx.algorithm.any" -> "std.functional";
+    "rx.algorithm.any" -> "std.range";
+    "rx.algorithm.buffer" -> "rx.disposable";
+    "rx.algorithm.buffer" -> "rx.observable";
+    "rx.algorithm.buffer" -> "rx.observer";
+    "rx.algorithm.buffer" -> "std.range";
+    "rx.algorithm.combineLatest" -> "rx.disposable";
+    "rx.algorithm.combineLatest" -> "rx.observable";
+    "rx.algorithm.combineLatest" -> "rx.observer";
+    "rx.algorithm.combineLatest" -> "rx.util";
+    "rx.algorithm.combineLatest" -> "std.meta";
+    "rx.algorithm.combineLatest" -> "std.range";
+    "rx.algorithm.combineLatest" -> "std.typecons";
+    "rx.algorithm.debounce" -> "core.thread";
+    "rx.algorithm.debounce" -> "core.time";
+    "rx.algorithm.debounce" -> "rx.disposable";
+    "rx.algorithm.debounce" -> "rx.observable";
+    "rx.algorithm.debounce" -> "rx.observer";
+    "rx.algorithm.debounce" -> "rx.scheduler";
+    "rx.algorithm.debounce" -> "std.range";
+    "rx.algorithm.filter" -> "rx.disposable";
+    "rx.algorithm.filter" -> "rx.observable";
+    "rx.algorithm.filter" -> "rx.observer";
+    "rx.algorithm.filter" -> "rx.util";
+    "rx.algorithm.filter" -> "std.functional";
+    "rx.algorithm.filter" -> "std.range";
+    "rx.algorithm.fold" -> "rx.disposable";
+    "rx.algorithm.fold" -> "rx.observable";
+    "rx.algorithm.fold" -> "rx.observer";
+    "rx.algorithm.groupby" -> "rx.disposable";
+    "rx.algorithm.groupby" -> "rx.observable";
+    "rx.algorithm.groupby" -> "rx.observer";
+    "rx.algorithm.groupby" -> "rx.subject";
+    "rx.algorithm.groupby" -> "rx.util";
+    "rx.algorithm.groupby" -> "std.functional";
+    "rx.algorithm.groupby" -> "std.range";
+    "rx.algorithm.map" -> "rx.disposable";
+    "rx.algorithm.map" -> "rx.observable";
+    "rx.algorithm.map" -> "rx.observer";
+    "rx.algorithm.map" -> "rx.util";
+    "rx.algorithm.map" -> "std.functional";
+    "rx.algorithm.map" -> "std.range";
+    "rx.algorithm.merge" -> "rx.disposable";
+    "rx.algorithm.merge" -> "rx.observable";
+    "rx.algorithm.merge" -> "rx.observer";
+    "rx.algorithm.merge" -> "rx.util";
+    "rx.algorithm.merge" -> "std.range";
+    "rx.algorithm.scan" -> "rx.disposable";
+    "rx.algorithm.scan" -> "rx.observable";
+    "rx.algorithm.scan" -> "rx.observer";
+    "rx.algorithm.scan" -> "rx.util";
+    "rx.algorithm.scan" -> "std.functional";
+    "rx.algorithm.scan" -> "std.range";
+    "rx.algorithm.scan" -> "std.typecons";
+    "rx.algorithm.tee" -> "rx.disposable";
+    "rx.algorithm.tee" -> "rx.observable";
+    "rx.algorithm.tee" -> "rx.observer";
+    "rx.algorithm.tee" -> "rx.util";
+    "rx.algorithm.tee" -> "std.functional";
+    "rx.algorithm.tee" -> "std.range";
+    "rx.algorithm.uniq" -> "rx.disposable";
+    "rx.algorithm.uniq" -> "rx.observable";
+    "rx.algorithm.uniq" -> "rx.observer";
+    "rx.algorithm.uniq" -> "rx.util";
+    "rx.algorithm.uniq" -> "std.functional";
+    "rx.algorithm.uniq" -> "std.range";
+    "rx.disposable" -> "core.atomic";
+    "rx.disposable" -> "core.internal.traits";
+    "rx.disposable" -> "core.stdc.string";
+    "rx.disposable" -> "core.sync.mutex";
+    "rx.disposable" -> "rx.util";
+    "rx.disposable" -> "std.concurrency";
+    "rx.observable" -> "rx.disposable";
+    "rx.observable" -> "rx.observer";
+    "rx.observable" -> "rx.util";
+    "rx.observable" -> "std.functional";
+    "rx.observable" -> "std.range";
+    "rx.observer" -> "std.range";
+    "rx.observer" -> "std.typetuple";
+    "rx.range" -> "rx.range.drop";
+    "rx.range" -> "rx.range.take";
+    "rx.range" -> "rx.range.takeLast";
+    "rx.range.drop" -> "rx.disposable";
+    "rx.range.drop" -> "rx.observable";
+    "rx.range.drop" -> "rx.observer";
+    "rx.range.drop" -> "rx.util";
+    "rx.range.drop" -> "std.range";
+    "rx.range.take" -> "rx.disposable";
+    "rx.range.take" -> "rx.observable";
+    "rx.range.take" -> "rx.observer";
+    "rx.range.take" -> "rx.util";
+    "rx.range.take" -> "std.range";
+    "rx.range.takeLast" -> "rx.disposable";
+    "rx.range.takeLast" -> "rx.observable";
+    "rx.range.takeLast" -> "rx.observer";
+    "rx.range.takeLast" -> "rx.util";
+    "rx.range.takeLast" -> "std.range";
+    "rx.scheduler" -> "core.internal.traits";
+    "rx.scheduler" -> "core.thread";
+    "rx.scheduler" -> "core.time";
+    "rx.scheduler" -> "rx.disposable";
+    "rx.scheduler" -> "rx.observable";
+    "rx.scheduler" -> "rx.observer";
+    "rx.scheduler" -> "std.algorithm.internal";
+    "rx.scheduler" -> "std.exception";
+    "rx.scheduler" -> "std.parallelism";
+    "rx.scheduler" -> "std.range";
+    "rx.subject" -> "core.atomic";
+    "rx.subject" -> "rx.disposable";
+    "rx.subject" -> "rx.observable";
+    "rx.subject" -> "rx.observer";
+    "rx.subject" -> "rx.util";
+    "rx.subject" -> "std.range";
+    "rx.util" -> "core.atomic";
+    "rx.util" -> "core.sync.condition";
+    "rx.util" -> "core.sync.mutex";
+    "rx.range" -> "rx.range.takeUntil" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "rx.disposable" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "rx.observable" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "rx.observer" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "rx.util" [color="#2cbe4e"];
+    "rx.range.takeUntil" -> "std.range" [color="#2cbe4e"];
+}

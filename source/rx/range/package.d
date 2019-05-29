@@ -3,6 +3,7 @@ module rx.range;
 public import rx.range.drop;
 public import rx.range.take;
 public import rx.range.takeLast;
+public import rx.range.takeUntil;
 
 /+++++++++++++++++++++++++++++
  + Overview

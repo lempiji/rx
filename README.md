@@ -115,9 +115,7 @@ dub test
 
 #### Update documents
 
-```bash
-dub build -c ddox
-```
+Use https://github.com/adamdruppe/adrdox
 
 
 ### Future work
@@ -125,8 +123,8 @@ dub build -c ddox
 - generic observable factory
     - create, start, timer, interval
 - more subjects
-    - publish, replay
+    - publish, connectable
 - more algorithms
-    - window, zip
+    - window, zip, multicast
 - more test
 - more documents

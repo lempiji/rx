@@ -32,11 +32,13 @@ else
 ///
 interface Scheduler
 {
+    ///
     void start(void delegate() op);
 }
 ///
 interface AsyncScheduler : Scheduler
 {
+    ///
     CancellationToken schedule(void delegate() op, Duration val);
 }
 
@@ -44,6 +46,7 @@ interface AsyncScheduler : Scheduler
 class LocalScheduler : Scheduler
 {
 public:
+    ///
     void start(void delegate() op)
     {
         op();
@@ -52,12 +55,14 @@ public:
 ///
 class ThreadScheduler : AsyncScheduler
 {
+    ///
     void start(void delegate() op)
     {
         auto t = new Thread(op);
         t.start();
     }
 
+    ///
     CancellationToken schedule(void delegate() op, Duration val)
     {
         auto target = MonoTime.currTime + val;
@@ -98,6 +103,7 @@ unittest
 class TaskPoolScheduler : AsyncScheduler
 {
 public:
+    ///
     this(TaskPool pool = null)
     {
         if (pool is null)
@@ -107,11 +113,13 @@ public:
     }
 
 public:
+    ///
     void start(void delegate() op)
     {
         _pool.put(task(op));
     }
 
+    ///
     CancellationToken schedule(void delegate() op, Duration val)
     {
         auto target = MonoTime.currTime + val;
@@ -165,6 +173,7 @@ class HistoricalScheduler(T) : AsyncScheduler
     static assert(is(T : AsyncScheduler));
 
 public:
+    ///
     this(T innerScheduler)
     {
         _offset = Duration.zero;
@@ -172,11 +181,13 @@ public:
     }
 
 public:
+    ///
     void start(void delegate() op)
     {
         _innerScheduler.start(op);
     }
 
+    ///
     CancellationToken schedule(void delegate() op, Duration val)
     {
         return _innerScheduler.schedule(op, val - _offset);
@@ -271,6 +282,7 @@ struct ObserveOnObserver(TObserver, TScheduler, E)
 public:
     static if (hasFailure!TObserver)
     {
+        ///
         this(TObserver observer, TScheduler scheduler, Disposable disposable)
         {
             _observer = observer;
@@ -280,6 +292,7 @@ public:
     }
     else
     {
+        ///
         this(TObserver observer, TScheduler scheduler)
         {
             _observer = observer;
@@ -287,6 +300,7 @@ public:
         }
     }
 public:
+    ///
     void put(E obj)
     {
         _scheduler.start({
@@ -311,6 +325,7 @@ public:
 
     static if (hasCompleted!TObserver)
     {
+        ///
         void completed()
         {
             _scheduler.start({ _observer.completed(); });
@@ -318,6 +333,7 @@ public:
     }
     static if (hasFailure!TObserver)
     {
+        ///
         void failure(Exception e)
         {
             _scheduler.start({ _observer.failure(e); });
@@ -337,6 +353,7 @@ struct ObserveOnObservable(TObservable, TScheduler : Scheduler)
 {
     alias ElementType = TObservable.ElementType;
 public:
+    ///
     this(TObservable observable, TScheduler scheduler)
     {
         _observable = observable;
@@ -344,6 +361,7 @@ public:
     }
 
 public:
+    ///
     auto subscribe(TObserver)(TObserver observer)
     {
         alias ObserverType = ObserveOnObserver!(TObserver, TScheduler, TObservable.ElementType);
@@ -492,6 +510,7 @@ class SubscribeOnObservable(TObservable, TScheduler : Scheduler)
     alias ElementType = TObservable.ElementType;
 
 public:
+    ///
     this(TObservable observable, TScheduler scheduler)
     {
         _observable = observable;
@@ -499,6 +518,7 @@ public:
     }
 
 public:
+    ///
     auto subscribe(TObserver)(TObserver observer)
     {
         auto disposable = new SingleAssignmentDisposable;

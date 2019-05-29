@@ -767,3 +767,426 @@ unittest
     .put(subject, 10);
     assert(num == 1);
 }
+
+///
+auto asBehaviorSubject(TObservable)(auto ref TObservable observable)
+{
+    alias E = TObservable.ElementType;
+    auto subject = new BehaviorSubject!E;
+    observable.doSubscribe(subject);
+    return subject;
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto num1 = new BehaviorSubject!int;
+    auto num2 = new BehaviorSubject!int;
+
+    BehaviorSubject!int sum = combineLatest!((l, r) => l + r)(num1, num2).asBehaviorSubject();
+
+    assert(sum.value == 0);
+    num1.value = 10;
+    assert(sum.value == 10);
+    num2.value = 20;
+    assert(sum.value == 30);
+}
+
+///
+class ReplaySubject(E) : Subject!E
+{
+private:
+    RingBuffer!E _buffer;
+    SubjectObject!E _subject;
+    bool _completed;
+
+public:
+    ///
+    this(size_t bufferSize)
+    {
+        _buffer = RingBuffer!E(bufferSize);
+        _subject = new SubjectObject!E;
+    }
+
+public:
+    ///
+    Disposable subscribe(TObserver)(auto ref TObserver observer)
+    {
+        .put(observer, _buffer[]);
+        if (_completed)
+            return NopDisposable.instance;
+        else
+            return _subject.doSubscribe(observer).disposableObject();
+    }
+
+    ///
+    Disposable subscribe(Observer!E observer)
+    {
+        .put(observer, _buffer[]);
+        if (_completed)
+            return NopDisposable.instance;
+        else
+            return disposableObject(_subject.doSubscribe(observer));
+    }
+
+    ///
+    void put(E obj)
+    {
+        if (_completed) return;
+        .put(_buffer, obj);
+        .put(_subject, obj);
+    }
+
+    ///
+    void completed()
+    {
+        _completed = true;
+        _subject.completed();
+    }
+
+    ///
+    void failure(Exception e)
+    {
+        _completed = true;
+        _subject.failure(e);
+    }
+}
+
+///
+unittest
+{
+    auto sub = new ReplaySubject!int(1);
+    .put(sub, 1);
+
+    int[] buf;
+    auto d = sub.doSubscribe!(v => buf ~= v);
+    scope (exit)
+        d.dispose();
+
+    assert(buf.length == 1);
+    assert(buf[0] == 1);
+}
+
+///
+unittest
+{
+    auto sub = new ReplaySubject!int(1);
+    .put(sub, 1);
+    .put(sub, 2);
+
+    int[] buf;
+    auto d = sub.doSubscribe!(v => buf ~= v);
+    scope (exit)
+        d.dispose();
+
+    assert(buf == [2]);
+}
+
+///
+unittest
+{
+    auto sub = new ReplaySubject!int(2);
+    .put(sub, 1);
+    .put(sub, 2);
+    .put(sub, 3);
+
+    int[] buf;
+    auto d = sub.doSubscribe!(v => buf ~= v);
+    scope (exit)
+        d.dispose();
+
+    assert(buf == [2, 3]);
+}
+
+unittest
+{
+    auto sub = new ReplaySubject!int(2);
+    .put(sub, 1);
+
+    int[] buf;
+    auto d = sub.doSubscribe!(v => buf ~= v);
+    scope (exit)
+        d.dispose();
+
+    .put(sub, 2);
+
+    assert(buf.length == 2);
+    assert(buf[0] == 1);
+    assert(buf[1] == 2);
+}
+
+unittest
+{
+    auto sub = new ReplaySubject!int(2);
+    .put(sub, 1);
+    sub.completed();
+    .put(sub, 2);
+
+    int[] buf;
+    sub.doSubscribe!(v => buf ~= v);
+
+    assert(buf == [1]);
+}
+
+unittest
+{
+    auto sub = new ReplaySubject!int(2);
+    .put(sub, 1);
+    .put(sub, 2);
+    .put(sub, 3);
+    sub.completed();
+    .put(sub, 4);
+
+    int[] buf;
+    sub.doSubscribe!(v => buf ~= v);
+
+    assert(buf == [2, 3]);
+}
+
+unittest
+{
+    auto sub = new ReplaySubject!int(2);
+    .put(sub, 1);
+    .put(sub, 2);
+    .put(sub, 3);
+    sub.failure(null);
+    .put(sub, 4);
+
+    int[] buf;
+    sub.doSubscribe!(v => buf ~= v);
+
+    assert(buf == [2, 3]);
+}
+
+private struct RingBuffer(T)
+{
+    T[] buffer;
+    size_t pos;
+    size_t count;
+
+    this(size_t n)
+    {
+        buffer.length = n;
+    }
+
+    void put(T obj)
+    {
+        import std.algorithm : min;
+
+        buffer[pos] = obj;
+        pos = (pos + 1) % buffer.length;
+        count = min(count + 1, buffer.length);
+    }
+
+    RingBufferRange!T opSlice()
+    {
+        return RingBufferRange!T(buffer, buffer.length - (count - pos), 0, count);
+    }
+}
+
+unittest
+{
+    import std.algorithm : equal;
+    import std.range : walkLength;
+
+    auto buf = RingBuffer!int(4);
+
+    assert(walkLength(buf[]) == 0);
+
+    buf.put(0);
+    assert(buf.buffer.length == 4);
+    assert(buf.pos == 1);
+    assert(buf.count == 1);
+    assert(buf[][0] == 0);
+    assert(equal(buf[], [0]));
+
+    buf.put(1);
+    assert(buf.buffer.length == 4);
+    assert(equal(buf.buffer, [0, 1, 0, 0]));
+    assert(buf.pos == 2);
+    assert(buf.count == 2);
+    assert(buf[][0] == 0);
+    assert(buf[][1] == 1);
+    assert(equal(buf[], [0, 1]));
+
+    buf.put(2);
+    assert(equal(buf[], [0, 1, 2]));
+
+    buf.put(3);
+    assert(equal(buf[], [0, 1, 2, 3]));
+
+    buf.put(4);
+    assert(equal(buf[], [1, 2, 3, 4]));
+}
+
+private struct RingBufferRange(T)
+{
+    T[] buffer;
+    size_t offset;
+    size_t pos;
+    size_t count;
+
+    bool empty() const @property
+    {
+        return count == 0 || pos == count;
+    }
+
+    inout(T) front() inout @property
+    {
+        return buffer[(offset + pos) % buffer.length];
+    }
+
+    void popFront()
+    {
+        pos++;
+    }
+
+    T opIndex(size_t n)
+    {
+        return buffer[(offset + pos + n) % buffer.length];
+    }
+}
+
+unittest
+{
+    import std.algorithm : equal;
+
+    // no offset
+    auto r0 = RingBufferRange!int([0, 1, 2], 0, 0, 2);
+    assert(equal(r0, [0, 1]));
+
+    auto r1 = RingBufferRange!int([0, 1, 2], 0, 0, 3);
+    assert(equal(r1, [0, 1, 2]));
+
+    auto r2 = RingBufferRange!int([0, 1, 2, 3], 0, 0, 4);
+    assert(equal(r2, [0, 1, 2, 3]));
+
+    auto r3 = RingBufferRange!int([0, 1, 2, 3, 4], 0, 0, 5);
+    assert(equal(r3, [0, 1, 2, 3, 4]));
+
+    // has offset
+    auto r4 = RingBufferRange!int([0, 1, 2, 3], 1, 0, 4);
+    assert(!r4.empty);
+    assert(r4.front == 1);
+    r4.popFront();
+    assert(!r4.empty);
+    assert(r4.front == 2);
+    r4.popFront();
+    assert(!r4.empty);
+    assert(r4.front == 3);
+    r4.popFront();
+    assert(!r4.empty);
+    assert(r4.front == 0);
+    r4.popFront();
+    assert(r4.empty);
+
+    auto r5 = RingBufferRange!int([0, 1, 2, 3], 1, 0, 4);
+    assert(equal(r5, [1, 2, 3, 0]));
+
+    auto r6 = RingBufferRange!int([0, 1, 2, 3], 2, 0, 4);
+    assert(equal(r6, [2, 3, 0, 1]));
+}
+
+unittest
+{
+    import std.algorithm : equal;
+
+    // empty
+    auto rempty = RingBufferRange!int([0, 0, 0, 0], 0, 0, 0);
+    assert(rempty.empty);
+
+    auto r1 = RingBufferRange!int([1, 0, 0, 0], 0, 0, 1);
+    assert(equal(r1, [1]));
+
+    auto r2 = RingBufferRange!int([1, 2, 0, 0], 0, 0, 2);
+    assert(equal(r2, [1, 2]));
+}
+
+unittest
+{
+    import std.algorithm : equal;
+
+    // empty
+    auto r = RingBufferRange!int([0, 1, 2, 3], 0, 0, 4);
+    assert(r[0] == 0);
+    assert(r[1] == 1);
+    assert(r[2] == 2);
+    assert(r[3] == 3);
+}
+
+unittest
+{
+    import std.algorithm : equal;
+
+    // empty
+    auto r = RingBufferRange!int([0, 1, 2, 3], 1, 0, 4);
+    assert(r[0] == 1);
+    assert(r[1] == 2);
+    assert(r[2] == 3);
+    assert(r[3] == 0);
+}
+
+unittest
+{
+    import std.algorithm : equal;
+
+    // empty
+    auto r = RingBufferRange!int([0, 1, 2, 3], 1, 0, 4);
+    r.popFront();
+    assert(r[0] == 2);
+    assert(r[1] == 3);
+    assert(r[2] == 0);
+}
+
+///
+auto asReplaySubject(TObservable)(auto ref TObservable observable, size_t bufferSize)
+{
+    alias E = TObservable.ElementType;
+    auto subject = new ReplaySubject!E(bufferSize);
+    observable.doSubscribe(subject);
+    return subject;
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = defer!(int, (observer) {
+        observer.put(10);
+        observer.put(20);
+        observer.put(30);
+        observer.completed();
+        return NopDisposable.instance;
+    });
+
+    ReplaySubject!int nums = sub.asReplaySubject(4);
+
+    int[] data;
+    nums.doSubscribe!(x => data ~= x);
+
+    assert(data == [10, 20, 30]);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto sub = defer!(int, (observer) {
+        observer.put(10);
+        observer.put(20);
+        observer.put(30);
+        observer.failure(null);
+        return NopDisposable.instance;
+    });
+
+    ReplaySubject!int nums = sub.asReplaySubject(2);
+
+    int[] data;
+    nums.doSubscribe!(x => data ~= x);
+
+    assert(data == [20, 30]);
+}

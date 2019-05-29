@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-110454541-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-110454541-2');
+	</script>
+
+        <title>observerObject (rx.observer.observerObject)</title>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link rel="stylesheet" href="style.css" />
+        <script type="text/javascript" src="script.js"></script>
+
+	
+	<link rel="prefetch" href="search-results.html" />
+</head>
+<body>
+	<div id="page-header">
+		<div id="logotype">
+		<span>Documentation</span>
+		<nav>
+			<a href="http://dlang.org/">Dlang.org</a>
+		</nav>
+		</div>
+
+		<form action="search-docs.html" id="search">
+			<input type="search" placeholder="Find a symbol name..." name="searchTerm" />
+			<input type="submit" value="Go" />
+		</form>
+	</div>
+	<div id="page-body">
+		<div id="page-content">
+		<h1>observerObject</h1><div class="breadcrumbs"><a href="rx.html" class="breadcrumb">rx</a><a href="rx.observer.html" class="breadcrumb">observer</a></div><div><div class="documentation-comment synopsis"><div><p>Wraps subscribe method in virtual function.</p></div></div></div><div class="annotated-prototype"><div class="function-prototype"><div class="parent-prototype"><span class="builtin-type">template</span> <span class="name">observerObject</span><span class="template-params">(E)</span></div><div><div class="attributes"></div><div class="return-type"><a data-ident="ObserverObject" href="rx.observer.ObserverObject.html" title="rx.observer.ObserverObject" class="name">ObserverObject</a>!(<span data-ident="R" class="name">R</span>, <span data-ident="E" class="name">E</span>)</div><div class="function-name">observerObject</div><div class="template-parameters">(<div class="parameters-list toplevel"><div class="template-parameter-item parameter-item">	<span><span data-ident="R" class="name">R</span></span></div></div>)</div><div class="runtime-parameters">(<div class="parameters-list toplevel"><div class="runtime-parameter-item parameter-item"><span class="parameter-type-holder"><span class="parameter-type"><span data-ident="R" class="name">R</span></span></span> <span data-ident="range" class="parameter-name name"><a href="#param-range">range</a></span></div></div>)</div><div class="function-contracts"></div></div></div></div><div><h2 id="examples"><a href="#examples" class="header-anchor">Examples</a></h2><div class="documentation-comment"><div></div></div><div class="unittest-example-holder"><div class="documentation-comment"></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="kwrd">struct</span> <span class="hid">TestObserver</span>
+<span class="br">2 </span>{
+<span class="br">3 </span>    <span class="type">void</span> <span class="hid">put</span>(<span class="type">int</span> <span class="hid">n</span>)
+<span class="br">4 </span>    {
+<span class="br">5 </span>    }
+<span class="br">6 </span>
+<span class="br">7 </span>    <span class="type">void</span> <span class="hid">put</span>(<span class="hid">Object</span> <span class="hid">obj</span>)
+<span class="br">8 </span>    {
+<span class="br">9 </span>    }
+<span class="br">10 </span>}
+<span class="br">11 </span>
+<span class="br">12 </span><span class="hid">Observer</span>!<span class="type">int</span> <span class="hid">observer</span> = <span class="hid">observerObject</span>!<span class="type">int</span>(<span class="hid">TestObserver</span>());
+<span class="br">13 </span><span class="hid">observer</span>.<span class="hid">put</span>(<span class="num">0</span>);
+<span class="br">14 </span><span class="hid">observer</span>.<span class="hid">completed</span>();
+<span class="br">15 </span><span class="hid">observer</span>.<span class="hid">failure</span>(<span class="kwrd">null</span>);
+<span class="br">16 </span><span class="kwrd">static</span> <span class="kwrd">assert</span>(<span class="hid">isObserver</span>!(<span class="kwrd">typeof</span>(<span class="hid">observer</span>), <span class="type">int</span>));</pre></div></div></div>
+		<div id="page-nav"><a href="rx.html" class="parent">rx</a><a href="rx.observer.html" class="parent">observer</a>
+		<span class="type-separator">classes</span><ul><li><a href="rx.observer.CompositeObserver.html" class="class">CompositeObserver</a></li><li><a href="rx.observer.DoneObserver.html" class="class">DoneObserver</a></li><li><a href="rx.observer.NopObserver.html" class="class">NopObserver</a></li><li><a href="rx.observer.ObserverObject.html" class="class">ObserverObject</a></li></ul><span class="type-separator">functions</span><ul><li><a href="rx.observer.makeObserver.1.html" class="function">makeObserver</a></li></ul><span class="type-separator">interfaces</span><ul><li><a href="rx.observer.Observer.html" class="interface">Observer</a></li></ul><span class="type-separator">templates</span><ul><li><a href="rx.observer.hasCompleted.html" class="template">hasCompleted</a></li><li><a href="rx.observer.hasFailure.html" class="template">hasFailure</a></li><li><a href="rx.observer.isObserver.html" class="template">isObserver</a></li><li><a href="rx.observer.observerObject.html" class="template current">observerObject</a></li></ul></div>
+	</div>
+	<div id="page-footer">Page generated by <a href="https://github.com/adamdruppe/adrdox">adrdox</a></div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+concurrency.so
+concurrency.dylib
+concurrency.dll
+concurrency.a
+concurrency.lib
+concurrency-test-*
+*.exe
+*.o
+*.obj
+*.lst
