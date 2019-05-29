@@ -115,9 +115,7 @@ dub test
 
 #### Update documents
 
-```bash
-dub build -c ddox
-```
+Use https://github.com/adamdruppe/adrdox
 
 
 ### Future work

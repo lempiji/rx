@@ -16,17 +16,6 @@
 			"targetType": "library"
 		},
 		{
-			"name": "ddox",
-			"buildOptions": ["syntaxOnly"],
-			"dflags": ["-c", "-Df__dummy.html", "-Xfdocs.json"],
-			"postBuildCommands-windows": [
-				"dub fetch ddox",
-				"dub run ddox --arch=x86_mscoff -- filter docs.json --only-documented",
-				"dub run ddox --arch=x86_mscoff -- generate-html docs.json docs",
-				"del __dummy.html"
-			]
-		},
-		{
 			"name": "diff",
 			"postGenerateCommands": [
 				"dub build -c makedeps -f",
