@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-110454541-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-110454541-2');
+	</script>
+
+        <title>assumeThreadLocal (rx.util.assumeThreadLocal)</title>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link rel="stylesheet" href="style.css" />
+        <script type="text/javascript" src="script.js"></script>
+
+	
+	<link rel="prefetch" href="search-results.html" />
+</head>
+<body>
+	<div id="page-header">
+		<div id="logotype">
+		<span>Documentation</span>
+		<nav>
+			<a href="http://dlang.org/">Dlang.org</a>
+		</nav>
+		</div>
+
+		<form action="search-docs.html" id="search">
+			<input type="search" placeholder="Find a symbol name..." name="searchTerm" />
+			<input type="submit" value="Go" />
+		</form>
+	</div>
+	<div id="page-body">
+		<div id="page-content">
+		<h1>assumeThreadLocal</h1><div class="breadcrumbs"><a href="rx.html" class="breadcrumb">rx</a><a href="rx.util.html" class="breadcrumb">util</a></div><div><div class="documentation-comment synopsis"><div></div></div></div><div class="annotated-prototype"><ol class="overloads"><li class="overload-option"><a href="rx.util.assumeThreadLocal.1.html"><span class="overload-signature"><tt class="highlighted"><span class="hid">T</span></tt> <span class="name">assumeThreadLocal</span><tt class="highlighted">(<span class="kwrd">auto</span> <span class="kwrd">ref</span> <span class="hid">T</span> <span class="hid">obj</span>)</tt></span></a></li><li class="active-overload-option"><span class="overload-signature"><tt class="highlighted"><span class="hid">T</span></tt> <span class="name">assumeThreadLocal</span><tt class="highlighted">(<span class="kwrd">auto</span> <span class="kwrd">ref</span> <span class="kwrd">shared</span>(<span class="hid">T</span>) <span class="hid">obj</span>)</tt></span><div class="function-prototype"><div class="attributes">ref </div><div class="return-type"><span data-ident="T" class="name">T</span></div><div class="function-name">assumeThreadLocal</div><div class="template-parameters">(<div class="parameters-list toplevel"><div class="template-parameter-item parameter-item">	<span><span data-ident="T" class="name">T</span></span></div></div>)</div><div class="runtime-parameters">(<div class="parameters-list toplevel"><div class="runtime-parameter-item parameter-item"><span class="parameter-type-holder"><span class="parameter-type"><span class="storage-class">auto</span> <span class="storage-class">ref</span> <span class="type-constructor">shared</span>(<span data-ident="T" class="name">T</span>)</span></span> <span data-ident="obj" class="parameter-name name"><a href="#param-obj">obj</a></span></div></div>)</div><div class="function-contracts"></div></div></li></ol></div><div><h2 id="examples"><a href="#examples" class="header-anchor">Examples</a></h2><div class="documentation-comment"><div></div></div><div class="unittest-example-holder"><div class="documentation-comment"></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="kwrd">class</span> <span class="hid">Test</span>
+<span class="br">2 </span>{
+<span class="br">3 </span>    <span class="type">int</span> <span class="hid">hoge</span>()
+<span class="br">4 </span>    {
+<span class="br">5 </span>        <span class="kwrd">return</span> <span class="num">0</span>;
+<span class="br">6 </span>    }
+<span class="br">7 </span>}
+<span class="br">8 </span>
+<span class="br">9 </span><span class="kwrd">auto</span> <span class="hid">raw</span> = <span class="kwrd">new</span> <span class="kwrd">shared</span>(<span class="hid">Test</span>);
+<span class="br">10 </span><span class="hid">Test</span> <span class="hid">local1</span> = <span class="hid">assumeThreadLocal</span>(<span class="hid">raw</span>);
+<span class="br">11 </span><span class="hid">Test</span> <span class="hid">local2</span> = <span class="hid">assumeThreadLocal</span>(<span class="kwrd">new</span> <span class="kwrd">shared</span>(<span class="hid">Test</span>));</pre></div></div></div>
+		<div id="page-nav"><a href="rx.html" class="parent">rx</a><a href="rx.util.html" class="parent">util</a>
+		<span class="type-separator">aliases</span><ul><li><a href="rx.util.Ticket.html" class="alias">Ticket</a></li></ul><span class="type-separator">classes</span><ul><li><a href="rx.util.AtomicCounter.html" class="class">AtomicCounter</a></li><li><a href="rx.util.EventSignal.html" class="class">EventSignal</a></li><li><a href="rx.util.TicketBase.html" class="class">TicketBase</a></li></ul><span class="type-separator">functions</span><ul><li><a href="rx.util.assumeThreadLocal.1.html" class="function current">assumeThreadLocal</a></li><li><a href="rx.util.exchange.html" class="function">exchange</a></li></ul></div>
+	</div>
+	<div id="page-footer">Page generated by <a href="https://github.com/adamdruppe/adrdox">adrdox</a></div>
+</body>
+</html>

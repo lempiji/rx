@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-110454541-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-110454541-2');
+	</script>
+
+        <title>makeObserver (rx.observer.makeObserver)</title>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+        <link rel="stylesheet" href="style.css" />
+        <script type="text/javascript" src="script.js"></script>
+
+	
+	<link rel="prefetch" href="search-results.html" />
+</head>
+<body>
+	<div id="page-header">
+		<div id="logotype">
+		<span>Documentation</span>
+		<nav>
+			<a href="http://dlang.org/">Dlang.org</a>
+		</nav>
+		</div>
+
+		<form action="search-docs.html" id="search">
+			<input type="search" placeholder="Find a symbol name..." name="searchTerm" />
+			<input type="submit" value="Go" />
+		</form>
+	</div>
+	<div id="page-body">
+		<div id="page-content">
+		<h1>makeObserver</h1><div class="breadcrumbs"><a href="rx.html" class="breadcrumb">rx</a><a href="rx.observer.html" class="breadcrumb">observer</a></div><div><div class="documentation-comment synopsis"><div><p>The helper for the own observer.</p></div></div></div><div class="annotated-prototype"><ol class="overloads"><li class="overload-option"><a href="rx.observer.makeObserver.1.html"><span class="overload-signature"><span class="lang-feature">auto</span>  <span class="name">makeObserver</span><tt class="highlighted">(<span class="type">void</span> <span class="kwrd">delegate</span>(<span class="hid">E</span>) <span class="hid">doPut</span>, <span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">doCompleted</span>, <span class="type">void</span> <span class="kwrd">delegate</span>(<span class="hid">Exception</span>) <span class="hid">doFailure</span>)</tt></span></a></li><li class="active-overload-option"><span class="overload-signature"><span class="lang-feature">auto</span>  <span class="name">makeObserver</span><tt class="highlighted">(<span class="type">void</span> <span class="kwrd">delegate</span>(<span class="hid">E</span>) <span class="hid">doPut</span>, <span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">doCompleted</span>)</tt></span><div class="function-prototype"><div class="attributes"></div><div class="return-type"><a href="http://dpldocs.info/auto-function-return-prototype" class="lang-feature">auto</a> </div><div class="function-name">makeObserver</div><div class="template-parameters">(<div class="parameters-list toplevel"><div class="template-parameter-item parameter-item">	<span><span data-ident="E" class="name">E</span></span></div></div>)</div><div class="runtime-parameters">(<div class="parameters-list toplevel"><div class="runtime-parameter-item parameter-item"><span class="parameter-type-holder"><span class="parameter-type"><span class="builtin-type">void</span> <span class="lang-feature">delegate</span>(<div class="parameters-list toplevel"><div class="runtime-parameter-item parameter-item"><span class="parameter-type-holder"><span class="parameter-type"><span data-ident="E" class="name">E</span></span></span></div></div>)</span></span> <span data-ident="doPut" class="parameter-name name"><a href="#param-doPut">doPut</a></span></div><span class="comma">,</span><div class="runtime-parameter-item parameter-item"><span class="parameter-type-holder"><span class="parameter-type"><span class="builtin-type">void</span> <span class="lang-feature">delegate</span>(<div class="parameters-list toplevel"></div>)</span></span> <span data-ident="doCompleted" class="parameter-name name"><a href="#param-doCompleted">doCompleted</a></span></div></div>)</div><div class="function-contracts"></div></div></li><li class="overload-option"><a href="rx.observer.makeObserver.3.html"><span class="overload-signature"><span class="lang-feature">auto</span>  <span class="name">makeObserver</span><tt class="highlighted">(<span class="type">void</span> <span class="kwrd">delegate</span>(<span class="hid">E</span>) <span class="hid">doPut</span>, <span class="type">void</span> <span class="kwrd">delegate</span>(<span class="hid">Exception</span>) <span class="hid">doFailure</span>)</tt></span></a></li></ol></div><div><h2 id="examples"><a href="#examples" class="header-anchor">Examples</a></h2><div class="documentation-comment"><div></div></div><div class="unittest-example-holder"><div class="documentation-comment"></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="type">int</span> <span class="hid">countPut</span> = <span class="num">0</span>;
+<span class="br">2 </span><span class="type">int</span> <span class="hid">countCompleted</span> = <span class="num">0</span>;
+<span class="br">3 </span><span class="type">int</span> <span class="hid">countFailure</span> = <span class="num">0</span>;
+<span class="br">4 </span>
+<span class="br">5 </span><span class="kwrd">auto</span> <span class="hid">observer</span> = <span class="hid">makeObserver</span>((<span class="type">int</span>) { <span class="hid">countPut</span>++; }, () { <span class="hid">countCompleted</span>++; }, (<span class="hid">Exception</span>) {
+<span class="br">6 </span>    <span class="hid">countFailure</span>++;
+<span class="br">7 </span>});
+<span class="br">8 </span>
+<span class="br">9 </span>.<span class="hid">put</span>(<span class="hid">observer</span>, <span class="num">0</span>);
+<span class="br">10 </span><span class="kwrd">assert</span>(<span class="hid">countPut</span> == <span class="num">1</span>);
+<span class="br">11 </span>
+<span class="br">12 </span><span class="hid">observer</span>.<span class="hid">completed</span>();
+<span class="br">13 </span><span class="kwrd">assert</span>(<span class="hid">countCompleted</span> == <span class="num">1</span>);
+<span class="br">14 </span>
+<span class="br">15 </span><span class="hid">observer</span>.<span class="hid">failure</span>(<span class="kwrd">null</span>);
+<span class="br">16 </span><span class="kwrd">assert</span>(<span class="hid">countFailure</span> == <span class="num">1</span>);</pre></div></div></div>
+		<div id="page-nav"><a href="rx.html" class="parent">rx</a><a href="rx.observer.html" class="parent">observer</a>
+		<span class="type-separator">classes</span><ul><li><a href="rx.observer.CompositeObserver.html" class="class">CompositeObserver</a></li><li><a href="rx.observer.DoneObserver.html" class="class">DoneObserver</a></li><li><a href="rx.observer.NopObserver.html" class="class">NopObserver</a></li><li><a href="rx.observer.ObserverObject.html" class="class">ObserverObject</a></li></ul><span class="type-separator">functions</span><ul><li><a href="rx.observer.makeObserver.1.html" class="function current">makeObserver</a></li></ul><span class="type-separator">interfaces</span><ul><li><a href="rx.observer.Observer.html" class="interface">Observer</a></li></ul><span class="type-separator">templates</span><ul><li><a href="rx.observer.hasCompleted.html" class="template">hasCompleted</a></li><li><a href="rx.observer.hasFailure.html" class="template">hasFailure</a></li><li><a href="rx.observer.isObserver.html" class="template">isObserver</a></li><li><a href="rx.observer.observerObject.html" class="template">observerObject</a></li></ul></div>
+	</div>
+	<div id="page-footer">Page generated by <a href="https://github.com/adamdruppe/adrdox">adrdox</a></div>
+</body>
+</html>
