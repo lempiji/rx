@@ -419,9 +419,17 @@ private:
     }
 
 public:
+    ///
     this(Observer!E[] observers)
     {
         _observers = observers;
+    }
+
+public:
+    ///
+    Observer!E[] observers() @property
+    {
+        return _observers;
     }
 
 public:

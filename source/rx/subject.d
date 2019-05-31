@@ -140,6 +140,12 @@ public:
         while (!cas(&_observer, oldObserver, newObserver));
     }
 
+protected:
+    Observer!E currentObserver() @property
+    {
+        return assumeThreadLocal(atomicLoad(_observer));
+    }
+
 private:
     shared(Observer!E) _observer;
 }
@@ -259,6 +265,65 @@ unittest
     assert(observer.completedCount == 0);
     assert(observer.failureCount == 1);
     assert(observer.lastException is ex);
+}
+
+unittest
+{
+    // MyFilterSubject puts a value only on MyCustomObserver.
+
+    static class MyCustomObserver : Observer!int
+    {
+        int[] buf;
+
+        void put(int obj)
+        {
+            buf ~= obj;
+        }
+
+        void completed()
+        {
+        }
+
+        void failure(Exception ex)
+        {
+        }
+    }
+
+    static class MyFilterSubject : SubjectObject!int
+    {
+        override void put(int obj)
+        {
+            if (auto current = cast(CompositeObserver!int) currentObserver)
+            {
+                /// write a own filter, map, order and more  
+                foreach (observer; current.observers)
+                {
+                    if (auto myObserver = cast(MyCustomObserver) observer)
+                    {
+                        myObserver.put(obj);
+                    }
+                }
+            }
+        }
+    }
+
+    import std.array : appender;
+
+    auto myObserver = new MyCustomObserver;
+    auto buffer = appender!(int[]);
+
+    auto sub = new MyFilterSubject;
+    .put(sub, -1);
+
+    sub.subscribe(myObserver);
+    sub.subscribe(buffer);
+
+    .put(sub, 0);
+    .put(sub, 1);
+    .put(sub, 2);
+
+    assert(myObserver.buf.length == 3);
+    assert(buffer.data.length == 0);
 }
 
 private class Subscription(TSubject, TObserver) : Disposable
@@ -834,7 +899,8 @@ public:
     ///
     void put(E obj)
     {
-        if (_completed) return;
+        if (_completed)
+            return;
         .put(_buffer, obj);
         .put(_subject, obj);
     }
