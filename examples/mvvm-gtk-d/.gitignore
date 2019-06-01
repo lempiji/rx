@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/mvvm-gtk-d
+mvvm-gtk-d.so
+mvvm-gtk-d.dylib
+mvvm-gtk-d.dll
+mvvm-gtk-d.a
+mvvm-gtk-d.lib
+mvvm-gtk-d-test-*
+*.exe
+*.o
+*.obj
+*.lst

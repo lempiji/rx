@@ -1,0 +1,14 @@
+{
+	"authors": [
+		"lempiji"
+	],
+	"dependencies": {
+		"gtk-d": "~>3.9.0",
+		"rx": {
+			"path": "../../"
+		}
+	},
+	"description": "The example for MVVM on Gtk-D",
+	"license": "MIT",
+	"name": "mvvm-gtk-d"
+}
