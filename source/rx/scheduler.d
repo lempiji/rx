@@ -30,11 +30,49 @@ else
 }
 
 ///
+enum isScheduler(T) = is(typeof({
+            T scheduler = void;
+
+            void delegate() work = null;
+            scheduler.start(work);
+        }));
+
+///
+unittest
+{
+    static assert(isScheduler!Scheduler);
+    static assert(isScheduler!LocalScheduler);
+}
+
+///
+enum isAsyncScheduler(T) = isScheduler!T && is(typeof({
+            T scheduler = void;
+
+            void delegate() work = null;
+            Duration time = void;
+            CancellationToken token = scheduler.schedule(work, time);
+        }));
+
+///
+unittest
+{
+    static assert(!isAsyncScheduler!Scheduler);
+    static assert(!isAsyncScheduler!LocalScheduler);
+
+    static assert(isAsyncScheduler!AsyncScheduler);
+    static assert(isAsyncScheduler!ThreadScheduler);
+    static assert(isAsyncScheduler!TaskPoolScheduler);
+    static assert(isAsyncScheduler!(HistoricalScheduler!ThreadScheduler));
+    static assert(isAsyncScheduler!(HistoricalScheduler!TaskPoolScheduler));
+}
+
+///
 interface Scheduler
 {
     ///
     void start(void delegate() op);
 }
+
 ///
 interface AsyncScheduler : Scheduler
 {
@@ -52,6 +90,7 @@ public:
         op();
     }
 }
+
 ///
 class ThreadScheduler : AsyncScheduler
 {
@@ -99,6 +138,7 @@ unittest
     assert(done);
     assert(!c.isCanceled);
 }
+
 ///
 class TaskPoolScheduler : AsyncScheduler
 {
