@@ -226,10 +226,51 @@ OutputRange_failure .up.|> Observer : convertible
 
 ## Disposable
 ### 要件・型チェックテンプレート
-// TODO
+
+`Disposable`は`rx.disposable`というモジュールで定義されているコンセプトです。
+これは、「リソースの破棄が必要なオブジェクトを抽象化したもの」と表現することができます。
+
+この`Disposable`は、`dispose`というメソッドで「リソースの破棄」を行う機能があります。
+
+コードで表すと以下のようになります。
+
+```d
+Disposable disposable;
+disposable.dispose();
+```
+
 
 ### 共通インターフェース、ラップ関数
-// TODO
+他のコンセプトと同様、`Disposable`という「共通インターフェース」と`disposableObject`という「ラップ関数」を提供します。
+
+これらの具体的な定義は以下の通りです。
+
+```d
+interface Disposable
+{
+    void dispose();
+}
+
+struct MyDisposable
+{
+    void dispose()
+    {
+        // process
+    }
+}
+
+MyDisposable source;
+Disposable disposable = source.disposableObject();
+```
+
+### ObservableとDisposableの関係
+`Disposable`は「`Observable`における`subscribe`メソッドの戻り値」としてよく使われます。
+これは`dispose`メソッドを呼ぶことで、`subscribe`で登録した処理を解除する、という使い方になっています。
+
+すべての`Observable`は、「`subscribe`メソッドの戻り値として`Disposable`コンセプトを満たすオブジェクトを返す」という要件があります。
+
+> Note: 多くの場合、`subscribe`は`Disposable`インターフェースを実装した型を返しますが、あくまでも「コンセプトを満たせば良い」という点に注意してください。
+> 他のコンセプトと同様に、共通インターフェースでラップすることで一定の型として変数に保持することができます。
 
 ## Scheduler
 ### 要件・型チェックテンプレート
@@ -242,6 +283,15 @@ OutputRange_failure .up.|> Observer : convertible
 ### 機能と役割
 // TODO
 
+### 種類
+// TODO
+
+## Operators
+// TODO
+
 ## Utility
+### makeObserver
+// TODO
+
 ### doSubscribe
 // TODO
