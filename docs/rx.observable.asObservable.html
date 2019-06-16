@@ -11,11 +11,11 @@
 	gtag('config', 'UA-110454541-2');
 	</script>
 
-        <title>asObservable (rx.observable.asObservable)</title>
+	<title>asObservable (rx.observable.asObservable)</title>
 	<meta charset="utf-8" />
 	<meta content="width=device-width, initial-scale=1" name="viewport" />
-        <link rel="stylesheet" href="style.css" />
-        <script type="text/javascript" src="script.js"></script>
+	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="script.js"></script>
 
 	
 	<link rel="prefetch" href="search-results.html" />
@@ -56,7 +56,18 @@
 <span class="br">8 </span>
 <span class="br">9 </span><span class="kwrd">assert</span>(<span class="hid">res</span>.<span class="hid">length</span> == <span class="num">10</span>);
 <span class="br">10 </span><span class="kwrd">assert</span>(<span class="hid">res</span>[<span class="num">0</span>] == <span class="num">0</span>);
-<span class="br">11 </span><span class="kwrd">assert</span>(<span class="hid">res</span>[<span class="num">9</span>] == <span class="num">9</span>);</pre></div></div></div>
+<span class="br">11 </span><span class="kwrd">assert</span>(<span class="hid">res</span>[<span class="num">9</span>] == <span class="num">9</span>);</pre></div><div class="unittest-example-holder"><div class="documentation-comment"></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="kwrd">import</span> <span class="hid">rx</span>;
+<span class="br">2 </span><span class="kwrd">import</span> <span class="hid">std</span>.<span class="hid">range</span> : <span class="hid">iota</span>;
+<span class="br">3 </span>
+<span class="br">4 </span><span class="kwrd">auto</span> <span class="hid">observable</span> = <span class="hid">iota</span>(<span class="num">10</span>).<span class="hid">asObservable</span>();
+<span class="br">5 </span><span class="kwrd">auto</span> <span class="hid">observer</span> = <span class="kwrd">new</span> <span class="hid">CounterObserver</span>!<span class="type">int</span>;
+<span class="br">6 </span>
+<span class="br">7 </span><span class="kwrd">auto</span> <span class="hid">disposable</span> = <span class="hid">observable</span>.<span class="hid">subscribe</span>(<span class="hid">observer</span>);
+<span class="br">8 </span><span class="kwrd">scope</span> (<span class="hid">exit</span>)
+<span class="br">9 </span>    <span class="hid">disposable</span>.<span class="hid">dispose</span>();
+<span class="br">10 </span>
+<span class="br">11 </span><span class="kwrd">assert</span>(<span class="hid">observer</span>.<span class="hid">putCount</span> == <span class="num">10</span>);
+<span class="br">12 </span><span class="kwrd">assert</span>(<span class="hid">observer</span>.<span class="hid">completedCount</span> == <span class="num">1</span>);</pre></div></div></div>
 		<div id="page-nav"><a href="rx.html" class="parent">rx</a><a href="rx.observable.html" class="parent">observable</a>
 		<span class="type-separator">aliases</span><ul><li><a href="rx.observable.asObservable.html" class="alias current">asObservable</a></li></ul><span class="type-separator">classes</span><ul><li><a href="rx.observable.ObservableObject.html" class="class">ObservableObject</a></li></ul><span class="type-separator">functions</span><ul><li><a href="rx.observable.defer.html" class="function">defer</a></li><li><a href="rx.observable.doSubscribe.1.html" class="function">doSubscribe</a></li><li><a href="rx.observable.empty.html" class="function">empty</a></li><li><a href="rx.observable.error.html" class="function">error</a></li><li><a href="rx.observable.from.html" class="function">from</a></li><li><a href="rx.observable.never.html" class="function">never</a></li></ul><span class="type-separator">interfaces</span><ul><li><a href="rx.observable.Observable.html" class="interface">Observable</a></li></ul><span class="type-separator">templates</span><ul><li><a href="rx.observable.isObservable.1.html" class="template">isObservable</a></li><li><a href="rx.observable.isSubscribable.html" class="template">isSubscribable</a></li><li><a href="rx.observable.observableObject.html" class="template">observableObject</a></li></ul></div>
 	</div>

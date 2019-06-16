@@ -217,16 +217,16 @@ unittest
     }
 
     TestObservable1 o1;
-    auto d0 = o1.doSubscribe((int n) {  }, () {  }, (Exception e) {  });
-    auto d1 = o1.doSubscribe((int n) {  }, () {  });
-    auto d2 = o1.doSubscribe((int n) {  }, (Exception e) {  });
-    auto d3 = o1.doSubscribe((int n) {  });
+    auto d0 = o1.doSubscribe((int n) {}, () {}, (Exception e) {});
+    auto d1 = o1.doSubscribe((int n) {}, () {});
+    auto d2 = o1.doSubscribe((int n) {}, (Exception e) {});
+    auto d3 = o1.doSubscribe((int n) {});
     auto d4 = o1.doSubscribe(TestObserver());
     TestObservable2 o2;
-    auto d5 = o2.doSubscribe((int n) {  }, () {  }, (Exception e) {  });
-    auto d6 = o2.doSubscribe((int n) {  }, () {  });
-    auto d7 = o2.doSubscribe((int n) {  }, (Exception e) {  });
-    auto d8 = o2.doSubscribe((int n) {  });
+    auto d5 = o2.doSubscribe((int n) {}, () {}, (Exception e) {});
+    auto d6 = o2.doSubscribe((int n) {}, () {});
+    auto d7 = o2.doSubscribe((int n) {}, (Exception e) {});
+    auto d8 = o2.doSubscribe((int n) {});
     auto d9 = o2.doSubscribe(TestObserver());
 }
 
@@ -814,7 +814,7 @@ unittest
     auto o = empty!int();
 
     assert(!completed);
-    auto d = o.doSubscribe((int n) {  }, () { completed = true; });
+    auto d = o.doSubscribe((int n) {}, () { completed = true; });
     assert(completed);
 }
 
@@ -837,7 +837,7 @@ auto never(E)()
 unittest
 {
     auto o = never!int();
-    auto d = o.doSubscribe((int) {  });
+    auto d = o.doSubscribe((int) {});
     d.dispose();
 }
 
@@ -874,7 +874,7 @@ unittest
     auto o = error!int(expected);
 
     Exception actual = null;
-    o.doSubscribe((int n) {  }, (Exception e) { actual = e; });
+    o.doSubscribe((int n) {}, (Exception e) { actual = e; });
     assert(actual is expected);
 }
 
@@ -896,6 +896,9 @@ auto from(R)(auto ref R input) if (isInputRange!R)
                 if (isOutputRange!(TObserver, ElementType))
         {
             .put(observer, input);
+            static if (hasCompleted!TObserver)
+                observer.completed();
+
             return NopDisposable.instance;
         }
 
@@ -937,4 +940,21 @@ unittest
     assert(res.length == 10);
     assert(res[0] == 0);
     assert(res[9] == 9);
+}
+
+///
+unittest
+{
+    import rx;
+    import std.range : iota;
+
+    auto observable = iota(10).asObservable();
+    auto observer = new CounterObserver!int;
+
+    auto disposable = observable.subscribe(observer);
+    scope (exit)
+        disposable.dispose();
+
+    assert(observer.putCount == 10);
+    assert(observer.completedCount == 1);
 }

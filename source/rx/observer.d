@@ -419,9 +419,17 @@ private:
     }
 
 public:
+    ///
     this(Observer!E[] observers)
     {
         _observers = observers;
+    }
+
+public:
+    ///
+    Observer!E[] observers() @property
+    {
+        return _observers;
     }
 
 public:
@@ -462,6 +470,26 @@ public:
         if (_observers.length == 2)
             return _observers[1 - i];
 
+        return new CompositeObserver!E(_observers[0 .. i] ~ _observers[i + 1 .. $]);
+    }
+    ///
+    CompositeObserver!E removeStrict(Observer!E observer)
+    {
+        import std.algorithm : countUntil;
+
+        auto i = _observers.countUntil(observer);
+        if (i < 0)
+            return this;
+
+        if (_observers.length == 1)
+            return CompositeObserver!E.empty;
+        if (_observers.length == 2)
+        {
+            if (i == 0)
+                return new CompositeObserver!E(_observers[1 .. $]);
+            if (i == 1)
+                return new CompositeObserver!E(_observers[0 .. 1]);
+        }
         return new CompositeObserver!E(_observers[0 .. i] ~ _observers[i + 1 .. $]);
     }
 

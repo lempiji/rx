@@ -4,6 +4,7 @@ public import rx.range.drop;
 public import rx.range.take;
 public import rx.range.takeLast;
 public import rx.range.takeUntil;
+public import rx.range.zip;
 
 /+++++++++++++++++++++++++++++
  + Overview

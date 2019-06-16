@@ -11,11 +11,11 @@
 	gtag('config', 'UA-110454541-2');
 	</script>
 
-        <title>doSubscribe (rx.observable.doSubscribe)</title>
+	<title>doSubscribe (rx.observable.doSubscribe)</title>
 	<meta charset="utf-8" />
 	<meta content="width=device-width, initial-scale=1" name="viewport" />
-        <link rel="stylesheet" href="style.css" />
-        <script type="text/javascript" src="script.js"></script>
+	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="script.js"></script>
 
 	
 	<link rel="prefetch" href="search-results.html" />
@@ -76,16 +76,16 @@
 <span class="br">24 </span>}
 <span class="br">25 </span>
 <span class="br">26 </span><span class="hid">TestObservable1</span> <span class="hid">o1</span>;
-<span class="br">27 </span><span class="kwrd">auto</span> <span class="hid">d0</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {  }, () {  }, (<span class="hid">Exception</span> <span class="hid">e</span>) {  });
-<span class="br">28 </span><span class="kwrd">auto</span> <span class="hid">d1</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {  }, () {  });
-<span class="br">29 </span><span class="kwrd">auto</span> <span class="hid">d2</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {  }, (<span class="hid">Exception</span> <span class="hid">e</span>) {  });
-<span class="br">30 </span><span class="kwrd">auto</span> <span class="hid">d3</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {  });
+<span class="br">27 </span><span class="kwrd">auto</span> <span class="hid">d0</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {}, () {}, (<span class="hid">Exception</span> <span class="hid">e</span>) {});
+<span class="br">28 </span><span class="kwrd">auto</span> <span class="hid">d1</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {}, () {});
+<span class="br">29 </span><span class="kwrd">auto</span> <span class="hid">d2</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {}, (<span class="hid">Exception</span> <span class="hid">e</span>) {});
+<span class="br">30 </span><span class="kwrd">auto</span> <span class="hid">d3</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {});
 <span class="br">31 </span><span class="kwrd">auto</span> <span class="hid">d4</span> = <span class="hid">o1</span>.<span class="hid">doSubscribe</span>(<span class="hid">TestObserver</span>());
 <span class="br">32 </span><span class="hid">TestObservable2</span> <span class="hid">o2</span>;
-<span class="br">33 </span><span class="kwrd">auto</span> <span class="hid">d5</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {  }, () {  }, (<span class="hid">Exception</span> <span class="hid">e</span>) {  });
-<span class="br">34 </span><span class="kwrd">auto</span> <span class="hid">d6</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {  }, () {  });
-<span class="br">35 </span><span class="kwrd">auto</span> <span class="hid">d7</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {  }, (<span class="hid">Exception</span> <span class="hid">e</span>) {  });
-<span class="br">36 </span><span class="kwrd">auto</span> <span class="hid">d8</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {  });
+<span class="br">33 </span><span class="kwrd">auto</span> <span class="hid">d5</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {}, () {}, (<span class="hid">Exception</span> <span class="hid">e</span>) {});
+<span class="br">34 </span><span class="kwrd">auto</span> <span class="hid">d6</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {}, () {});
+<span class="br">35 </span><span class="kwrd">auto</span> <span class="hid">d7</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {}, (<span class="hid">Exception</span> <span class="hid">e</span>) {});
+<span class="br">36 </span><span class="kwrd">auto</span> <span class="hid">d8</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>((<span class="type">int</span> <span class="hid">n</span>) {});
 <span class="br">37 </span><span class="kwrd">auto</span> <span class="hid">d9</span> = <span class="hid">o2</span>.<span class="hid">doSubscribe</span>(<span class="hid">TestObserver</span>());</pre></div></div></div>
 		<div id="page-nav"><a href="rx.html" class="parent">rx</a><a href="rx.observable.html" class="parent">observable</a>
 		<span class="type-separator">aliases</span><ul><li><a href="rx.observable.asObservable.html" class="alias">asObservable</a></li></ul><span class="type-separator">classes</span><ul><li><a href="rx.observable.ObservableObject.html" class="class">ObservableObject</a></li></ul><span class="type-separator">functions</span><ul><li><a href="rx.observable.defer.html" class="function">defer</a></li><li><a href="rx.observable.doSubscribe.1.html" class="function current">doSubscribe</a></li><li><a href="rx.observable.empty.html" class="function">empty</a></li><li><a href="rx.observable.error.html" class="function">error</a></li><li><a href="rx.observable.from.html" class="function">from</a></li><li><a href="rx.observable.never.html" class="function">never</a></li></ul><span class="type-separator">interfaces</span><ul><li><a href="rx.observable.Observable.html" class="interface">Observable</a></li></ul><span class="type-separator">templates</span><ul><li><a href="rx.observable.isObservable.1.html" class="template">isObservable</a></li><li><a href="rx.observable.isSubscribable.html" class="template">isSubscribable</a></li><li><a href="rx.observable.observableObject.html" class="template">observableObject</a></li></ul></div>

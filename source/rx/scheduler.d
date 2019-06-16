@@ -30,11 +30,49 @@ else
 }
 
 ///
+enum isScheduler(T) = is(typeof({
+            T scheduler = void;
+
+            void delegate() work = null;
+            scheduler.start(work);
+        }));
+
+///
+unittest
+{
+    static assert(isScheduler!Scheduler);
+    static assert(isScheduler!LocalScheduler);
+}
+
+///
+enum isAsyncScheduler(T) = isScheduler!T && is(typeof({
+            T scheduler = void;
+
+            void delegate() work = null;
+            Duration time = void;
+            CancellationToken token = scheduler.schedule(work, time);
+        }));
+
+///
+unittest
+{
+    static assert(!isAsyncScheduler!Scheduler);
+    static assert(!isAsyncScheduler!LocalScheduler);
+
+    static assert(isAsyncScheduler!AsyncScheduler);
+    static assert(isAsyncScheduler!ThreadScheduler);
+    static assert(isAsyncScheduler!TaskPoolScheduler);
+    static assert(isAsyncScheduler!(HistoricalScheduler!ThreadScheduler));
+    static assert(isAsyncScheduler!(HistoricalScheduler!TaskPoolScheduler));
+}
+
+///
 interface Scheduler
 {
     ///
     void start(void delegate() op);
 }
+
 ///
 interface AsyncScheduler : Scheduler
 {
@@ -52,6 +90,7 @@ public:
         op();
     }
 }
+
 ///
 class ThreadScheduler : AsyncScheduler
 {
@@ -99,6 +138,7 @@ unittest
     assert(done);
     assert(!c.isCanceled);
 }
+
 ///
 class TaskPoolScheduler : AsyncScheduler
 {
@@ -274,6 +314,215 @@ unittest
 unittest
 {
     static assert(!__traits(compiles, { HistoricalScheduler!LocalScheduler s; }));
+}
+
+///
+template MostDerivedScheduler(T)
+{
+    static assert(isScheduler!T);
+
+    static if (isAsyncScheduler!T)
+    {
+        ///
+        alias MostDerivedScheduler = AsyncScheduler;
+    }
+    else
+    {
+        ///
+        alias MostDerivedScheduler = Scheduler;
+    }
+}
+
+///
+unittest
+{
+    alias S1 = MostDerivedScheduler!Scheduler;
+    alias S2 = MostDerivedScheduler!AsyncScheduler;
+    alias S3 = MostDerivedScheduler!LocalScheduler;
+    alias S4 = MostDerivedScheduler!ThreadScheduler;
+    alias S5 = MostDerivedScheduler!TaskPoolScheduler;
+    alias S6 = MostDerivedScheduler!(HistoricalScheduler!ThreadScheduler);
+    alias S7 = MostDerivedScheduler!(HistoricalScheduler!TaskPoolScheduler);
+
+    static assert(is(S1 == Scheduler));
+    static assert(is(S2 == AsyncScheduler));
+    static assert(is(S3 == Scheduler));
+    static assert(is(S4 == AsyncScheduler));
+    static assert(is(S5 == AsyncScheduler));
+    static assert(is(S6 == AsyncScheduler));
+    static assert(is(S7 == AsyncScheduler));
+}
+
+///
+final class SchedulerObject(TScheduler) : MostDerivedScheduler!TScheduler
+{
+private:
+    TScheduler scheduler;
+
+public:
+    ///
+    this(TScheduler scheduler)
+    {
+        this.scheduler = scheduler;
+    }
+
+    ///
+    this(ref TScheduler scheduler)
+    {
+        this.scheduler = scheduler;
+    }
+
+    ///
+    void start(void delegate() op)
+    {
+        scheduler.start(op);
+    }
+
+    static if (isAsyncScheduler!TScheduler)
+    {
+        ///
+        CancellationToken schedule(void delegate() op, Duration val)
+        {
+            return scheduler.schedule(op, val);
+        }
+    }
+}
+
+///
+MostDerivedScheduler!TScheduler schedulerObject(TScheduler)(auto ref TScheduler scheduler)
+{
+    static if (is(MostDerivedScheduler!TScheduler == AsyncScheduler))
+    {
+        static if (is(TScheduler : AsyncScheduler))
+            return scheduler;
+        else
+            return new SchedulerObject!TScheduler(scheduler);
+    }
+    else static if (is(MostDerivedScheduler!TScheduler == Scheduler))
+    {
+        static if (is(TScheduler : Scheduler))
+            return scheduler;
+        else
+            return new SchedulerObject!TScheduler(scheduler);
+    }
+    else
+        static assert(false);
+}
+
+///
+unittest
+{
+    struct MyScheduler
+    {
+        void start(void delegate() op)
+        {
+        }
+    }
+
+    class MyClassScheduler
+    {
+        void start(void delegate() op)
+        {
+        }
+    }
+
+    class MyClassDerivedScheduler : Scheduler
+    {
+        void start(void delegate() op)
+        {
+        }
+    }
+
+    struct MyAsyncScheduler
+    {
+        void start(void delegate() op)
+        {
+        }
+
+        CancellationToken schedule(void delegate() op, Duration val)
+        {
+            return null;
+        }
+    }
+
+    class MyClassAsyncScheduler
+    {
+        void start(void delegate() op)
+        {
+        }
+
+        CancellationToken schedule(void delegate() op, Duration val)
+        {
+            return null;
+        }
+    }
+    
+    class MyClassPartAsyncScheduler : Scheduler
+    {
+        void start(void delegate() op)
+        {
+        }
+
+        CancellationToken schedule(void delegate() op, Duration val)
+        {
+            return null;
+        }
+    }
+
+    class MyClassDerivedAsyncScheduler : AsyncScheduler
+    {
+        void start(void delegate() op)
+        {
+        }
+
+        CancellationToken schedule(void delegate() op, Duration val)
+        {
+            return null;
+        }
+    }
+
+    auto s1 = MyScheduler();
+    auto s2 = new MyClassScheduler;
+    auto s3 = new MyClassDerivedScheduler;
+    auto s4 = MyAsyncScheduler();
+    auto s5 = new MyClassAsyncScheduler;
+    auto s6 = new MyClassPartAsyncScheduler;
+    auto s7 = new MyClassDerivedAsyncScheduler;
+
+    Scheduler t1 = s1.schedulerObject();
+    Scheduler t2 = s2.schedulerObject();
+    Scheduler t3 = s3.schedulerObject();
+    AsyncScheduler t4 = s4.schedulerObject();
+    AsyncScheduler t5 = s5.schedulerObject();
+    AsyncScheduler t6 = s6.schedulerObject();
+    AsyncScheduler t7 = s7.schedulerObject();
+
+    assert(t1 !is null);
+    assert(t2 !is null);
+    assert(t3 !is null);
+    assert(t4 !is null);
+    assert(t5 !is null);
+    assert(t6 !is null);
+    assert(t7 !is null);
+
+    assert(t3 is s3);
+    assert(t7 is s7);
+}
+
+///
+unittest
+{
+    struct MyScheduler
+    {
+        void start(void delegate() op)
+        {
+            op();
+        }
+    }
+
+    MyScheduler scheduler;
+    Scheduler wrapped = scheduler.schedulerObject();
+    assert(wrapped !is null);
 }
 
 ///
