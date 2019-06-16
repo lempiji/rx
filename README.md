@@ -125,6 +125,6 @@ Use https://github.com/adamdruppe/adrdox
 - more subjects
     - publish, connectable
 - more algorithms
-    - window, zip, multicast
+    - window, multicast
 - more test
 - more documents

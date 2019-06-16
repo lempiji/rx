@@ -1256,3 +1256,45 @@ unittest
 
     assert(data == [20, 30]);
 }
+
+version (unittest)
+{
+    class TestingSubject(E) : SubjectObject!E
+    {
+        size_t observerCount()
+        {
+            if (auto current = cast(CompositeObserver!E) currentObserver)
+            {
+                return current.observers.length;
+            }
+            if (currentObserver is NopObserver!E.instance)
+            {
+                return 0;
+            }
+            if (currentObserver is DoneObserver!E.instance)
+            {
+                return 0;
+            }
+            return 1;
+        }
+    }
+
+    unittest
+    {
+        auto s = new TestingSubject!int;
+        assert(s.observerCount == 0);
+
+        int[] buf;
+        auto observer = observerObject!int((int n) { buf ~= n; });
+
+        auto d0 = s.subscribe(observer);
+        assert(s.observerCount == 1);
+        auto d1 = s.subscribe(observer);
+        assert(s.observerCount == 2);
+
+        d0.dispose();
+        assert(s.observerCount == 1);
+        d1.dispose();
+        assert(s.observerCount == 0);
+    }
+}
