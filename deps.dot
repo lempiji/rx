@@ -29,6 +29,7 @@ digraph {
         "rx.range.drop"
         "rx.range.take"
         "rx.range.takeLast"
+        "rx.range.takeUntil"
         "rx.scheduler"
         "rx.subject"
         "rx.util"
@@ -44,7 +45,8 @@ digraph {
     }
     {
         node [style=filled color="#bef5cb" fillcolor="#e6ffed"];
-        "rx.range.takeUntil"
+        "rx.range.zip"
+        "std.container.dlist"
     }
     "rx" -> "rx.algorithm";
     "rx" -> "rx.disposable";
@@ -159,6 +161,7 @@ digraph {
     "rx.range" -> "rx.range.drop";
     "rx.range" -> "rx.range.take";
     "rx.range" -> "rx.range.takeLast";
+    "rx.range" -> "rx.range.takeUntil";
     "rx.range.drop" -> "rx.disposable";
     "rx.range.drop" -> "rx.observable";
     "rx.range.drop" -> "rx.observer";
@@ -174,6 +177,11 @@ digraph {
     "rx.range.takeLast" -> "rx.observer";
     "rx.range.takeLast" -> "rx.util";
     "rx.range.takeLast" -> "std.range";
+    "rx.range.takeUntil" -> "rx.disposable";
+    "rx.range.takeUntil" -> "rx.observable";
+    "rx.range.takeUntil" -> "rx.observer";
+    "rx.range.takeUntil" -> "rx.util";
+    "rx.range.takeUntil" -> "std.range";
     "rx.scheduler" -> "core.internal.traits";
     "rx.scheduler" -> "core.thread";
     "rx.scheduler" -> "core.time";
@@ -193,10 +201,12 @@ digraph {
     "rx.util" -> "core.atomic";
     "rx.util" -> "core.sync.condition";
     "rx.util" -> "core.sync.mutex";
-    "rx.range" -> "rx.range.takeUntil" [color="#2cbe4e"];
-    "rx.range.takeUntil" -> "rx.disposable" [color="#2cbe4e"];
-    "rx.range.takeUntil" -> "rx.observable" [color="#2cbe4e"];
-    "rx.range.takeUntil" -> "rx.observer" [color="#2cbe4e"];
-    "rx.range.takeUntil" -> "rx.util" [color="#2cbe4e"];
-    "rx.range.takeUntil" -> "std.range" [color="#2cbe4e"];
+    "rx.range" -> "rx.range.zip" [color="#2cbe4e"];
+    "rx.range.zip" -> "rx.disposable" [color="#2cbe4e"];
+    "rx.range.zip" -> "rx.observable" [color="#2cbe4e"];
+    "rx.range.zip" -> "rx.observer" [color="#2cbe4e"];
+    "rx.range.zip" -> "std.container.dlist" [color="#2cbe4e"];
+    "rx.range.zip" -> "std.meta" [color="#2cbe4e"];
+    "rx.range.zip" -> "std.range" [color="#2cbe4e"];
+    "rx.range.zip" -> "std.typecons" [color="#2cbe4e"];
 }
