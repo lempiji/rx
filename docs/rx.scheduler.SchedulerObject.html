@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-110454541-2"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'UA-110454541-2');
+	</script>
+
+	<title>schedulerObject (rx.scheduler.schedulerObject)</title>
+	<meta charset="utf-8" />
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="script.js"></script>
+
+	
+	<link rel="prefetch" href="search-results.html" />
+</head>
+<body>
+	<div id="page-header">
+		<div id="logotype">
+		<span>Documentation</span>
+		<nav>
+			<a href="http://dlang.org/">Dlang.org</a>
+		</nav>
+		</div>
+
+		<form action="search-docs.html" id="search">
+			<input type="search" placeholder="Find a symbol name..." name="searchTerm" />
+			<input type="submit" value="Go" />
+		</form>
+	</div>
+	<div id="page-body">
+		<div id="page-content">
+		<h1>schedulerObject</h1><div class="breadcrumbs"><a href="rx.html" class="breadcrumb">rx</a><a href="rx.scheduler.html" class="breadcrumb">scheduler</a></div><div><div class="documentation-comment synopsis"><div></div></div></div><div class="annotated-prototype"><div class="function-prototype"><div class="attributes"></div><div class="return-type"><a data-ident="MostDerivedScheduler" href="rx.scheduler.MostDerivedScheduler.html" title="rx.scheduler.MostDerivedScheduler" class="name">MostDerivedScheduler</a>!<span data-ident="TScheduler" class="name">TScheduler</span></div><div class="function-name">schedulerObject</div><div class="template-parameters">(<div class="parameters-list toplevel"><div class="template-parameter-item parameter-item">	<span><span data-ident="TScheduler" class="name">TScheduler</span></span></div></div>)</div><div class="runtime-parameters">(<div class="parameters-list toplevel"><div class="runtime-parameter-item parameter-item"><span class="parameter-type-holder"><span class="parameter-type"><span class="storage-class">auto</span> <span class="storage-class">ref</span> <span data-ident="TScheduler" class="name">TScheduler</span></span></span> <span data-ident="scheduler" class="parameter-name name"><a href="#param-scheduler">scheduler</a></span></div></div>)</div><div class="function-contracts"></div></div></div><div><h2 id="examples"><a href="#examples" class="header-anchor">Examples</a></h2><div class="documentation-comment"><div></div></div><div class="unittest-example-holder"><div class="documentation-comment"></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="kwrd">struct</span> <span class="hid">MyScheduler</span>
+<span class="br">2 </span>{
+<span class="br">3 </span>    <span class="type">void</span> <span class="hid">start</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>)
+<span class="br">4 </span>    {
+<span class="br">5 </span>    }
+<span class="br">6 </span>}
+<span class="br">7 </span>
+<span class="br">8 </span><span class="kwrd">class</span> <span class="hid">MyClassScheduler</span>
+<span class="br">9 </span>{
+<span class="br">10 </span>    <span class="type">void</span> <span class="hid">start</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>)
+<span class="br">11 </span>    {
+<span class="br">12 </span>    }
+<span class="br">13 </span>}
+<span class="br">14 </span>
+<span class="br">15 </span><span class="kwrd">class</span> <span class="hid">MyClassDerivedScheduler</span> : <span class="hid">Scheduler</span>
+<span class="br">16 </span>{
+<span class="br">17 </span>    <span class="type">void</span> <span class="hid">start</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>)
+<span class="br">18 </span>    {
+<span class="br">19 </span>    }
+<span class="br">20 </span>}
+<span class="br">21 </span>
+<span class="br">22 </span><span class="kwrd">struct</span> <span class="hid">MyAsyncScheduler</span>
+<span class="br">23 </span>{
+<span class="br">24 </span>    <span class="type">void</span> <span class="hid">start</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>)
+<span class="br">25 </span>    {
+<span class="br">26 </span>    }
+<span class="br">27 </span>
+<span class="br">28 </span>    <span class="hid">CancellationToken</span> <span class="hid">schedule</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>, <span class="hid">Duration</span> <span class="hid">val</span>)
+<span class="br">29 </span>    {
+<span class="br">30 </span>        <span class="kwrd">return</span> <span class="kwrd">null</span>;
+<span class="br">31 </span>    }
+<span class="br">32 </span>}
+<span class="br">33 </span>
+<span class="br">34 </span><span class="kwrd">class</span> <span class="hid">MyClassAsyncScheduler</span>
+<span class="br">35 </span>{
+<span class="br">36 </span>    <span class="type">void</span> <span class="hid">start</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>)
+<span class="br">37 </span>    {
+<span class="br">38 </span>    }
+<span class="br">39 </span>
+<span class="br">40 </span>    <span class="hid">CancellationToken</span> <span class="hid">schedule</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>, <span class="hid">Duration</span> <span class="hid">val</span>)
+<span class="br">41 </span>    {
+<span class="br">42 </span>        <span class="kwrd">return</span> <span class="kwrd">null</span>;
+<span class="br">43 </span>    }
+<span class="br">44 </span>}
+<span class="br">45 </span>
+<span class="br">46 </span><span class="kwrd">class</span> <span class="hid">MyClassPartAsyncScheduler</span> : <span class="hid">Scheduler</span>
+<span class="br">47 </span>{
+<span class="br">48 </span>    <span class="type">void</span> <span class="hid">start</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>)
+<span class="br">49 </span>    {
+<span class="br">50 </span>    }
+<span class="br">51 </span>
+<span class="br">52 </span>    <span class="hid">CancellationToken</span> <span class="hid">schedule</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>, <span class="hid">Duration</span> <span class="hid">val</span>)
+<span class="br">53 </span>    {
+<span class="br">54 </span>        <span class="kwrd">return</span> <span class="kwrd">null</span>;
+<span class="br">55 </span>    }
+<span class="br">56 </span>}
+<span class="br">57 </span>
+<span class="br">58 </span><span class="kwrd">class</span> <span class="hid">MyClassDerivedAsyncScheduler</span> : <span class="hid">AsyncScheduler</span>
+<span class="br">59 </span>{
+<span class="br">60 </span>    <span class="type">void</span> <span class="hid">start</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>)
+<span class="br">61 </span>    {
+<span class="br">62 </span>    }
+<span class="br">63 </span>
+<span class="br">64 </span>    <span class="hid">CancellationToken</span> <span class="hid">schedule</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>, <span class="hid">Duration</span> <span class="hid">val</span>)
+<span class="br">65 </span>    {
+<span class="br">66 </span>        <span class="kwrd">return</span> <span class="kwrd">null</span>;
+<span class="br">67 </span>    }
+<span class="br">68 </span>}
+<span class="br">69 </span>
+<span class="br">70 </span><span class="kwrd">auto</span> <span class="hid">s1</span> = <span class="hid">MyScheduler</span>();
+<span class="br">71 </span><span class="kwrd">auto</span> <span class="hid">s2</span> = <span class="kwrd">new</span> <span class="hid">MyClassScheduler</span>;
+<span class="br">72 </span><span class="kwrd">auto</span> <span class="hid">s3</span> = <span class="kwrd">new</span> <span class="hid">MyClassDerivedScheduler</span>;
+<span class="br">73 </span><span class="kwrd">auto</span> <span class="hid">s4</span> = <span class="hid">MyAsyncScheduler</span>();
+<span class="br">74 </span><span class="kwrd">auto</span> <span class="hid">s5</span> = <span class="kwrd">new</span> <span class="hid">MyClassAsyncScheduler</span>;
+<span class="br">75 </span><span class="kwrd">auto</span> <span class="hid">s6</span> = <span class="kwrd">new</span> <span class="hid">MyClassPartAsyncScheduler</span>;
+<span class="br">76 </span><span class="kwrd">auto</span> <span class="hid">s7</span> = <span class="kwrd">new</span> <span class="hid">MyClassDerivedAsyncScheduler</span>;
+<span class="br">77 </span>
+<span class="br">78 </span><span class="hid">Scheduler</span> <span class="hid">t1</span> = <span class="hid">s1</span>.<span class="hid">schedulerObject</span>();
+<span class="br">79 </span><span class="hid">Scheduler</span> <span class="hid">t2</span> = <span class="hid">s2</span>.<span class="hid">schedulerObject</span>();
+<span class="br">80 </span><span class="hid">Scheduler</span> <span class="hid">t3</span> = <span class="hid">s3</span>.<span class="hid">schedulerObject</span>();
+<span class="br">81 </span><span class="hid">AsyncScheduler</span> <span class="hid">t4</span> = <span class="hid">s4</span>.<span class="hid">schedulerObject</span>();
+<span class="br">82 </span><span class="hid">AsyncScheduler</span> <span class="hid">t5</span> = <span class="hid">s5</span>.<span class="hid">schedulerObject</span>();
+<span class="br">83 </span><span class="hid">AsyncScheduler</span> <span class="hid">t6</span> = <span class="hid">s6</span>.<span class="hid">schedulerObject</span>();
+<span class="br">84 </span><span class="hid">AsyncScheduler</span> <span class="hid">t7</span> = <span class="hid">s7</span>.<span class="hid">schedulerObject</span>();
+<span class="br">85 </span>
+<span class="br">86 </span><span class="kwrd">assert</span>(<span class="hid">t1</span> !<span class="kwrd">is</span> <span class="kwrd">null</span>);
+<span class="br">87 </span><span class="kwrd">assert</span>(<span class="hid">t2</span> !<span class="kwrd">is</span> <span class="kwrd">null</span>);
+<span class="br">88 </span><span class="kwrd">assert</span>(<span class="hid">t3</span> !<span class="kwrd">is</span> <span class="kwrd">null</span>);
+<span class="br">89 </span><span class="kwrd">assert</span>(<span class="hid">t4</span> !<span class="kwrd">is</span> <span class="kwrd">null</span>);
+<span class="br">90 </span><span class="kwrd">assert</span>(<span class="hid">t5</span> !<span class="kwrd">is</span> <span class="kwrd">null</span>);
+<span class="br">91 </span><span class="kwrd">assert</span>(<span class="hid">t6</span> !<span class="kwrd">is</span> <span class="kwrd">null</span>);
+<span class="br">92 </span><span class="kwrd">assert</span>(<span class="hid">t7</span> !<span class="kwrd">is</span> <span class="kwrd">null</span>);
+<span class="br">93 </span>
+<span class="br">94 </span><span class="kwrd">assert</span>(<span class="hid">t3</span> <span class="kwrd">is</span> <span class="hid">s3</span>);
+<span class="br">95 </span><span class="kwrd">assert</span>(<span class="hid">t7</span> <span class="kwrd">is</span> <span class="hid">s7</span>);</pre></div><div class="unittest-example-holder"><div class="documentation-comment"></div><pre class="d_code highlighted with-line-wrappers"><span class="br">1 </span><span class="kwrd">struct</span> <span class="hid">MyScheduler</span>
+<span class="br">2 </span>{
+<span class="br">3 </span>    <span class="type">void</span> <span class="hid">start</span>(<span class="type">void</span> <span class="kwrd">delegate</span>() <span class="hid">op</span>)
+<span class="br">4 </span>    {
+<span class="br">5 </span>        <span class="hid">op</span>();
+<span class="br">6 </span>    }
+<span class="br">7 </span>}
+<span class="br">8 </span>
+<span class="br">9 </span><span class="hid">MyScheduler</span> <span class="hid">scheduler</span>;
+<span class="br">10 </span><span class="hid">Scheduler</span> <span class="hid">wrapped</span> = <span class="hid">scheduler</span>.<span class="hid">schedulerObject</span>();
+<span class="br">11 </span><span class="kwrd">assert</span>(<span class="hid">wrapped</span> !<span class="kwrd">is</span> <span class="kwrd">null</span>);</pre></div></div></div>
+		<div id="page-nav"><a href="rx.html" class="parent">rx</a><a href="rx.scheduler.html" class="parent">scheduler</a>
+		<span class="type-separator">classes</span><ul><li><a href="rx.scheduler.HistoricalScheduler.html" class="class">HistoricalScheduler</a></li><li><a href="rx.scheduler.LocalScheduler.html" class="class">LocalScheduler</a></li><li><a href="rx.scheduler.SchedulerObject.html" class="class">SchedulerObject</a></li><li><a href="rx.scheduler.SubscribeOnObservable.html" class="class">SubscribeOnObservable</a></li><li><a href="rx.scheduler.TaskPoolScheduler.html" class="class">TaskPoolScheduler</a></li><li><a href="rx.scheduler.ThreadScheduler.html" class="class">ThreadScheduler</a></li></ul><span class="type-separator">enums</span><ul><li><a href="rx.scheduler.isAsyncScheduler.html" class="enum">isAsyncScheduler</a></li><li><a href="rx.scheduler.isScheduler.html" class="enum">isScheduler</a></li></ul><span class="type-separator">functions</span><ul><li><a href="rx.scheduler.currentScheduler.1.html" class="function">currentScheduler</a></li><li><a href="rx.scheduler.historicalScheduler.html" class="function">historicalScheduler</a></li><li><a href="rx.scheduler.observeOn.html" class="function">observeOn</a></li><li><a href="rx.scheduler.schedulerObject.html" class="function current">schedulerObject</a></li><li><a href="rx.scheduler.subscribeOn.html" class="function">subscribeOn</a></li></ul><span class="type-separator">interfaces</span><ul><li><a href="rx.scheduler.AsyncScheduler.html" class="interface">AsyncScheduler</a></li><li><a href="rx.scheduler.Scheduler.html" class="interface">Scheduler</a></li></ul><span class="type-separator">structs</span><ul><li><a href="rx.scheduler.ObserveOnObservable.html" class="struct">ObserveOnObservable</a></li><li><a href="rx.scheduler.ObserveOnObserver.html" class="struct">ObserveOnObserver</a></li></ul><span class="type-separator">templates</span><ul><li><a href="rx.scheduler.MostDerivedScheduler.html" class="template">MostDerivedScheduler</a></li></ul></div>
+	</div>
+	<div id="page-footer">Page generated by <a href="https://github.com/adamdruppe/adrdox">adrdox</a></div>
+</body>
+</html>
