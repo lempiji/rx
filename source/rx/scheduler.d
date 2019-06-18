@@ -11,6 +11,8 @@ import core.time;
 import core.thread : Thread;
 import std.range : put;
 import std.parallelism : TaskPool, taskPool, task;
+import std.container.binaryheap;
+import std.datetime.stopwatch;
 
 //Note:
 // In single core, taskPool's worker are not initialized.
@@ -456,7 +458,7 @@ unittest
             return null;
         }
     }
-    
+
     class MyClassPartAsyncScheduler : Scheduler
     {
         void start(void delegate() op)
@@ -994,4 +996,171 @@ unittest
     TaskPoolScheduler s1 = new TaskPoolScheduler;
     TaskPoolScheduler s2 = currentScheduler = s1;
     assert(s2 is s1);
+}
+
+private struct ScheduleItem
+{
+    CancellationToken disposable;
+    Duration dueTime;
+    void delegate() action;
+
+    this(Duration dueTime, void delegate() action)
+    {
+        this.disposable = new CancellationToken;
+        this.dueTime = dueTime;
+        this.action = action;
+    }
+
+    bool isCanceled() @property
+    {
+        return disposable.isDisposed;
+    }
+
+    int opCmp(const ScheduleItem rhs) const
+    {
+        return dueTime.opCmp(rhs.dueTime);
+    }
+}
+
+unittest
+{
+    bool flag = false;
+    auto item = ScheduleItem(1.seconds, () { flag = true; });
+    assert(!flag);
+    assert(!item.isCanceled);
+    item.action();
+    assert(flag);
+    assert(!item.isCanceled);
+}
+
+unittest
+{
+    bool flag = false;
+    auto item = ScheduleItem(1.seconds, () { flag = true; });
+    auto disposable = item.disposable;
+
+    disposable.dispose();
+    if (!item.isCanceled)
+        item.action();
+    assert(item.isCanceled);
+    assert(!flag);
+}
+
+private class SchedulerQueue
+{
+    alias Queue = BinaryHeap!(ScheduleItem[], "a > b");
+
+    Queue queue; // min heap
+
+    this()
+    {
+        this.queue = Queue([], 4);
+    }
+
+    bool empty()
+    {
+        return queue.empty;
+    }
+
+    void enqueue(ScheduleItem item)
+    {
+        queue.insert(item);
+    }
+
+    ScheduleItem dequeue()
+    {
+        return queue.removeAny();
+    }
+}
+
+unittest
+{
+    auto queue = new SchedulerQueue;
+    queue.enqueue(ScheduleItem(1.seconds, null));
+    queue.enqueue(ScheduleItem(2.seconds, null));
+
+    auto item0 = queue.dequeue();
+    assert(item0.dueTime == 1.seconds);
+    auto item1 = queue.dequeue();
+    assert(item1.dueTime == 2.seconds);
+}
+
+///
+class CurrentThreadScheduler : AsyncScheduler
+{
+    private static SchedulerQueue currentThreadQueue;
+    private static StopWatch stopwatch;
+
+    private Duration time()
+    {
+        if (stopwatch is StopWatch.init)
+            stopwatch = StopWatch(AutoStart.yes);
+
+        return stopwatch.peek();
+    }
+
+    ///
+    void start(void delegate() op)
+    {
+        schedule(op, Duration.zero);
+    }
+
+    ///
+    CancellationToken schedule(void delegate() op, Duration dueTime)
+    {
+        auto item = ScheduleItem(time() + dueTime, op);
+
+        if (currentThreadQueue is null)
+        {
+            currentThreadQueue = new SchedulerQueue;
+            scope (exit)
+                currentThreadQueue = null;
+
+            currentThreadQueue.enqueue(item);
+
+            while (!currentThreadQueue.empty)
+            {
+                auto work = currentThreadQueue.dequeue();
+                auto dt = work.dueTime - time();
+
+                if (dt > Duration.zero)
+                {
+                    Thread.sleep(dt);
+                }
+
+                if (!work.isCanceled)
+                    work.action();
+            }
+        }
+        else
+        {
+            currentThreadQueue.enqueue(item);
+        }
+
+        return item.disposable;
+    }
+}
+
+unittest
+{
+    auto current = new CurrentThreadScheduler;
+
+    size_t count = 0;
+    void pushTask()
+    {
+        count++;
+        if (count < 5)
+        {
+            current.schedule(&pushTask, (count * 10).msecs);
+        }
+    }
+
+    const start = MonoTime.currTime;
+    current.start(&pushTask);
+    const end = MonoTime.currTime;
+
+    import std.conv : to;
+    assert(end - start > 99.msecs, "time : " ~ to!string(end - start));
+    assert(end - start < 105.msecs, "time : " ~ to!string(end - start));
+    assert(count == 5);
 }
