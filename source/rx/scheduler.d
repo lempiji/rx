@@ -36,21 +36,6 @@ enum isScheduler(T) = is(typeof({
             T scheduler = void;
 
             void delegate() work = null;
-            scheduler.start(work);
-        }));
-
-///
-unittest
-{
-    static assert(isScheduler!Scheduler);
-    static assert(isScheduler!LocalScheduler);
-}
-
-///
-enum isAsyncScheduler(T) = isScheduler!T && is(typeof({
-            T scheduler = void;
-
-            void delegate() work = null;
             Duration time = void;
             CancellationToken token = scheduler.schedule(work, time);
         }));
@@ -58,57 +43,44 @@ enum isAsyncScheduler(T) = isScheduler!T && is(typeof({
 ///
 unittest
 {
-    static assert(!isAsyncScheduler!Scheduler);
-    static assert(!isAsyncScheduler!LocalScheduler);
-
-    static assert(isAsyncScheduler!AsyncScheduler);
-    static assert(isAsyncScheduler!ThreadScheduler);
-    static assert(isAsyncScheduler!TaskPoolScheduler);
-    static assert(isAsyncScheduler!(HistoricalScheduler!ThreadScheduler));
-    static assert(isAsyncScheduler!(HistoricalScheduler!TaskPoolScheduler));
+    static assert(isScheduler!Scheduler);
+    static assert(isScheduler!ImmediateScheduler);
+    static assert(isScheduler!ThreadScheduler);
+    static assert(isScheduler!TaskPoolScheduler);
+    static assert(isScheduler!(HistoricalScheduler!ThreadScheduler));
+    static assert(isScheduler!(HistoricalScheduler!TaskPoolScheduler));
 }
 
 ///
 interface Scheduler
 {
     ///
-    void start(void delegate() op);
-}
-
-///
-interface AsyncScheduler : Scheduler
-{
-    ///
     CancellationToken schedule(void delegate() op, Duration val);
 }
 
 ///
-class LocalScheduler : Scheduler
+class ImmediateScheduler : Scheduler
 {
 public:
     ///
-    void start(void delegate() op)
+    CancellationToken schedule(void delegate() op, Duration dueTime)
     {
+        if (dueTime > Duration.zero)
+            Thread.sleep(dueTime);
         op();
+        return new CancellationToken;
     }
 }
 
 ///
-class ThreadScheduler : AsyncScheduler
+class ThreadScheduler : Scheduler
 {
-    ///
-    void start(void delegate() op)
-    {
-        auto t = new Thread(op);
-        t.start();
-    }
-
     ///
     CancellationToken schedule(void delegate() op, Duration val)
     {
         auto target = MonoTime.currTime + val;
         auto c = new CancellationToken;
-        start({
+        auto t = new Thread({
             if (c.isCanceled)
                 return;
             auto dt = target - MonoTime.currTime;
@@ -117,6 +89,7 @@ class ThreadScheduler : AsyncScheduler
             if (!c.isCanceled)
                 op();
         });
+        t.start();
         return c;
     }
 }
@@ -142,7 +115,7 @@ unittest
 }
 
 ///
-class TaskPoolScheduler : AsyncScheduler
+class TaskPoolScheduler : Scheduler
 {
 public:
     ///
@@ -156,25 +129,19 @@ public:
 
 public:
     ///
-    void start(void delegate() op)
-    {
-        _pool.put(task(op));
-    }
-
-    ///
     CancellationToken schedule(void delegate() op, Duration val)
     {
         auto target = MonoTime.currTime + val;
         auto c = new CancellationToken;
-        start({
-            if (c.isCanceled)
-                return;
-            auto dt = target - MonoTime.currTime;
-            if (dt > Duration.zero)
-                Thread.sleep(dt);
-            if (!c.isCanceled)
-                op();
-        });
+        _pool.put(task({
+                if (c.isCanceled)
+                    return;
+                auto dt = target - MonoTime.currTime;
+                if (dt > Duration.zero)
+                    Thread.sleep(dt);
+                if (!c.isCanceled)
+                    op();
+            }));
         return c;
     }
 
@@ -210,25 +177,24 @@ unittest
 }
 
 ///
-class HistoricalScheduler(T) : AsyncScheduler
+class HistoricalScheduler(T) : Scheduler
 {
-    static assert(is(T : AsyncScheduler));
+    static assert(is(T : Scheduler));
 
 public:
     ///
     this(T innerScheduler)
     {
-        _offset = Duration.zero;
+        this(innerScheduler, Duration.zero);
+    }
+
+    this(T innerScheduler, Duration offset)
+    {
         _innerScheduler = innerScheduler;
+        _offset = offset;
     }
 
 public:
-    ///
-    void start(void delegate() op)
-    {
-        _innerScheduler.start(op);
-    }
-
     ///
     CancellationToken schedule(void delegate() op, Duration val)
     {
@@ -258,7 +224,7 @@ unittest
     scope (exit)
         writeln("HistoricalScheduler test is completed.");
 
-    void test(AsyncScheduler scheduler)
+    void test(Scheduler scheduler)
     {
         import rx.util : EventSignal;
 
@@ -281,7 +247,7 @@ unittest
 
 unittest
 {
-    void test(AsyncScheduler scheduler)
+    void test(Scheduler scheduler)
     {
         bool done = false;
         auto c = scheduler.schedule(() { done = true; }, dur!"msecs"(50));
@@ -315,48 +281,11 @@ unittest
 
 unittest
 {
-    static assert(!__traits(compiles, { HistoricalScheduler!LocalScheduler s; }));
+    static assert(__traits(compiles, { HistoricalScheduler!ImmediateScheduler s; }));
 }
 
 ///
-template MostDerivedScheduler(T)
-{
-    static assert(isScheduler!T);
-
-    static if (isAsyncScheduler!T)
-    {
-        ///
-        alias MostDerivedScheduler = AsyncScheduler;
-    }
-    else
-    {
-        ///
-        alias MostDerivedScheduler = Scheduler;
-    }
-}
-
-///
-unittest
-{
-    alias S1 = MostDerivedScheduler!Scheduler;
-    alias S2 = MostDerivedScheduler!AsyncScheduler;
-    alias S3 = MostDerivedScheduler!LocalScheduler;
-    alias S4 = MostDerivedScheduler!ThreadScheduler;
-    alias S5 = MostDerivedScheduler!TaskPoolScheduler;
-    alias S6 = MostDerivedScheduler!(HistoricalScheduler!ThreadScheduler);
-    alias S7 = MostDerivedScheduler!(HistoricalScheduler!TaskPoolScheduler);
-
-    static assert(is(S1 == Scheduler));
-    static assert(is(S2 == AsyncScheduler));
-    static assert(is(S3 == Scheduler));
-    static assert(is(S4 == AsyncScheduler));
-    static assert(is(S5 == AsyncScheduler));
-    static assert(is(S6 == AsyncScheduler));
-    static assert(is(S7 == AsyncScheduler));
-}
-
-///
-final class SchedulerObject(TScheduler) : MostDerivedScheduler!TScheduler
+final class SchedulerObject(TScheduler) : Scheduler
 {
 private:
     TScheduler scheduler;
@@ -375,38 +304,27 @@ public:
     }
 
     ///
-    void start(void delegate() op)
+    CancellationToken schedule(void delegate() op, Duration val)
     {
-        scheduler.start(op);
-    }
-
-    static if (isAsyncScheduler!TScheduler)
-    {
-        ///
-        CancellationToken schedule(void delegate() op, Duration val)
-        {
-            return scheduler.schedule(op, val);
-        }
+        return scheduler.schedule(op, val);
     }
 }
 
-///
-MostDerivedScheduler!TScheduler schedulerObject(TScheduler)(auto ref TScheduler scheduler)
+unittest
 {
-    static if (is(MostDerivedScheduler!TScheduler == AsyncScheduler))
-    {
-        static if (is(TScheduler : AsyncScheduler))
-            return scheduler;
-        else
-            return new SchedulerObject!TScheduler(scheduler);
-    }
-    else static if (is(MostDerivedScheduler!TScheduler == Scheduler))
-    {
-        static if (is(TScheduler : Scheduler))
-            return scheduler;
-        else
-            return new SchedulerObject!TScheduler(scheduler);
-    }
+    auto inner = new ImmediateScheduler;
+    auto scheduler = new SchedulerObject!Scheduler(inner);
+}
+
+///
+auto schedulerObject(TScheduler)(TScheduler scheduler)
+{
+    static assert(isScheduler!TScheduler);
+    
+    static if (is(TScheduler : Scheduler))
+        return scheduler;
+    else static if (isScheduler!TScheduler)
+        return new SchedulerObject!TScheduler(scheduler);
     else
         static assert(false);
 }
@@ -416,99 +334,44 @@ unittest
 {
     struct MyScheduler
     {
-        void start(void delegate() op)
+        CancellationToken schedule(void delegate() op, Duration val)
         {
+            return null;
         }
     }
 
     class MyClassScheduler
     {
-        void start(void delegate() op)
+        CancellationToken schedule(void delegate() op, Duration val)
         {
+            return null;
         }
     }
 
     class MyClassDerivedScheduler : Scheduler
     {
-        void start(void delegate() op)
-        {
-        }
-    }
-
-    struct MyAsyncScheduler
-    {
-        void start(void delegate() op)
-        {
-        }
-
         CancellationToken schedule(void delegate() op, Duration val)
         {
             return null;
         }
     }
 
-    class MyClassAsyncScheduler
-    {
-        void start(void delegate() op)
-        {
-        }
-
-        CancellationToken schedule(void delegate() op, Duration val)
-        {
-            return null;
-        }
-    }
-
-    class MyClassPartAsyncScheduler : Scheduler
-    {
-        void start(void delegate() op)
-        {
-        }
-
-        CancellationToken schedule(void delegate() op, Duration val)
-        {
-            return null;
-        }
-    }
-
-    class MyClassDerivedAsyncScheduler : AsyncScheduler
-    {
-        void start(void delegate() op)
-        {
-        }
-
-        CancellationToken schedule(void delegate() op, Duration val)
-        {
-            return null;
-        }
-    }
+    static assert(isScheduler!MyScheduler);
+    static assert(isScheduler!MyClassScheduler);
+    static assert(isScheduler!MyClassDerivedScheduler);
 
     auto s1 = MyScheduler();
     auto s2 = new MyClassScheduler;
     auto s3 = new MyClassDerivedScheduler;
-    auto s4 = MyAsyncScheduler();
-    auto s5 = new MyClassAsyncScheduler;
-    auto s6 = new MyClassPartAsyncScheduler;
-    auto s7 = new MyClassDerivedAsyncScheduler;
 
     Scheduler t1 = s1.schedulerObject();
     Scheduler t2 = s2.schedulerObject();
     Scheduler t3 = s3.schedulerObject();
-    AsyncScheduler t4 = s4.schedulerObject();
-    AsyncScheduler t5 = s5.schedulerObject();
-    AsyncScheduler t6 = s6.schedulerObject();
-    AsyncScheduler t7 = s7.schedulerObject();
 
     assert(t1 !is null);
     assert(t2 !is null);
     assert(t3 !is null);
-    assert(t4 !is null);
-    assert(t5 !is null);
-    assert(t6 !is null);
-    assert(t7 !is null);
-
     assert(t3 is s3);
-    assert(t7 is s7);
 }
 
 ///
@@ -516,9 +379,13 @@ unittest
 {
     struct MyScheduler
     {
-        void start(void delegate() op)
+        CancellationToken schedule(void delegate() op, Duration dueTime)
         {
+            if (dueTime > Duration.zero)
+                Thread.sleep(dueTime);
+
             op();
+            return new CancellationToken;
         }
     }
 
@@ -554,7 +421,7 @@ public:
     ///
     void put(E obj)
     {
-        _scheduler.start({
+        _scheduler.schedule({
             static if (hasFailure!TObserver)
             {
                 try
@@ -571,7 +438,7 @@ public:
             {
                 _observer.put(obj);
             }
-        });
+        }, Duration.zero);
     }
 
     static if (hasCompleted!TObserver)
@@ -579,7 +446,7 @@ public:
         ///
         void completed()
         {
-            _scheduler.start({ _observer.completed(); });
+            _scheduler.schedule({ _observer.completed(); }, Duration.zero);
         }
     }
     static if (hasFailure!TObserver)
@@ -587,7 +454,7 @@ public:
         ///
         void failure(Exception e)
         {
-            _scheduler.start({ _observer.failure(e); });
+            _scheduler.schedule({ _observer.failure(e); }, Duration.zero);
         }
     }
 private:
@@ -642,7 +509,7 @@ unittest
     import rx.subject : SubjectObject;
 
     auto sub = new SubjectObject!int;
-    auto scheduler = new LocalScheduler;
+    auto scheduler = new ImmediateScheduler;
 
     auto scheduled = TestObservable(sub, scheduler);
 
@@ -675,7 +542,7 @@ unittest
     import rx.subject;
 
     auto subject = new SubjectObject!int;
-    auto scheduler = new LocalScheduler;
+    auto scheduler = new ImmediateScheduler;
     auto scheduled = subject.observeOn(scheduler);
 
     import std.array : appender;
@@ -699,7 +566,7 @@ unittest
     import rx.subject;
 
     auto subject = new SubjectObject!int;
-    auto scheduler = new LocalScheduler;
+    auto scheduler = new ImmediateScheduler;
     auto scheduled = subject.observeOn(scheduler);
 
     struct ObserverA
@@ -773,11 +640,11 @@ public:
     auto subscribe(TObserver)(TObserver observer)
     {
         auto disposable = new SingleAssignmentDisposable;
-        _scheduler.start({
+        auto cancel = _scheduler.schedule({
             auto temp = doSubscribe(_observable, observer);
             disposable.setDisposable(disposableObject(temp));
-        });
-        return disposable;
+        }, Duration.zero);
+        return new CompositeDisposable(disposable, cancel);
     }
 
 private:
@@ -793,7 +660,7 @@ unittest
     import rx.subject : SubjectObject;
 
     auto sub = new SubjectObject!int;
-    auto scheduler = new LocalScheduler;
+    auto scheduler = new ImmediateScheduler;
 
     auto scheduled = new TestObservable(sub, scheduler);
 
@@ -827,7 +694,7 @@ unittest
         .put(observer, 100);
         return NopDisposable.instance;
     });
-    auto scheduler = new LocalScheduler;
+    auto scheduler = new ImmediateScheduler;
 
     auto scheduled = sub.subscribeOn(scheduler);
 
@@ -950,18 +817,18 @@ unittest
         shared count = 0;
         foreach (n; 0 .. N)
         {
-            scheduler.start(() {
+            scheduler.schedule(() {
                 atomicOp!"+="(count, 1);
                 Thread.sleep(dur!"msecs"(50));
                 if (atomicLoad(count) == N)
                     signal.setSignal();
-            });
+            }, Duration.zero);
         }
         signal.wait();
         assert(count == N);
     }
 
-    test(new LocalScheduler);
+    test(new ImmediateScheduler);
     test(new ThreadScheduler);
     test(new TaskPoolScheduler);
     test(new HistoricalScheduler!ThreadScheduler(new ThreadScheduler));
@@ -1086,7 +953,7 @@ unittest
 }
 
 ///
-class CurrentThreadScheduler : AsyncScheduler
+class CurrentThreadScheduler : Scheduler
 {
     private static SchedulerQueue currentThreadQueue;
     private static StopWatch stopwatch;
@@ -1160,6 +1027,7 @@ unittest
     const end = MonoTime.currTime;
 
     import std.conv : to;
+
     assert(end - start > 99.msecs, "time : " ~ to!string(end - start));
     assert(end - start < 105.msecs, "time : " ~ to!string(end - start));
     assert(count == 5);
