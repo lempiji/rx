@@ -53,20 +53,11 @@ struct TimerHandler
     void delegate() action;
 }
 
-class DlangUIScheduler : Widget, AsyncScheduler
+class DlangUIScheduler : Widget, Scheduler
 {
     TimerHandler[ulong] _actions;
     Object _gate = new Object();
     ulong _timerId;
-
-    void start(void delegate() op)
-    {
-        auto id = setTimer(0);
-        synchronized (_gate)
-        {
-            _actions[id] = TimerHandler(null, op);
-        }
-    }
 
     CancellationToken schedule(void delegate() op, Duration val)
     {
