@@ -881,7 +881,11 @@ public:
     {
         .put(observer, _buffer[]);
         if (_completed)
+        {
+            static if (hasCompleted!TObserver)
+                observer.completed();
             return NopDisposable.instance;
+        }
         else
             return _subject.doSubscribe(observer).disposableObject();
     }
@@ -891,7 +895,10 @@ public:
     {
         .put(observer, _buffer[]);
         if (_completed)
+        {
+            observer.completed();
             return NopDisposable.instance;
+        }
         else
             return disposableObject(_subject.doSubscribe(observer));
     }
@@ -1024,6 +1031,33 @@ unittest
     sub.doSubscribe!(v => buf ~= v);
 
     assert(buf == [2, 3]);
+}
+
+unittest
+{
+    auto sub = new ReplaySubject!int(5);
+    .put(sub, 1);
+    .put(sub, 2);
+    .put(sub, 3);
+    sub.completed();
+
+    auto observer = new CounterObserver!int;
+    sub.subscribe(observer);
+
+    assert(observer.putCount == 3);
+    assert(observer.completedCount == 1);
+
+    size_t count;
+    struct TestObserver
+    {
+        void put(int n)
+        {
+            count++;
+        }
+    }
+
+    sub.subscribe(TestObserver());
+    assert(count == 3);
 }
 
 private struct RingBuffer(T)
