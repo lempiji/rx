@@ -274,10 +274,101 @@ Disposable disposable = source.disposableObject();
 
 ## Scheduler
 ### 要件・型チェックテンプレート
-// TODO
+
+`Scheduler`は`rx.scheduler`というモジュールで定義されているコンセプトです。
+これは、「処理の実行を遅延させたりスレッドを切り替える役割」を持った「スケジューリングを担うオブジェクト」を表します。
+
+この`Scheduler`は、`schedule`というメソッドで「一定時間後に処理を実行するよう登録する機能」があります。
+また、この処理は実行前であればキャンセルすることもできます。
+
+コードで表すと以下のようになります。
+
+```d
+import core.time : seconds;
+import std.stdio : writeln;
+
+Scheduler scheduler = new TaskPoolScheduler;
+auto disposable = scheduler.schedule({
+        writeln("execute on taskPool");
+    }, 1.seconds);
+
+disposable.dispose(); // cancel
+```
+
+#### rxにおけるSchedulerの役割
+
+`rx`では多くの非同期処理を扱うため、処理のタイミングや順序、実行スレッドといった「スケジューリング」について考える必要があります。
+
+特にGUIアプリケーションでは、いわゆる「UIスレッド」上でGUI操作を行う必要がある」といった制約を持つ場合があります。
+こういったケースでは、独自の`Scheduler`を実装することで処理をイベントループにディスパッチすることができるようになります。
+
+##### Schedulerの種類
+
+`rx`が標準で提供する`Scheduler`は以下の5種類があります。
+
+- `ImmediateScheduler`
+    - 処理を同期的に実行します。
+- `CurrentThreadScheduler`
+    - 処理を現在のスレッド上でキューに入れながらFIFOで実行します。
+- `TaskPoolScheduler`
+    - 処理をTaskPool上で実行します。
+- `ThreadScheduler`
+    - 処理を新しいスレッド上で実行します。
+- `HistoricalScheduler`
+    - 他の`Scheduler`をラップして、処理時間をずらす機能を持った特殊な`Scheduler`です。
+
+
+##### 実行の切り替えタイミング
+
+`rx`の処理は実行スレッドの切り替えタイミングが大きく2つあります。
+
+1つは`put`や`completed`など「`subscribe`以外の処理」、もう1つは「`subscribe`を含むすべての処理」です。
+
+これを任意の`Scheduler`と組み合わせて処理するため、標準で`observeOn`と`subscribeOn`という関数を提供します。
+使い方は以下のようになります。
+
+```d
+Observable!int observable;
+
+// subscribeの処理も含めてすべての処理がTaskPool上で行われます
+auto disposable = observable
+    .subscribeOn(new TaskPoolScheduler)
+    .subscribe((int n) { writeln(n); });
+```
+
+```d
+Observable!int observable;
+
+// subscribeの処理は即時行われ、putやcompletedの処理がTaskPool上で行われます
+auto disposable = observable
+    .observeOn(new TaskPoolScheduler)
+    .subscribe((int n) { writeln(n); });
+```
+
 
 ### 共通インターフェース、ラップ関数
-// TODO
+
+他のコンセプトと同様、`Scheduler`という「共通インターフェース」と`schedulerObject`という「ラップ関数」を提供します。
+
+これらの具体的な定義は以下の通りです。
+
+```d
+interface Scheduler
+{
+    Disposable schedule(void delegate() op, Duration dueTime);
+}
+
+struct MyScheduler
+{
+    Disposable schedule(void delegate() op, Duration dueTime)
+    {
+        // process
+    }
+}
+
+MyScheduler source;
+Scheduler scheduler = source.schedulerObject();
+```
 
 ## Subject
 ### 機能と役割

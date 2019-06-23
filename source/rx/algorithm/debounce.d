@@ -15,7 +15,7 @@ import rx.scheduler;
 // Debounce
 //#########################
 ///
-DebounceObservable!(T, TScheduler, T.ElementType) debounce(T, TScheduler : AsyncScheduler)(
+DebounceObservable!(T, TScheduler, T.ElementType) debounce(T, TScheduler : Scheduler)(
         T observable, Duration val, TScheduler scheduler)
 {
     return typeof(return)(observable, scheduler, val);
