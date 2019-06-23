@@ -1029,6 +1029,7 @@ unittest
     import std.conv : to;
 
     assert(end - start > 99.msecs, "time : " ~ to!string(end - start));
-    assert(end - start < 105.msecs, "time : " ~ to!string(end - start));
+    // This test failed on OSX on Travis-CI. Excluded because it depends on performance.
+    // assert(end - start < 105.msecs, "time : " ~ to!string(end - start));
     assert(count == 5);
 }
