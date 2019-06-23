@@ -37,7 +37,8 @@ enum isScheduler(T) = is(typeof({
 
             void delegate() work = null;
             Duration time = void;
-            CancellationToken token = scheduler.schedule(work, time);
+            auto disposable = scheduler.schedule(work, time);
+            static assert(isDisposable!(typeof(disposable)));
         }));
 
 ///
@@ -55,7 +56,7 @@ unittest
 interface Scheduler
 {
     ///
-    CancellationToken schedule(void delegate() op, Duration val);
+    Disposable schedule(void delegate() op, Duration val);
 }
 
 ///
@@ -63,12 +64,12 @@ class ImmediateScheduler : Scheduler
 {
 public:
     ///
-    CancellationToken schedule(void delegate() op, Duration dueTime)
+    Disposable schedule(void delegate() op, Duration dueTime)
     {
         if (dueTime > Duration.zero)
             Thread.sleep(dueTime);
         op();
-        return new CancellationToken;
+        return NopDisposable.instance;
     }
 }
 
@@ -76,7 +77,7 @@ public:
 class ThreadScheduler : Scheduler
 {
     ///
-    CancellationToken schedule(void delegate() op, Duration val)
+    Disposable schedule(void delegate() op, Duration val)
     {
         auto target = MonoTime.currTime + val;
         auto c = new CancellationToken;
@@ -111,7 +112,7 @@ unittest
 
     signal.wait();
     assert(done);
-    assert(!c.isCanceled);
+    assert(!(cast(CancellationToken) c).isCanceled);
 }
 
 ///
@@ -129,7 +130,7 @@ public:
 
 public:
     ///
-    CancellationToken schedule(void delegate() op, Duration val)
+    Disposable schedule(void delegate() op, Duration val)
     {
         auto target = MonoTime.currTime + val;
         auto c = new CancellationToken;
@@ -173,7 +174,7 @@ unittest
 
     signal.wait();
     assert(done);
-    assert(!c.isCanceled);
+    assert(!(cast(CancellationToken) c).isCanceled);
 }
 
 ///
@@ -196,7 +197,7 @@ public:
 
 public:
     ///
-    CancellationToken schedule(void delegate() op, Duration val)
+    Disposable schedule(void delegate() op, Duration val)
     {
         return _innerScheduler.schedule(op, val - _offset);
     }
@@ -236,7 +237,7 @@ unittest
 
         signal.wait();
         assert(done);
-        assert(!c.isCanceled);
+        assert(!(cast(CancellationToken) c).isCanceled);
     }
 
     //test(new ThreadScheduler);
@@ -251,7 +252,7 @@ unittest
     {
         bool done = false;
         auto c = scheduler.schedule(() { done = true; }, dur!"msecs"(50));
-        c.cancel();
+        c.dispose();
         Thread.sleep(dur!"msecs"(100));
         assert(!done);
     }
@@ -304,9 +305,9 @@ public:
     }
 
     ///
-    CancellationToken schedule(void delegate() op, Duration val)
+    Disposable schedule(void delegate() op, Duration val)
     {
-        return scheduler.schedule(op, val);
+        return scheduler.schedule(op, val).disposableObject();
     }
 }
 
@@ -320,7 +321,7 @@ unittest
 auto schedulerObject(TScheduler)(TScheduler scheduler)
 {
     static assert(isScheduler!TScheduler);
-    
+
     static if (is(TScheduler : Scheduler))
         return scheduler;
     else static if (isScheduler!TScheduler)
@@ -332,17 +333,24 @@ auto schedulerObject(TScheduler)(TScheduler scheduler)
 ///
 unittest
 {
+    struct MyDisposable
+    {
+        void dispose()
+        {
+        }
+    }
+
     struct MyScheduler
     {
-        CancellationToken schedule(void delegate() op, Duration val)
+        MyDisposable schedule(void delegate() op, Duration val)
         {
-            return null;
+            return MyDisposable();
         }
     }
 
     class MyClassScheduler
     {
-        CancellationToken schedule(void delegate() op, Duration val)
+        Disposable schedule(void delegate() op, Duration val)
         {
             return null;
         }
@@ -350,7 +358,7 @@ unittest
 
     class MyClassDerivedScheduler : Scheduler
     {
-        CancellationToken schedule(void delegate() op, Duration val)
+        Disposable schedule(void delegate() op, Duration val)
         {
             return null;
         }
@@ -379,13 +387,13 @@ unittest
 {
     struct MyScheduler
     {
-        CancellationToken schedule(void delegate() op, Duration dueTime)
+        Disposable schedule(void delegate() op, Duration dueTime)
         {
             if (dueTime > Duration.zero)
                 Thread.sleep(dueTime);
 
             op();
-            return new CancellationToken;
+            return NopDisposable.instance;
         }
     }
 
@@ -973,7 +981,7 @@ class CurrentThreadScheduler : Scheduler
     }
 
     ///
-    CancellationToken schedule(void delegate() op, Duration dueTime)
+    Disposable schedule(void delegate() op, Duration dueTime)
     {
         auto item = ScheduleItem(time() + dueTime, op);
 
