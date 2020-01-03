@@ -1001,7 +1001,7 @@ unittest
     auto sub = new SubjectObject!int;
     size_t disposedCount = 0;
 
-    auto disposable = sub.doSubscribe!((int) {  })
+    auto disposable = sub.doSubscribe!((int) {})
         .withDisposed!(() { disposedCount++; });
 
     disposable.dispose();
@@ -1038,7 +1038,7 @@ unittest
     auto sub = new SubjectObject!int;
     size_t disposedCount = 0;
 
-    auto disposable = sub.doSubscribe!((int) {  }).withDisposed(() {
+    auto disposable = sub.doSubscribe!((int) {}).withDisposed(() {
         disposedCount++;
     });
 
@@ -1046,4 +1046,72 @@ unittest
     disposable.dispose();
 
     assert(disposedCount == 1);
+}
+
+///
+void atomicDispose(T)(ref shared(T) disposable)
+        if (isDisposable!T && (is(T == class) || is(T == interface)))
+{
+    auto temp = exchange(disposable, null).assumeThreadLocal();
+    if (temp !is null)
+        temp.dispose();
+}
+///
+unittest
+{
+    size_t count;
+    class MyDisposable
+    {
+        void dispose()
+        {
+            count++;
+        }
+    }
+
+    auto disposable = cast(shared) new MyDisposable;
+
+    .atomicDispose(disposable);
+    assert(count == 1);
+    assert(disposable is null);
+
+    .atomicDispose(disposable);
+    assert(count == 1);
+    assert(disposable is null);
+}
+///
+unittest
+{
+    size_t count;
+    class MyDisposable : Disposable
+    {
+        void dispose()
+        {
+            count++;
+        }
+    }
+
+    shared(Disposable) disposable = cast(shared) new MyDisposable;
+
+    .atomicDispose(disposable);
+    assert(count == 1);
+    assert(disposable is null);
+
+    .atomicDispose(disposable);
+    assert(count == 1);
+    assert(disposable is null);
+}
+///
+unittest
+{
+    class MyDisposable
+    {
+        void dispose()
+        {
+        }
+    }
+
+    shared(MyDisposable) disposable1 = null;
+    .atomicDispose(disposable1);
+    shared(Disposable) disposable2 = null;
+    .atomicDispose(disposable2);
 }
