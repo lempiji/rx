@@ -7,13 +7,6 @@ import core.atomic;
 import core.sync.mutex;
 import core.sync.condition;
 
-// @@TODO@@ Remove this overload, when the phobos of LDC supports TailShared.
-///
-auto ref T assumeThreadLocal(T)(auto ref T obj) if (!is(T == shared))
-{
-    return obj;
-}
-
 ///
 auto ref T assumeThreadLocal(T)(auto ref shared(T) obj)
 {
@@ -184,7 +177,7 @@ public:
             if (oldValue == 0)
                 return false;
         }
-        while (!cas(&_count, oldValue, cast(size_t)0));
+        while (!cas(&_count, oldValue, cast(size_t) 0));
 
         return true;
     }
