@@ -559,6 +559,8 @@ unittest
 ///
 class CompositeDisposable : Disposable
 {
+    private enum ShrinkThreshold = 64;
+
 public:
     ///
     this(Disposable[] disposables...)
@@ -568,6 +570,12 @@ public:
     }
 
 public:
+    ///
+    size_t count() const nothrow @nogc @property
+    {
+        return atomicLoad(_count);
+    }
+
     ///
     void dispose()
     {
@@ -579,6 +587,7 @@ public:
                 _disposed = true;
                 currentDisposables = _disposables;
                 _disposables = [];
+                _count = 0;
             }
         }
 
@@ -586,11 +595,13 @@ public:
         {
             foreach (d; currentDisposables)
             {
-                d.dispose();
+                if (d)
+                    d.dispose();
             }
         }
     }
 
+    ///
     void clear()
     {
         Disposable[] currentDisposables;
@@ -598,14 +609,17 @@ public:
         {
             currentDisposables = _disposables;
             _disposables = [];
+            _count = 0;
         }
 
         foreach (d; currentDisposables)
         {
-            d.dispose();
+            if (d)
+                d.dispose();
         }
     }
 
+    ///
     void insert(Disposable item)
     {
         assert(item !is null);
@@ -618,6 +632,7 @@ public:
             {
                 _disposables ~= item;
             }
+            atomicOp!"+="(_count, 1);
         }
 
         if (shouldDispose)
@@ -626,11 +641,53 @@ public:
         }
     }
 
+    ///
+    bool remove(Disposable item)
+    {
+        assert(item !is null);
+
+        synchronized (_gate)
+        {
+            auto current = _disposables;
+
+            import std.algorithm : countUntil;
+
+            auto i = countUntil(current, item);
+            if (i < 0)
+            {
+                // not found, just return
+                return false;
+            }
+
+            current[i] = null;
+            const cap = current.capacity;
+            if (cap > ShrinkThreshold && _count < cap / 2)
+            {
+                Disposable[] fresh;
+                fresh.reserve(cap / 2);
+
+                foreach (d; current)
+                {
+                    if (d !is null)
+                    {
+                        fresh ~= d;
+                    }
+                }
+
+                _disposables = fresh;
+            }
+            atomicOp!"-="(_count, 1);
+            return true;
+        }
+    }
+
 private:
-    Disposable[] _disposables;
-    bool _disposed;
     Object _gate;
+    Disposable[] _disposables;
+    shared(bool) _disposed;
+    shared(size_t) _count;
 }
+
 ///
 unittest
 {
@@ -638,8 +695,10 @@ unittest
     auto d2 = new SerialDisposable;
     auto d = new CompositeDisposable(d1, d2);
     d.dispose();
+    assert(d.count == 0);
 }
 
+///
 unittest
 {
     auto composite = new CompositeDisposable;
@@ -650,6 +709,7 @@ unittest
     assert(disposed);
 }
 
+///
 unittest
 {
     auto composite = new CompositeDisposable;
@@ -663,6 +723,7 @@ unittest
     assert(_count == 1);
 }
 
+///
 unittest
 {
     auto composite = new CompositeDisposable;
@@ -672,6 +733,52 @@ unittest
     auto inner2 = new AnonymousDisposable({ disposed = true; });
     composite.insert(inner2);
     assert(disposed);
+}
+
+///
+unittest
+{
+    auto composite = new CompositeDisposable;
+    bool disposed = false;
+    auto disposable = new AnonymousDisposable({ disposed = true; });
+    composite.insert(disposable);
+    composite.remove(disposable);
+    composite.dispose();
+    assert(!disposed);
+}
+
+///
+unittest
+{
+    auto composite = new CompositeDisposable;
+    Disposable[] ds;
+    size_t disposedCount = 0;
+    foreach (_; 0 .. 100)
+    {
+        auto temp = new AnonymousDisposable({ disposedCount++; });
+        composite.insert(temp);
+        ds ~= temp;
+    }
+    foreach (i; 0 .. 80)
+    {
+        composite.remove(ds[i]);
+    }
+    assert(composite.count == 20);
+    composite.dispose();
+    assert(composite.count == 0);
+    assert(disposedCount == 20);
+}
+
+///
+unittest
+{
+    auto composite = new CompositeDisposable;
+    auto disposed = false;
+    auto item = new AnonymousDisposable({ disposed = true; });
+    composite.insert(item);
+    composite.remove(item);
+    composite.clear();
+    assert(!disposed);
 }
 
 ///
