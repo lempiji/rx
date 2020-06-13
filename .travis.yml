@@ -7,13 +7,13 @@ os:
 d:
   # support 3 versions
   - dmd
-  - dmd-2.085.1
-  - dmd-2.084.0
-  - dmd-2.083.1
+  - dmd-2.092.1
+  - dmd-2.091.1
+  - dmd-2.090.1
   - ldc
-  - ldc-1.15.0
-  - ldc-1.14.0
-  - ldc-1.13.0
+  - ldc-1.20.0
+  - ldc-1.19.0
+  - ldc-1.18.0
 
 script:
   - dub test -b unittest-cov
