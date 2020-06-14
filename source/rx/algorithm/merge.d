@@ -36,7 +36,8 @@ public:
 
             void put(ElementType obj)
             {
-                if (_counter.isZero) return;
+                if (_counter.isZero)
+                    return;
 
                 .put(_observer, obj);
             }
@@ -72,7 +73,8 @@ public:
         auto mergeObserver = MergeObserver(observer, counter, subscription);
         auto d1 = _observable1.doSubscribe(mergeObserver);
         auto d2 = _observable2.doSubscribe(mergeObserver);
-        subscription.setDisposable(new CompositeDisposable(disposableObject(d1), disposableObject(d2)));
+        subscription.setDisposable(new CompositeDisposable(disposableObject(d1),
+                disposableObject(d2)));
         return subscription;
     }
 
@@ -124,7 +126,8 @@ unittest
     auto observer = new CounterObserver!int;
 
     auto disposable = merged.doSubscribe(observer);
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     s1.put(0);
     assert(observer.putCount == 1);
@@ -173,7 +176,8 @@ unittest
     auto observer = new CounterObserver!int;
 
     auto disposable = merged.doSubscribe(observer);
-    scope(exit) disposable.dispose();
+    scope (exit)
+        disposable.dispose();
 
     s1.put(0);
     assert(observer.putCount == 1);
@@ -187,7 +191,7 @@ unittest
 
     s2.put(2);
     assert(observer.putCount == 2);
-    
+
     s2.completed();
     assert(observer.completedCount == 0);
 }
@@ -230,7 +234,7 @@ unittest
 
     int result = -1;
     auto disposable = merge(s1, s2).doSubscribe((int n) { result = n; });
-    
+
     s1.put(0);
     assert(result == 0);
     s2.put(1);
@@ -256,16 +260,11 @@ auto merge(TObservable)(auto ref TObservable observable)
             _observable = observable;
         }
 
-        auto subscribe(TObserver)(TObserver observer)
+        auto subscribe(TObserver)(auto ref TObserver observer)
         {
-            auto subject = new SubjectObject!ElementType;
-            auto groupSubscription = new CompositeDisposable;
-            auto innerSubscription = subject.doSubscribe(observer);
-            auto outerSubscription = _observable.doSubscribe((TObservable.ElementType obj) {
-                auto subscription = obj.doSubscribe(subject);
-                groupSubscription.insert(disposableObject(subscription));
-            }, { subject.completed(); }, (Exception e) { subject.failure(e); });
-            return new CompositeDisposable(groupSubscription, innerSubscription, outerSubscription);
+            auto sink = new MergeSink!(TObservable.ElementType, TObserver, ElementType)(observer);
+            sink._upstream = _observable.doSubscribe(sink).disposableObject();
+            return sink;
         }
 
         TObservable _observable;
@@ -277,13 +276,99 @@ auto merge(TObservable)(auto ref TObservable observable)
 ///
 unittest
 {
+    import rx;
+
+    auto outer = new SubjectObject!(Observable!int);
+
+    Observable!int flatten = outer.merge().observableObject!int();
+
+    int[] xs;
+    auto disposable = flatten.doSubscribe((int n) { xs ~= n; });
+    scope (exit)
+        disposable.dispose();
+
+    auto inner1 = new SubjectObject!int;
+    auto inner2 = new SubjectObject!int;
+
+    .put(outer, inner1);
+    .put(inner1, 0);
+    assert(xs == [0]);
+    .put(inner1, 1);
+    assert(xs == [0, 1]);
+
+    .put(outer, inner2);
+    .put(inner1, 2);
+    assert(xs == [0, 1, 2]);
+    .put(inner2, 3);
+    assert(xs == [0, 1, 2, 3]);
+    .put(inner2, 4);
+    assert(xs == [0, 1, 2, 3, 4]);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto outer = new SubjectObject!(Observable!int);
+
+    Observable!int flatten = outer.merge().observableObject!int();
+
+    auto observer = new CounterObserver!int;
+    auto disposable = flatten.doSubscribe(observer);
+    scope (exit)
+        disposable.dispose();
+
+    auto inner = new SubjectObject!int;
+
+    .put(outer, inner);
+    .put(inner, 0);
+
+    inner.completed();
+    assert(observer.completedCount == 0);
+    outer.completed();
+    assert(observer.completedCount == 1);
+}
+
+///
+unittest
+{
+    import rx;
+
+    auto outer = new SubjectObject!(Observable!int);
+
+    Observable!int flatten = outer.merge().observableObject!int();
+
+    auto observer = new CounterObserver!int;
+    auto disposable = flatten.doSubscribe(observer);
+    scope (exit)
+        disposable.dispose();
+
+    auto inner = new SubjectObject!int;
+
+    .put(outer, inner);
+    .put(inner, 0);
+
+    outer.failure(new Exception("TEST"));
+    assert(observer.failureCount == 1);
+    .put(inner, 1);
+    import std : format;
+
+    assert(observer.putCount == 1, format!"putCount: %d"(observer.putCount));
+}
+
+///
+unittest
+{
     import rx.algorithm.groupby : groupBy;
     import rx.algorithm.map : map;
     import rx.algorithm.fold : fold;
     import rx.subject : SubjectObject, CounterObserver;
 
     auto subject = new SubjectObject!int;
-    auto counted = subject.groupBy!(n => n % 10).map!(o => o.fold!((a, b) => a + 1)(0)).merge();
+    auto counted = subject.groupBy!(n => n % 10)
+        .map!(o => o.fold!((a, b) => a + 1)(0))
+        .merge();
 
     auto counter = new CounterObserver!int;
 
@@ -295,4 +380,250 @@ unittest
     subject.completed();
     assert(counter.putCount == 1);
     assert(counter.lastValue == 2);
+}
+
+///
+unittest
+{
+    import std.format : format;
+    import rx;
+
+    auto outer = new SubjectObject!(Observable!int);
+    auto inner_pair1 = new SubjectObject!int;
+    auto inner_pair2 = new SubjectObject!int;
+    auto inner_flat1 = new SubjectObject!int;
+    auto inner_flat2 = new SubjectObject!int;
+
+    auto mergePair = merge(inner_pair1, inner_pair2);
+    auto mergeFlat = outer.merge();
+
+    auto counter1 = new CounterObserver!int;
+    auto counter2 = new CounterObserver!int;
+
+    auto disposable1 = mergePair.doSubscribe(counter1);
+    auto disposable2 = mergeFlat.doSubscribe(counter2);
+    .put(outer, inner_flat1);
+    .put(outer, inner_flat2);
+
+    .put(inner_pair1, 0);
+    .put(inner_flat1, 0);
+
+    .put(inner_pair2, 1);
+    .put(inner_flat2, 1);
+
+    assert(counter1.putCount == counter2.putCount);
+    assert(counter1.lastValue == counter2.lastValue);
+    assert(counter1.completedCount == counter2.completedCount);
+    assert(counter1.failureCount == counter2.failureCount);
+
+    inner_pair1.completed();
+    inner_flat1.completed();
+
+    assert(counter1.putCount == counter2.putCount);
+    assert(counter1.lastValue == counter2.lastValue);
+    assert(counter1.completedCount == counter2.completedCount,
+            format!"%d == %d"(counter1.completedCount, counter2.completedCount));
+    assert(counter1.failureCount == counter2.failureCount);
+
+    .put(inner_pair2, 10);
+    .put(inner_flat2, 10);
+
+    assert(counter1.putCount == counter2.putCount);
+    assert(counter1.lastValue == counter2.lastValue);
+    assert(counter1.completedCount == counter2.completedCount);
+    assert(counter1.failureCount == counter2.failureCount);
+
+    disposable1.dispose();
+    disposable2.dispose();
+
+    assert(counter1.putCount == counter2.putCount);
+    assert(counter1.lastValue == counter2.lastValue);
+    assert(counter1.completedCount == counter2.completedCount);
+    assert(counter1.failureCount == counter2.failureCount);
+
+    .put(inner_pair2, 100);
+    .put(inner_flat2, 100);
+
+    assert(counter1.putCount == counter2.putCount);
+    assert(counter1.lastValue == counter2.lastValue);
+    assert(counter1.completedCount == counter2.completedCount);
+    assert(counter1.failureCount == counter2.failureCount);
+}
+
+class MergeSink(TObservable, TObserver, E) : Observer!TObservable, Disposable
+{
+    private TObserver _observer;
+    private Disposable _upstream;
+    private Object _gate;
+    private shared(bool) _disposed;
+    private shared(bool) _isStopped;
+    private CompositeDisposable _group;
+
+    this(TObserver observer)
+    {
+        _observer = observer;
+        _gate = new Object;
+        _group = new CompositeDisposable;
+    }
+
+    void dispose()
+    {
+        import core.atomic : atomicStore;
+
+        atomicStore(_disposed, true);
+        tryDispose(_upstream);
+        _group.dispose();
+    }
+
+    void put(TObservable obj)
+    {
+        auto inner = new InnerObserver(this);
+        _group.insert(inner);
+        inner._upstream = obj.doSubscribe(inner).disposableObject();
+    }
+
+    void completed()
+    {
+        import core.atomic;
+
+        atomicStore(_isStopped, true);
+        if (_group.count == 0)
+        {
+            forwardCompleted();
+        }
+        else
+        {
+            dispose();
+        }
+    }
+
+    void failure(Exception e)
+    {
+        forwardFailure(e);
+        dispose();
+    }
+
+    private void forwardPut(E obj)
+    {
+        if (_disposed)
+            return;
+        synchronized (_gate)
+        {
+            .put(_observer, obj);
+        }
+    }
+
+    private void forwardCompleted()
+    {
+        if (_disposed)
+            return;
+        synchronized (_gate)
+        {
+            static if (hasCompleted!TObserver)
+            {
+                _observer.completed();
+            }
+            tryDispose(_upstream);
+        }
+    }
+
+    private void forwardFailure(Exception e)
+    {
+        if (_disposed)
+            return;
+        synchronized (_gate)
+        {
+            static if (hasFailure!TObserver)
+            {
+                _observer.failure(e);
+            }
+            tryDispose(_upstream);
+        }
+    }
+
+    private static final class InnerObserver : Observer!E, Disposable
+    {
+        private MergeSink _parent;
+        private Disposable _upstream;
+
+        this(MergeSink parent)
+        {
+            assert(parent !is null);
+
+            _parent = parent;
+        }
+
+        void dispose()
+        {
+            tryDispose(_upstream);
+        }
+
+        void put(E obj)
+        {
+            scope (failure)
+                dispose();
+            _parent.forwardPut(obj);
+        }
+
+        void completed()
+        {
+            scope (exit)
+                dispose();
+            _parent._group.remove(this);
+            if (_parent._isStopped && _parent._group.count == 0)
+            {
+                _parent.forwardCompleted();
+            }
+        }
+
+        void failure(Exception e)
+        {
+            scope (exit)
+                dispose();
+            _parent.forwardFailure(e);
+        }
+    }
+}
+
+unittest
+{
+    import rx;
+
+    auto sub = new SubjectObject!(Observable!int);
+
+    auto counter = new CounterObserver!int;
+    auto sink = new MergeSink!(Observable!int, Observer!int, int)(counter);
+
+    auto d = sub.subscribe(sink.observerObject!(Observable!int)());
+    sink._upstream = d.disposableObject();
+
+    auto inner1 = new SubjectObject!int;
+    sub.put(inner1);
+
+    assert(counter.putCount == 0);
+    inner1.put(1);
+    assert(counter.putCount == 1);
+    inner1.put(2);
+    assert(counter.putCount == 2);
+    inner1.put(3);
+    assert(counter.putCount == 3);
+
+    auto inner2 = new SubjectObject!int;
+    sub.put(inner2);
+
+    inner2.put(10);
+    assert(counter.putCount == 4);
+    inner2.put(11);
+    assert(counter.putCount == 5);
+
+    inner1.put(4);
+    assert(counter.putCount == 6);
+
+    inner1.completed();
+    assert(counter.completedCount == 0);
+    inner2.completed();
+    assert(counter.completedCount == 0);
+
+    sub.completed();
+    assert(counter.completedCount == 1);
 }

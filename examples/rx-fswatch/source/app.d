@@ -11,17 +11,25 @@ void main()
         auto shutdown = false;
 
         auto thread = new Thread({
-            auto watch = FileWatch("./data", true);
-
-            while (!shutdown)
+            try
             {
-                auto events = watch.getEvents();
-                if (events.length > 0)
-                {
-                    .put(observer, events);
-                }
+                auto watch = FileWatch("./data", true);
 
-                Thread.sleep(100.msecs);
+                while (!shutdown)
+                {
+                    auto events = watch.getEvents();
+                    if (events.length > 0)
+                    {
+                        .put(observer, events);
+                    }
+
+                    Thread.sleep(100.msecs);
+                }
+                observer.completed();
+            }
+            catch (Exception e)
+            {
+                observer.failure(e);
             }
         });
         thread.start();
@@ -30,7 +38,9 @@ void main()
     });
 
     auto flatten = watcher.map!(events => from(events)).merge();
-    auto changes = flatten.groupBy!(event => event.path).map!(o => o.debounce(2.seconds)).merge();
+    auto changes = flatten.groupBy!(event => event.path)
+        .map!(o => o.debounce(2.seconds))
+        .merge();
 
     // start FileWatch
     auto disposable = changes.doSubscribe((FileChangeEvent event) {

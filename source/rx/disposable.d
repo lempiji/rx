@@ -1222,3 +1222,32 @@ unittest
     shared(Disposable) disposable2 = null;
     .atomicDispose(disposable2);
 }
+
+///
+void tryDispose(T : Disposable)(ref T disposable)
+{
+    if (disposable)
+    {
+        import std.algorithm : swap;
+        T temp = null;
+        swap(disposable, temp);
+        if (temp !is null)
+        {
+            temp.dispose();
+        }
+    }
+}
+
+unittest
+{
+    size_t count = 0;
+    auto d = new AnonymousDisposable({ count++; });
+
+    assert(count == 0);
+    tryDispose(d);
+    assert(count == 1);
+    assert(d is null);
+    tryDispose(d);
+    assert(count == 1);
+    assert(d is null);
+}
