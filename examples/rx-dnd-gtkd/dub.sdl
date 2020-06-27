@@ -1,0 +1,6 @@
+name "rx-dnd-gtkd"
+description "A minimal D application."
+authors "lempiji"
+dependency "rx" path="../../"
+dependency "gfm:math" version="~>8.0.3"
+dependency "gtk-d" version="~>3.9.0"
