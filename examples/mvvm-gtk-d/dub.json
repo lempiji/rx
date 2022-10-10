@@ -3,7 +3,7 @@
 		"lempiji"
 	],
 	"dependencies": {
-		"gtk-d": "~>3.9.0",
+		"gtk-d": "~>3.10.0",
 		"rx": {
 			"path": "../../"
 		}
