@@ -35,9 +35,10 @@ Label toBindedLabel(TObservable)(auto ref TObservable source, CompositeDisposabl
 Button makeBindedButton(string text, void delegate() onClick, Observable!bool sensitiveSource, CompositeDisposable disposeBag)
 in
 {
-    const hasSensitiveSource = sensitiveSource is null;
-    const hasDisposeBag = disposeBag is null;
-    assert(hasSensitiveSource == hasDisposeBag);
+    const hasSensitiveSource = sensitiveSource !is null;
+    const hasDisposeBag = disposeBag !is null;
+    if (hasSensitiveSource)
+        assert(hasDisposeBag);
 }
 do
 {
@@ -50,7 +51,7 @@ do
     return button;
 }
 
-Button makeBindedButton(string text, void delegate() onClick)
+Button makeBindedButton(string text, void delegate() onClick, CompositeDisposable disposeBag)
 {
-    return makeBindedButton(text, onClick, null, null);
+    return makeBindedButton(text, onClick, null, disposeBag);
 }

@@ -27,7 +27,7 @@ class MyAppWindow : MainWindow
         auto name = model.name.toBindedEntry(disposeBag);
         auto age = model.age.toBindedLabel(disposeBag);
         auto profile = model.profile.debounce(500.msecs).toBindedLabel(disposeBag);
-        auto incrementAge = makeBindedButton("+1", &model.incrementAge);
+        auto incrementAge = makeBindedButton("+1", &model.incrementAge, disposeBag);
         auto decrementAge = makeBindedButton("-1", &model.decrementAge,
                 model.canDecrementAge, disposeBag);
         auto clear = makeBindedButton("Clear", {
