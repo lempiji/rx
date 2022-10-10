@@ -1,15 +1,16 @@
 {
-	"name": "scheduler-dlangui",
 	"authors": [
 		"lempiji"
 	],
+	"copyright": "Copyright © 2016, lempiji",
 	"dependencies": {
+		"dlangui": "~>0.9.188",
 		"rx": {
-			"path": "../../"
-		},
-		"dlangui": "~>0.9.60"
+			"path": "../../",
+			"version": ">=0.0.0"
+		}
 	},
 	"description": "A minimal D application.",
-	"copyright": "Copyright © 2016, lempiji",
-	"license": "MIT"
+	"license": "MIT",
+	"name": "scheduler-dlangui"
 }
