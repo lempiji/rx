@@ -16,6 +16,13 @@
 			"targetType": "library"
 		},
 		{
+			"name": "unittest",
+			"buildOptions": ["coverage"],
+			"dependencies": {
+				"silly": "~>1.1.1"
+			}
+		},
+		{
 			"name": "diff",
 			"postGenerateCommands": [
 				"dub build -c makedeps -f",
